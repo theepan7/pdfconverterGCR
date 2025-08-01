@@ -20,6 +20,9 @@ def index():
 def cors_test():
     return "CORS is working", 200
 
+@app.route('/compress', methods=['GET'])
+def compress_page_info():
+    return "📌 This endpoint only accepts POST requests. Use the upload form to compress your PDF."
 
 # === API: Compress PDF ===
 @app.route('/compress', methods=['POST'])
