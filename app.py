@@ -5,7 +5,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 # Enable CORS for all domains (adjust origins if you want to restrict)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": ["https://lemonchiffon-dunlin-886347.hostingersite.com"]}})
 
 UPLOAD_FOLDER = "uploads"
 PROCESSED_FOLDER = "processed"
