@@ -16,6 +16,11 @@ os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 def index():
     return "✅ PDF Tool API is running."
 
+@app.route('/cors-test', methods=['GET'])
+def cors_test():
+    return "CORS is working", 200
+
+
 # === API: Compress PDF ===
 @app.route('/compress', methods=['POST'])
 def compress():
