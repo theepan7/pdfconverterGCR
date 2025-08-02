@@ -1,1 +1,107 @@
-<h1>Welcome to PDF Toolkit</h1><a href='/compress-page'>Compress PDF</a><br><a href='/merge-page'>Merge PDFs</a><br><a href='/split-page'>Split PDF</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PDF Toolkit - Home</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts - Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Custom styles for Inter font and smooth transitions */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .card {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    .btn-primary {
+      transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #a0aec0;
+      width: 100%; /* Ensure footer spans full width */
+      margin-top: auto; /* Push footer to the bottom */
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-between">
+
+  <!-- Header Section -->
+  <header class="w-full py-12 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-5xl font-extrabold mb-4 leading-tight">
+        <span class="block animate-fade-in-down">PDF Toolkit</span>
+      </h1>
+      <p class="text-xl font-light opacity-90 animate-fade-in-up">
+        Your lightweight solution for compressing, merging, and splitting PDFs with ease.
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container flex flex-wrap justify-center gap-8 p-8 max-w-5xl w-full my-8">
+    <!-- Card: Compress PDF -->
+    <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
+      <svg class="w-16 h-16 mb-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9V5a2 2 0 00-2-2H6a2 2 0 00-2 2v14a2 2 0 002 2h6m-6-6h6m-6-6h6m-4-6h4m4 6l4-4m-4 4l-4-4m4 4l4 4m-4-4v4"></path>
+      </svg>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-3">Compress PDF</h2>
+      <p class="text-gray-600 text-center mb-6 text-lg">
+        Reduce file size without compromising on quality. Optimize your documents effortlessly.
+      </p>
+      <a href="compress.html" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+        Try Now
+      </a>
+    </div>
+
+    <!-- Card: Merge PDFs -->
+    <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
+      <svg class="w-16 h-16 mb-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+      </svg>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-3">Merge PDFs</h2>
+      <p class="text-gray-600 text-center mb-6 text-lg">
+        Combine multiple PDF documents into a single, organized file. Simplify your workflow.
+      </p>
+      <a href="merge.html" class="btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75">
+        Try Now
+      </a>
+    </div>
+
+    <!-- Card: Split PDF -->
+    <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
+      <svg class="w-16 h-16 mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h4m-2 0V7m0 8h.01"></path>
+      </svg>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-3">Split PDF</h2>
+      <p class="text-gray-600 text-center mb-6 text-lg">
+        Extract specific pages or ranges from a PDF document. Get exactly what you need.
+      </p>
+      <a href="split.html" class="btn-primary bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
+        Try Now
+      </a>
+    </div>
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+       <p>Your document privacy and confidentiality are our top priority. All processing is done securely on your device, and your files are never stored on our servers.</p>
+     <p>&copy; 2025 PDF Toolkit. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
