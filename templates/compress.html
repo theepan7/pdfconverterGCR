@@ -100,6 +100,13 @@
       </div>
 
       <input type="file" id="pdf-upload" name="file" accept=".pdf" required />
+<div id="compressLoadingIndicator" class="hidden flex items-center space-x-2 text-blue-600 text-lg font-semibold">
+  <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+  </svg>
+  <span>Compressing... Please wait</span>
+</div>
 
       <button type="submit" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 text-xl">
         Compress PDF
