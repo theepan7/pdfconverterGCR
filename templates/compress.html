@@ -1,6 +1,81 @@
-<h1>Compress PDF</h1>
-<form id='compressForm' enctype='multipart/form-data'>
-  <input type='file' name='file' accept=".pdf" required>
-  <button type='submit'>Compress</button>
-</form>
-<script src='/static/js/compress.js'></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compress PDF</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts - Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons (optional, but good for consistent branding) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* Custom styles for Inter font and smooth transitions */
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh; /* Ensure body takes full viewport height */
+    }
+    .btn-primary {
+      transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+    }
+    /* Custom styling for file input for better appearance */
+    .custom-file-input {
+      border: 2px dashed #cbd5e0; /* Light gray dashed border */
+      padding: 2rem;
+      border-radius: 0.75rem; /* Rounded corners */
+      text-align: center;
+      cursor: pointer;
+      background-color: #f7fafc; /* Light background */
+      transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    }
+    .custom-file-input:hover {
+      background-color: #edf2f7; /* Slightly darker on hover */
+      border-color: #a0aec0; /* Darker border on hover */
+    }
+    .custom-file-input input[type="file"] {
+      display: none; /* Hide the default file input */
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-between">
+
+  <!-- Header Section -->
+  <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl font-extrabold mb-2">Compress PDF</h1>
+      <p class="text-lg font-light opacity-90">Reduce your PDF file size quickly and efficiently.</p>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container flex flex-col items-center justify-center p-8 max-w-xl w-full my-8 bg-white rounded-2xl shadow-xl border border-gray-200">
+    <h2 class="text-4xl font-semibold text-gray-800 mb-8 text-center">Upload Your PDF</h2>
+    <form id="compressForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
+      <label for="pdf-upload" class="custom-file-input w-full">
+        <div class="flex flex-col items-center justify-center h-full">
+          <i class="fas fa-file-upload text-blue-500 text-6xl mb-4"></i>
+          <p class="text-gray-700 font-medium text-lg mb-2">Drag & Drop your PDF here</p>
+          <p class="text-gray-500 text-sm">or click to browse</p>
+        </div>
+        <input type="file" id="pdf-upload" name="file" accept=".pdf" required />
+      </label>
+      
+      <button type="submit" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 text-xl">
+        Compress PDF
+      </button>
+    </form>
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="w-full py-6 text-center text-gray-500 text-sm bg-gray-200 rounded-t-xl mt-auto">
+    <p>&copy; 2025 PDF Toolkit. All rights reserved.</p>
+    <p>Your document privacy and confidentiality are our top priority. All processing is done securely on your device, and your files are never stored on our servers.</p>
+  </footer>
+
+  <script src="js/compress.js"></script>
+</body>
+</html>
