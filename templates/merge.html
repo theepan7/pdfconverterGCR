@@ -47,15 +47,21 @@
 <body class="bg-gray-100 flex flex-col items-center justify-between">
 
   <!-- Header -->
-  <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl">
-    <div class="max-w-4xl mx-auto text-center">
-       <a href="/" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
-        <i class="fas fa-home"></i><span class="hidden sm:inline">Home</span>
-      </a>
-      <h1 class="text-4xl font-extrabold mb-2">Merge PDFs</h1>
-      <p class="text-lg font-light opacity-90">Combine multiple PDF documents into one seamless file.</p>
-    </div>
-  </header>
+<!-- Inside your <body> tag, replacing the current header -->
+<header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl relative">
+  <div class="max-w-4xl mx-auto text-center relative">
+    
+    <!-- Home Button -->
+    <a href="index.html" class="absolute top-4 left-4 bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
+      <i class="fas fa-home"></i>
+      <span class="hidden sm:inline">Home</span>
+    </a>
+
+    <h1 class="text-4xl font-extrabold mb-2">Merge PDFs</h1>
+    <p class="text-lg font-light opacity-90">Combine multiple PDF documents into one seamless file.</p>
+  </div>
+</header>
+
 
   <!-- Main -->
   <main class="container flex flex-col items-center justify-center p-8 max-w-xl w-full my-8 bg-white rounded-2xl shadow-xl border border-gray-200">
