@@ -46,11 +46,15 @@
 <body class="bg-gray-100 flex flex-col items-center justify-between">
 
   <!-- Header -->
-  <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl">
-    <div class="max-w-4xl mx-auto text-center">
-       <a href="/" class="absolute left-4 top-4  bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
-        <i class="fas fa-home"></i><span class="hidden sm:inline">Home</span>
+  <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl relative ">
+    <div class="max-w-4xl mx-auto text-center relative">
+      
+      <!-- Home Button -->
+      <a href="/" class="absolute top-4 left-4 bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
+        <i class="fas fa-home"></i>
+        <span class="hidden sm:inline">Home</span>
       </a>
+
       <h1 class="text-4xl font-extrabold mb-2">Compress PDF</h1>
       <p class="text-lg font-light opacity-90">Reduce your PDF file size quickly and efficiently.</p>
     </div>
@@ -93,13 +97,13 @@
 
   <!-- JS -->
   <script>
-    // Update file name on UI
+    // Update file label
     document.getElementById('pdf-upload').addEventListener('change', function () {
       const file = this.files[0];
       document.getElementById('file-label').textContent = file ? file.name : 'Click to select your PDF';
     });
 
-    // Compress form submission logic
+    // Compress form submission
     document.getElementById('compressForm').addEventListener('submit', async function (event) {
       event.preventDefault();
 
