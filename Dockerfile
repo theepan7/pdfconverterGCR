@@ -1,25 +1,30 @@
 FROM python:3.11-slim
 
-# Install Ghostscript for PDF compression
+# Install only essential system packages for Pillow, ReportLab, and Ghostscript
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ghostscript && \
-    apt-get clean && \
+    apt-get install -y --no-install-recommends \
+    ghostscript \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libwebp-dev \
+    build-essential \
+    && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
+    
 # Set working directory
 WORKDIR /app
 
-# Copy requirements and install Python dependencies
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
+# Copy app source code
 COPY . .
 
-# Ensure upload and processed folders exist
+# Ensure folders exist
 RUN mkdir -p uploads processed
 
-# Expose the port your app runs on (8080 by default)
+# Expose Flask default port
 EXPOSE 8080
 
 # Start the Flask app
