@@ -3,8 +3,6 @@ from flask import Flask, request, send_file, render_template
 from flask_cors import CORS
 import os, uuid, subprocess
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
 from PIL import Image
 
 app = Flask(__name__, static_folder='static')
@@ -97,42 +95,27 @@ from io import BytesIO
 @app.route('/image-to-pdf', methods=['POST'])
 def image_to_pdf():
     if 'file' not in request.files:
-        return {'error': 'No file uploaded'}, 400
+        return "No file uploaded", 400
 
     img_file = request.files['file']
     if img_file.filename == '':
-        return {'error': 'No selected file'}, 400
+        return "No file selected", 400
 
     try:
-        img = Image.open(img_file)
-        img = img.convert("RGB")
+        # Open and convert image
+        image = Image.open(img_file).convert("RGB")
 
-        a4_width, a4_height = A4
-        img_width, img_height = img.size
-        ratio = min(a4_width / img_width, a4_height / img_height)
-        new_width = int(img_width * ratio)
-        new_height = int(img_height * ratio)
+        # Generate PDF path
+        pdf_filename = f"{uuid.uuid4()}.pdf"
+        pdf_path = os.path.join(PROCESSED_FOLDER, pdf_filename)
 
-        x = (a4_width - new_width) / 2
-        y = (a4_height - new_height) / 2
+        # Save image as PDF
+        image.save(pdf_path, "PDF")
 
-        buffer = BytesIO()
-        c = canvas.Canvas(buffer, pagesize=A4)
-
-        # Save image to in-memory buffer in supported format
-        image_buffer = BytesIO()
-        img.save(image_buffer, format='PNG')
-        image_buffer.seek(0)
-
-        c.drawImage(image_buffer, x, y, width=new_width, height=new_height)
-        c.showPage()
-        c.save()
-        buffer.seek(0)
-
-        return send_file(buffer, as_attachment=True, download_name="converted.pdf", mimetype='application/pdf')
+        return send_file(pdf_path, as_attachment=True, download_name="converted.pdf")
 
     except Exception as e:
-        return {'error': f"Conversion failed: {str(e)}"}, 500
+        return f"Image to PDF conversion failed: {str(e)}", 500
 
 
 if __name__ == "__main__":
