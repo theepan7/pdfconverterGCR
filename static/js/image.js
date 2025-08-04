@@ -9,7 +9,7 @@ document.getElementById('imageForm').addEventListener('submit', async function (
   if (submitBtn) submitBtn.disabled = true;
 
   try {
-    const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/image-to-pdf', {
+    const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/image', {
       method: 'POST',
       body: formData,
     });
