@@ -3,6 +3,9 @@ from flask import Flask, request, send_file, render_template
 from flask_cors import CORS
 import os, uuid, subprocess
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from PIL import Image
 
 app = Flask(__name__, static_folder='static')
 CORS(app)
@@ -27,6 +30,10 @@ def merge_page():
 @app.route('/split-page')
 def split_page():
     return render_template('split.html')
+
+@app.route('/image-page')
+def image_page():
+    return render_template('image.html')
 
 @app.route('/compress', methods=['POST'])
 def compress():
@@ -84,6 +91,44 @@ def split():
         except Exception as e:
             return f"Splitting failed: {e}", 500
     return "Invalid file", 400
+
+@app.route('/image-to-pdf', methods=['POST'])
+def image_to_pdf():
+    if 'file' not in request.files:
+        return {'error': 'No file uploaded'}, 400
+
+    img_file = request.files['file']
+    if img_file.filename == '':
+        return {'error': 'No selected file'}, 400
+
+    try:
+        img = Image.open(img_file)
+        pdf_filename = f"{uuid.uuid4()}.pdf"
+        pdf_path = os.path.join(PROCESSED_FOLDER, pdf_filename)
+
+        # Convert image to RGB & resize
+        a4_width, a4_height = A4
+        img = img.convert("RGB")
+        img_width, img_height = img.size
+        ratio = min(a4_width / img_width, a4_height / img_height)
+        img_width = int(img_width * ratio)
+        img_height = int(img_height * ratio)
+
+        c = canvas.Canvas(pdf_path, pagesize=A4)
+        x = (a4_width - img_width) / 2
+        y = (a4_height - img_height) / 2
+
+        temp_img_path = os.path.join(UPLOAD_FOLDER, f"{uuid.uuid4()}.jpg")
+        img.save(temp_img_path)
+        c.drawImage(temp_img_path, x, y, width=img_width, height=img_height)
+        c.showPage()
+        c.save()
+        os.remove(temp_img_path)
+
+        return send_file(pdf_path, as_attachment=True, download_name="converted.pdf")
+    
+    except Exception as e:
+        return {'error': str(e)}, 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
