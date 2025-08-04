@@ -90,7 +90,7 @@ def split():
             return f"Splitting failed: {e}", 500
     return "Invalid file", 400
 
-@app.route('/image-to-pdf', methods=['POST'])
+@app.route('/image', methods=['POST'])
 def image_to_pdf():
     if 'file' not in request.files:
         return "No file uploaded", 400
