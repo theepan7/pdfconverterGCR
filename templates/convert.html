@@ -125,7 +125,7 @@
         await new Promise(resolve => setTimeout(resolve, 2000));
         
         // Simulate a successful response
-        const blob = new Blob(["Simulated PDF content from images"], { type: "application/pdf" });
+        const blob = new Blob(["Simulated PDF content from images"], { type: "https://pdfcompress-1097766937022.europe-west1.run.app/image" });
 
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
