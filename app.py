@@ -92,6 +92,8 @@ def split():
             return f"Splitting failed: {e}", 500
     return "Invalid file", 400
 
+from io import BytesIO
+
 @app.route('/image-to-pdf', methods=['POST'])
 def image_to_pdf():
     if 'file' not in request.files:
@@ -103,32 +105,35 @@ def image_to_pdf():
 
     try:
         img = Image.open(img_file)
-        pdf_filename = f"{uuid.uuid4()}.pdf"
-        pdf_path = os.path.join(PROCESSED_FOLDER, pdf_filename)
-
-        # Convert image to RGB & resize
-        a4_width, a4_height = A4
         img = img.convert("RGB")
+
+        a4_width, a4_height = A4
         img_width, img_height = img.size
         ratio = min(a4_width / img_width, a4_height / img_height)
-        img_width = int(img_width * ratio)
-        img_height = int(img_height * ratio)
+        new_width = int(img_width * ratio)
+        new_height = int(img_height * ratio)
 
-        c = canvas.Canvas(pdf_path, pagesize=A4)
-        x = (a4_width - img_width) / 2
-        y = (a4_height - img_height) / 2
+        x = (a4_width - new_width) / 2
+        y = (a4_height - new_height) / 2
 
-        temp_img_path = os.path.join(UPLOAD_FOLDER, f"{uuid.uuid4()}.jpg")
-        img.save(temp_img_path)
-        c.drawImage(temp_img_path, x, y, width=img_width, height=img_height)
+        buffer = BytesIO()
+        c = canvas.Canvas(buffer, pagesize=A4)
+
+        # Save image to in-memory buffer in supported format
+        image_buffer = BytesIO()
+        img.save(image_buffer, format='PNG')
+        image_buffer.seek(0)
+
+        c.drawImage(image_buffer, x, y, width=new_width, height=new_height)
         c.showPage()
         c.save()
-        os.remove(temp_img_path)
+        buffer.seek(0)
 
-        return send_file(pdf_path, as_attachment=True, download_name="converted.pdf")
-    
+        return send_file(buffer, as_attachment=True, download_name="converted.pdf", mimetype='application/pdf')
+
     except Exception as e:
-        return {'error': str(e)}, 500
+        return {'error': f"Conversion failed: {str(e)}"}, 500
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
