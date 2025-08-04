@@ -90,8 +90,6 @@ def split():
             return f"Splitting failed: {e}", 500
     return "Invalid file", 400
 
-from io import BytesIO
-
 @app.route('/image-to-pdf', methods=['POST'])
 def image_to_pdf():
     if 'file' not in request.files:
@@ -102,21 +100,17 @@ def image_to_pdf():
         return "No file selected", 400
 
     try:
-        # Open and convert image
+        # Open and convert image to RGB
         image = Image.open(img_file).convert("RGB")
 
-        # Generate PDF path
-        pdf_filename = f"{uuid.uuid4()}.pdf"
-        pdf_path = os.path.join(PROCESSED_FOLDER, pdf_filename)
+        # Save image directly to PDF using Pillow
+        output_path = os.path.join(PROCESSED_FOLDER, f"{uuid.uuid4()}.pdf")
+        image.save(output_path, "PDF")
 
-        # Save image as PDF
-        image.save(pdf_path, "PDF")
-
-        return send_file(pdf_path, as_attachment=True, download_name="converted.pdf")
+        return send_file(output_path, as_attachment=True, download_name="converted.pdf")
 
     except Exception as e:
         return f"Image to PDF conversion failed: {str(e)}", 500
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
