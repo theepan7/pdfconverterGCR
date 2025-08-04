@@ -7,7 +7,7 @@ document.getElementById('imageForm').addEventListener('submit', async function (
   if (loading) loading.classList.remove('hidden'); // Show spinner
 
   try {
-    const response = await fetch('https://your-deployed-domain/image-to-pdf', {
+    const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/image-to-pdf', {
       method: 'POST',
       body: formData,
     });
