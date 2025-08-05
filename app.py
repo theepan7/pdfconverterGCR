@@ -90,28 +90,33 @@ def split():
             return f"Splitting failed: {e}", 500
     return "Invalid file", 400
 
-@app.route('/image', methods=['POST'])
-def image_to_pdf():
-    if 'file' not in request.files:
-        return "No file uploaded", 400
+def test_image_to_pdf():
+    import io
+    from PIL import Image
 
-    img_file = request.files['file']
-    if img_file.filename == '':
-        return "No file selected", 400
+    # Create an in-memory test image (e.g., red square)
+    img = Image.new('RGB', (1000, 1000), color='red')
+    img_byte_arr = io.BytesIO()
+    img.save(img_byte_arr, format='JPEG')
+    img_byte_arr.seek(0)
 
-    try:
-        # Open and convert image to RGB
-        image = Image.open(img_file).convert("RGB")
+    # Use Flask test client
+    with app.test_client() as client:
+        data = {
+            'file': (img_byte_arr, 'test.jpg')
+        }
+        response = client.post('/image', data=data, content_type='multipart/form-data')
+        print('Status code:', response.status_code)
+        if response.status_code == 200:
+            # Save output PDF locally to check
+            with open('test_output.pdf', 'wb') as f:
+                f.write(response.data)
+            print('PDF generated and saved as test_output.pdf')
+        else:
+            print('Error:', response.get_data(as_text=True))
 
-        # Save image directly to PDF using Pillow
-        output_path = os.path.join(PROCESSED_FOLDER, f"{uuid.uuid4()}.pdf")
-        image.save(output_path, "PDF")
+if __name__ == '__main__':
+    # Uncomment to run the test before starting app
+    # test_image_to_pdf()
+    app.run(host="0.0.0.0", port=8080)
 
-        return send_file(output_path, as_attachment=True, download_name="converted.pdf")
-
-    except Exception as e:
-        return f"Image to PDF conversion failed: {str(e)}", 500
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
