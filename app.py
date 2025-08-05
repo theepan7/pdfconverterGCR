@@ -91,7 +91,7 @@ def split():
 
 @app.route('/image', methods=['POST'])
 def image_to_pdf():
-    files = request.files.getlist('file')  # use 'file' to match your form
+    files = request.files.getlist('file')  # key is 'file' in FormData
     image_list = []
 
     try:
@@ -99,6 +99,7 @@ def image_to_pdf():
             filename = file.filename
             if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif')):
                 img = Image.open(file.stream)
+                img.load()  # Force load the image content before closing file
                 if img.mode in ("RGBA", "P"):
                     img = img.convert("RGB")
                 image_list.append(img)
@@ -108,11 +109,13 @@ def image_to_pdf():
 
         file_id = str(uuid.uuid4())
         output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_image2pdf.pdf")
-        image_list[0].save(output_path, save_all=True, append_images=image_list[1:])
+        image_list[0].save(output_path, format="PDF", save_all=True, append_images=image_list[1:])
 
         return send_file(output_path, as_attachment=True)
     except Exception as e:
+        print("Error:", e)
         return f"Image to PDF failed: {e}", 500
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080)
