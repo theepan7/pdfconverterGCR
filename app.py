@@ -89,13 +89,11 @@ def split():
             return f"Splitting failed: {e}", 500
     return "Invalid file", 400
 
-@app.route('/test-image')
-def test_image_to_pdf():
-    img = Image.new('RGB', (600, 400), color='green')
-    file_id = str(uuid.uuid4())
-    output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_test.pdf")
-    img.save(output_path, format='PDF')
-    return send_file(output_path, mimetype='application/pdf', as_attachment=True)
+@app.route('/image', methods=['POST'])
+def image_to_pdf():
+    from PIL import Image
+    files = request.files.getlist('file')
+    images = []
 
     try:
         for file in files:
@@ -110,19 +108,13 @@ def test_image_to_pdf():
 
         file_id = str(uuid.uuid4())
         output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_image2pdf.pdf")
-
-        # ✅ Add your debug print statements here
-        print(f"[INFO] Number of files received: {len(files)}")
-        print(f"[INFO] Files: {[f.filename for f in files]}")
-        print(f"[INFO] Output PDF will be saved at: {output_path}")
-
-        # Save the PDF
         images[0].save(output_path, format='PDF', save_all=True, append_images=images[1:])
 
         return send_file(output_path, mimetype='application/pdf', as_attachment=True)
     except Exception as e:
         print("[ERROR] Image to PDF failed:", e)
         return f"Image to PDF failed: {e}", 500
+
 
 
 if __name__ == '__main__':
