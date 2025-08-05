@@ -9,7 +9,7 @@ document.getElementById('imageForm').addEventListener('submit', async function (
   if (submitBtn) submitBtn.disabled = true;
 
   try {
-    const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/image', {
+    const response = await fetch('/image', {
       method: 'POST',
       body: formData,
     });
@@ -42,11 +42,17 @@ document.getElementById('imageForm').addEventListener('submit', async function (
   }
 });
 
-// Update file label
+// Update file label for multiple files
 document.getElementById('image-upload').addEventListener('change', function () {
-  const file = this.files[0];
+  const files = this.files;
   const label = document.getElementById('file-label');
   if (label) {
-    label.textContent = file ? file.name : 'Click to select an image file';
+    if (files.length === 0) {
+      label.textContent = 'Click to select image files';
+    } else if (files.length === 1) {
+      label.textContent = files[0].name;
+    } else {
+      label.textContent = `${files.length} files selected`;
+    }
   }
 });
