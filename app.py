@@ -91,29 +91,35 @@ def split():
 
 @app.route('/image', methods=['POST'])
 def image_to_pdf():
-    files = request.files.getlist('file')  # key is 'file' in FormData
-    image_list = []
+    from PIL import Image
+    files = request.files.getlist('file')
+    images = []
 
     try:
         for file in files:
-            filename = file.filename
-            if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif')):
+            if file and file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                 img = Image.open(file.stream)
-                img.load()  # Force load the image content before closing file
-                if img.mode in ("RGBA", "P"):
-                    img = img.convert("RGB")
-                image_list.append(img)
+                img.load()
+                img = img.convert("RGB")
+                images.append(img)
 
-        if not image_list:
+        if not images:
             return "No valid images uploaded", 400
 
         file_id = str(uuid.uuid4())
         output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_image2pdf.pdf")
-        image_list[0].save(output_path, format="PDF", save_all=True, append_images=image_list[1:])
 
-        return send_file(output_path, as_attachment=True)
+        # ✅ Add your debug print statements here
+        print(f"[INFO] Number of files received: {len(files)}")
+        print(f"[INFO] Files: {[f.filename for f in files]}")
+        print(f"[INFO] Output PDF will be saved at: {output_path}")
+
+        # Save the PDF
+        images[0].save(output_path, format='PDF', save_all=True, append_images=images[1:])
+
+        return send_file(output_path, mimetype='application/pdf', as_attachment=True)
     except Exception as e:
-        print("Error:", e)
+        print("[ERROR] Image to PDF failed:", e)
         return f"Image to PDF failed: {e}", 500
 
 
