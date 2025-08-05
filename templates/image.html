@@ -101,47 +101,52 @@
 
   <!-- JS -->
   <script>
-    // Update file label to show selected files
-    document.getElementById('image-upload').addEventListener('change', function () {
-      const files = this.files;
-      if (files.length > 0) {
-        document.getElementById('file-label').textContent = `${files.length} file(s) selected`;
-      } else {
-        document.getElementById('file-label').textContent = 'Drag & Drop your images here';
+  // Update file label
+  document.getElementById('image-upload').addEventListener('change', function () {
+    const files = this.files;
+    document.getElementById('file-label').textContent = files.length > 0
+      ? `${files.length} file(s) selected`
+      : 'Drag & Drop your images here';
+  });
+
+  // Handle real form submission
+  document.getElementById('imageToPdfForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const loading = document.getElementById('loadingIndicator');
+    loading.classList.remove('hidden');
+
+    try {
+      const response = await fetch('/image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Image-to-PDF failed: ${response.status} - ${errorText}`);
       }
-    });
 
-    // Handle form submission and conversion
-    document.getElementById('imageToPdfForm').addEventListener('submit', async function (event) {
-      event.preventDefault();
+      const blob = await response.blob();
+      if (blob.size === 0) throw new Error('Received an empty file.');
 
-      const formData = new FormData(this);
-      const loading = document.getElementById('loadingIndicator');
-      loading.classList.remove('hidden');
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'converted.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error during conversion:', error);
+      alert(error.message);
+    } finally {
+      loading.classList.add('hidden');
+    }
+  });
+</script>
 
-      try {
-        // Mocking an API call for demonstration purposes.
-        // Replace with your actual backend endpoint and logic.
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // Simulate a successful response
-        const blob = new Blob(["Simulated PDF content from images"], { type: "https://pdfcompress-1097766937022.europe-west1.run.app/image" });
-
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'converted.pdf';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      } catch (error) {
-        // Use a custom message box instead of alert()
-        console.error('Error during conversion:', error);
-      } finally {
-        loading.classList.add('hidden');
-      }
-    });
-  </script>
 </body>
 </html>
