@@ -1,4 +1,3 @@
-
 from flask import Flask, request, send_file, render_template
 from flask_cors import CORS
 import os, uuid, subprocess
@@ -90,33 +89,30 @@ def split():
             return f"Splitting failed: {e}", 500
     return "Invalid file", 400
 
-def test_image_to_pdf():
-    import io
-    from PIL import Image
+@app.route('/image', methods=['POST'])
+def image_to_pdf():
+    files = request.files.getlist('file')  # use 'file' to match your form
+    image_list = []
 
-    # Create an in-memory test image (e.g., red square)
-    img = Image.new('RGB', (1000, 1000), color='red')
-    img_byte_arr = io.BytesIO()
-    img.save(img_byte_arr, format='JPEG')
-    img_byte_arr.seek(0)
+    try:
+        for file in files:
+            filename = file.filename
+            if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif')):
+                img = Image.open(file.stream)
+                if img.mode in ("RGBA", "P"):
+                    img = img.convert("RGB")
+                image_list.append(img)
 
-    # Use Flask test client
-    with app.test_client() as client:
-        data = {
-            'file': (img_byte_arr, 'test.jpg')
-        }
-        response = client.post('/image', data=data, content_type='multipart/form-data')
-        print('Status code:', response.status_code)
-        if response.status_code == 200:
-            # Save output PDF locally to check
-            with open('test_output.pdf', 'wb') as f:
-                f.write(response.data)
-            print('PDF generated and saved as test_output.pdf')
-        else:
-            print('Error:', response.get_data(as_text=True))
+        if not image_list:
+            return "No valid images uploaded", 400
+
+        file_id = str(uuid.uuid4())
+        output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_image2pdf.pdf")
+        image_list[0].save(output_path, save_all=True, append_images=image_list[1:])
+
+        return send_file(output_path, as_attachment=True)
+    except Exception as e:
+        return f"Image to PDF failed: {e}", 500
 
 if __name__ == '__main__':
-    # Uncomment to run the test before starting app
-    # test_image_to_pdf()
     app.run(host="0.0.0.0", port=8080)
-
