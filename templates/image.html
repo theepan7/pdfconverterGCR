@@ -102,18 +102,6 @@
   <!-- JS -->
   <script>
 <script>
-  const imageInput = document.getElementById('image-upload');
-  const maxSize = 5 * 1024 * 1024; // 5MB
-
-  imageInput.addEventListener('change', function () {
-    for (const file of imageInput.files) {
-      if (file.size > maxSize) {
-        alert(`⚠️ File "${file.name}" is too large. Max allowed size is 5MB.`);
-        imageInput.value = ''; // Clear all files
-        break;
-      }
-    }
-  });
 
   document.getElementById('imageToPdfForm').addEventListener('submit', async function (event) {
     event.preventDefault();
