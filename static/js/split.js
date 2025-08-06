@@ -1,11 +1,15 @@
-const splitInput = document.getElementById('split-upload');
-const maxSize = 5 * 1024 * 1024; // 5MB limit
+const compressInput = document.getElementById('pdf-upload');
+const maxSize = 5 * 1024 * 1024; // 5MB
 
-splitInput.addEventListener('change', function () {
-  const file = splitInput.files[0];
-  if (file && file.size > maxSize) {
-    alert(`⚠️ File "${file.name}" exceeds 5MB limit.`);
-    splitInput.value = ''; // Clear file
+compressInput.addEventListener('change', function () {
+  const files = compressInput.files;
+
+  for (const file of files) {
+    if (file.size > maxSize) {
+      alert(`⚠️ File "${file.name}" is too large. Max allowed size is 5MB.`);
+      compressInput.value = ''; // Clear all files
+      break;
+    }
   }
 });
 
