@@ -1,16 +1,18 @@
-const mergeInput = document.getElementById('merge-upload');
-const maxSize = 5 * 1024 * 1024; // 5MB per file
+const compressInput = document.getElementById('pdf-upload');
+const maxSize = 5 * 1024 * 1024; // 5MB
 
-mergeInput.addEventListener('change', function () {
-  const files = mergeInput.files;
+compressInput.addEventListener('change', function () {
+  const files = compressInput.files;
+
   for (const file of files) {
     if (file.size > maxSize) {
-      alert(`⚠️ File "${file.name}" exceeds 5MB limit.`);
-      mergeInput.value = ''; // Clear all selected files
+      alert(`⚠️ File "${file.name}" is too large. Max allowed size is 5MB.`);
+      compressInput.value = ''; // Clear all files
       break;
     }
   }
 });
+
 
 document.getElementById('mergeForm').addEventListener('submit', async function (event) {
   event.preventDefault();
