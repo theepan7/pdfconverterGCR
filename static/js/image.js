@@ -1,15 +1,24 @@
 document.getElementById('imageForm').addEventListener('submit', async function (event) {
   event.preventDefault();
 
-  const formData = new FormData(this);
-  const loading = document.getElementById('imageLoadingIndicator');
-  const submitBtn = this.querySelector('button[type="submit"]');
+  const fileInput = document.getElementById('image-upload'); // Your input[type="file"] ID
+  const maxSize = 5 * 1024 * 1024; // 5MB
 
-  if (loading) loading.classList.remove('hidden');
-  if (submitBtn) submitBtn.disabled = true;
+  // ✅ Check all files are within size limit
+  for (const file of fileInput.files) {
+    if (file.size > maxSize) {
+      alert(`⚠️ File "${file.name}" is too large. Max allowed size is 5MB.`);
+      return; // stop submission
+    }
+  }
+
+  const formData = new FormData(this);
+  const loading = document.getElementById('imageLoadingIndicator'); // Optional spinner
+
+  if (loading) loading.classList.remove('hidden'); // Show spinner
 
   try {
-    const response = await fetch('/image', {
+    const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/image-to-pdf', {
       method: 'POST',
       body: formData,
     });
@@ -24,7 +33,7 @@ document.getElementById('imageForm').addEventListener('submit', async function (
       throw new Error('Received an empty file. Conversion may have failed.');
     }
 
-    // Trigger download
+    // Trigger file download
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -37,22 +46,6 @@ document.getElementById('imageForm').addEventListener('submit', async function (
     alert(error.message);
     console.error('Error during image-to-PDF:', error);
   } finally {
-    if (loading) loading.classList.add('hidden');
-    if (submitBtn) submitBtn.disabled = false;
-  }
-});
-
-// Update file label for multiple files
-document.getElementById('image-upload').addEventListener('change', function () {
-  const files = this.files;
-  const label = document.getElementById('file-label');
-  if (label) {
-    if (files.length === 0) {
-      label.textContent = 'Click to select image files';
-    } else if (files.length === 1) {
-      label.textContent = files[0].name;
-    } else {
-      label.textContent = `${files.length} files selected`;
-    }
+    if (loading) loading.classList.add('hidden'); // Hide spinner
   }
 });
