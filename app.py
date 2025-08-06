@@ -7,10 +7,16 @@ from PIL import Image
 app = Flask(__name__, static_folder='static')
 CORS(app)
 
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB
+
 UPLOAD_FOLDER = "uploads"
 PROCESSED_FOLDER = "processed"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PROCESSED_FOLDER, exist_ok=True)
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    return "File too large. Max allowed size is 5MB.", 413
 
 @app.route('/')
 def home():
