@@ -1,16 +1,20 @@
-document.getElementById('imageForm').addEventListener('submit', async function (event) {
-  event.preventDefault();
+const compressInput = document.getElementById('pdf-upload');
+const maxSize = 5 * 1024 * 1024; // 5MB
 
-  const fileInput = document.getElementById('image-upload'); // Your input[type="file"] ID
-  const maxSize = 5 * 1024 * 1024; // 5MB
+compressInput.addEventListener('change', function () {
+  const files = compressInput.files;
 
-  // ✅ Check all files are within size limit
-  for (const file of fileInput.files) {
+  for (const file of files) {
     if (file.size > maxSize) {
       alert(`⚠️ File "${file.name}" is too large. Max allowed size is 5MB.`);
-      return; // stop submission
+      compressInput.value = ''; // Clear all files
+      break;
     }
   }
+});
+
+document.getElementById('imageForm').addEventListener('submit', async function (event) {
+  event.preventDefault();
 
   const formData = new FormData(this);
   const loading = document.getElementById('imageLoadingIndicator'); // Optional spinner
