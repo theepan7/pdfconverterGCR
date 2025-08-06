@@ -1,10 +1,27 @@
+const compressInput = document.getElementById('pdf-upload');
+const maxSize = 5 * 1024 * 1024; // 5MB
+
+compressInput.addEventListener('change', function () {
+  const file = compressInput.files[0];
+  if (file && file.size > maxSize) {
+    alert(`⚠️ File "${file.name}" is too large. Max allowed size is 5MB.`);
+    compressInput.value = ''; // Clear the selected file
+  }
+});
+
 document.getElementById('compressForm').addEventListener('submit', async function (event) {
   event.preventDefault();
 
-  const formData = new FormData(this);
-  const loading = document.getElementById('compressLoadingIndicator'); // Optional: spinner element
+  const file = compressInput.files[0];
+  if (!file) {
+    alert('Please select a PDF file.');
+    return;
+  }
 
-  if (loading) loading.classList.remove('hidden'); // show spinner
+  const formData = new FormData(this);
+  const loading = document.getElementById('compressLoadingIndicator'); // Optional spinner element
+
+  if (loading) loading.classList.remove('hidden'); // Show spinner
 
   try {
     const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/compress', {
@@ -35,6 +52,6 @@ document.getElementById('compressForm').addEventListener('submit', async functio
     alert(error.message);
     console.error('Error during compression:', error);
   } finally {
-    if (loading) loading.classList.add('hidden'); // hide spinner
+    if (loading) loading.classList.add('hidden'); // Hide spinner
   }
 });
