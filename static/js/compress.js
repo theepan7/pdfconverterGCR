@@ -2,10 +2,14 @@ const compressInput = document.getElementById('pdf-upload');
 const maxSize = 5 * 1024 * 1024; // 5MB
 
 compressInput.addEventListener('change', function () {
-  const file = compressInput.files[0];
-  if (file && file.size > maxSize) {
-    alert(`⚠️ File "${file.name}" is too large. Max allowed size is 5MB.`);
-    compressInput.value = ''; // Clear the selected file
+  const files = compressInput.files;
+
+  for (const file of files) {
+    if (file.size > maxSize) {
+      alert(`⚠️ File "${file.name}" is too large. Max allowed size is 5MB.`);
+      compressInput.value = ''; // Clear all files
+      break;
+    }
   }
 });
 
