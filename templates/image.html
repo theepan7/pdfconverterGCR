@@ -62,13 +62,16 @@
         <form id="imageToPdfForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
             
             <label for="image-upload" class="custom-file-box w-full">
-                <div class="flex flex-col items-center justify-center">
+                <div id="file-drop-area" class="flex flex-col items-center justify-center">
                     <i class="fas fa-file-image text-orange-500 text-6xl mb-4"></i>
                     <p class="text-gray-700 font-medium text-lg mb-2" id="file-label">Drag & Drop your images here</p>
                     <p class="text-gray-500 text-sm">or click to browse</p>
                 </div>
                 <input type="file" id="image-upload" name="file" accept="image/*" multiple required />
             </label>
+
+            <div id="file-list" class="w-full text-center text-gray-600"></div>
+            <div id="error-message" class="hidden text-red-500 font-semibold mt-2"></div>
 
             <div id="loadingIndicator" class="hidden flex items-center space-x-2 text-orange-600 text-lg font-semibold">
                 <svg class="animate-spin h-5 w-5 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -90,23 +93,73 @@
     </footer>
 
     <script>
-        document.getElementById('imageToPdfForm').addEventListener('submit', async function (event) {
+        const imageUpload = document.getElementById('image-upload');
+        const fileLabel = document.getElementById('file-label');
+        const fileList = document.getElementById('file-list');
+        const errorMessage = document.getElementById('error-message');
+        const form = document.getElementById('imageToPdfForm');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        const MAX_SIZE_MB = 5;
+        const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+
+        imageUpload.addEventListener('change', function () {
+            const files = this.files;
+            let totalSize = 0;
+            fileList.innerHTML = '';
+            errorMessage.classList.add('hidden');
+
+            if (files.length > 0) {
+                fileLabel.textContent = `${files.length} file(s) selected`;
+                const ul = document.createElement('ul');
+                for (let i = 0; i < files.length; i++) {
+                    const li = document.createElement('li');
+                    li.textContent = files[i].name;
+                    ul.appendChild(li);
+                    totalSize += files[i].size;
+                }
+                fileList.appendChild(ul);
+            } else {
+                fileLabel.textContent = 'Drag & Drop your images here';
+            }
+
+            if (totalSize > MAX_SIZE_BYTES) {
+                errorMessage.textContent = `Total file size exceeds the ${MAX_SIZE_MB}MB limit.`;
+                errorMessage.classList.remove('hidden');
+                imageUpload.value = ''; // Clear the file input
+                fileList.innerHTML = ''; // Clear the file list
+                fileLabel.textContent = 'Drag & Drop your images here';
+            }
+        });
+
+        form.addEventListener('submit', async function (event) {
             event.preventDefault();
 
-            const formData = new FormData(this);
-            const loading = document.getElementById('loadingIndicator');
-            
-            // Validate if at least one file is selected
-            const fileInput = document.getElementById('image-upload');
-            if (fileInput.files.length === 0) {
-                alert('Please select at least one image file to convert.');
+            // Perform a final check before submitting
+            const files = imageUpload.files;
+            if (files.length === 0) {
+                errorMessage.textContent = 'Please select at least one image file to convert.';
+                errorMessage.classList.remove('hidden');
                 return;
             }
 
-            if (loading) loading.classList.remove('hidden');
+            let totalSize = 0;
+            for (const file of files) {
+                totalSize += file.size;
+            }
+
+            if (totalSize > MAX_SIZE_BYTES) {
+                errorMessage.textContent = `Total file size exceeds the ${MAX_SIZE_MB}MB limit.`;
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            const formData = new FormData(this);
+            loadingIndicator.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
 
             try {
-                const response = await fetch('/image', { // Changed to a relative URL
+                const response = await fetch('/image', {
                     method: 'POST',
                     body: formData,
                 });
@@ -133,7 +186,7 @@
                 alert(error.message);
                 console.error('Error during image-to-PDF:', error);
             } finally {
-                if (loading) loading.classList.add('hidden');
+                loadingIndicator.classList.add('hidden');
             }
         });
     </script>
