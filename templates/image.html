@@ -1,196 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Image to PDF</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <style>
-        /* Custom styles for Inter font and smooth transitions */
-        body {
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-        }
-        .btn-primary {
-            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-        }
-        /* Custom styling for file input for better appearance */
-        .custom-file-box {
-            border: 2px dashed #cbd5e0; /* Light gray dashed border */
-            padding: 2rem;
-            border-radius: 0.75rem; /* Rounded corners */
-            text-align: center;
-            background-color: #f7fafc; /* Light background */
-            transition: background-color 0.3s, border-color 0.3s;
-            cursor: pointer;
-        }
-        .custom-file-box:hover {
-            background-color: #edf2f7; /* Slightly darker on hover */
-            border-color: #a0aec0; /* Darker border on hover */
-        }
-        input[type="file"] {
-            display: none; /* Hide the default file input */
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image to PDF</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* Custom styles for Inter font and smooth transitions */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        .btn-primary {
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        /* Custom styling for file input for better appearance */
+        .custom-file-box {
+            border: 2px dashed #cbd5e0; /* Light gray dashed border */
+            padding: 2rem;
+            border-radius: 0.75rem; /* Rounded corners */
+            text-align: center;
+            background-color: #f7fafc; /* Light background */
+            transition: background-color 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+        .custom-file-box:hover {
+            background-color: #edf2f7; /* Slightly darker on hover */
+            border-color: #a0aec0; /* Darker border on hover */
+        }
+        input[type="file"] {
+            display: none; /* Hide the default file input */
+        }
+    </style>
 </head>
 <body class="bg-gray-100 flex flex-col items-center justify-between">
 
-    <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl relative ">
-        <div class="max-w-4xl mx-auto text-center relative">
-            
-            <a href="/" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
-                <i class="fas fa-home"></i>
-                <span class="hidden sm:inline">Home</span>
-            </a>
+    <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl relative ">
+        <div class="max-w-4xl mx-auto text-center relative">
+            
+            <a href="/" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
+                <i class="fas fa-home"></i>
+                <span class="hidden sm:inline">Home</span>
+            </a>
 
-            <h1 class="text-4xl font-extrabold mb-2">Image to PDF</h1>
-            <p class="text-lg font-light opacity-90">Convert your images into a single PDF file.</p>
-        </div>
-    </header>
+            <h1 class="text-4xl font-extrabold mb-2">Image to PDF</h1>
+            <p class="text-lg font-light opacity-90">Convert your images into a single PDF file.</p>
+        </div>
+    </header>
 
-    <main class="container flex flex-col items-center justify-center p-8 max-w-xl w-full my-8 bg-white rounded-2xl shadow-xl border border-gray-200">
-        <h2 class="text-4xl font-semibold text-gray-800 mb-8 text-center">Upload Your Images</h2>
-        <form id="imageToPdfForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
-            
-            <label for="image-upload" class="custom-file-box w-full">
-                <div id="file-drop-area" class="flex flex-col items-center justify-center">
-                    <i class="fas fa-file-image text-orange-500 text-6xl mb-4"></i>
-                    <p class="text-gray-700 font-medium text-lg mb-2" id="file-label">Drag & Drop your images here</p>
-                    <p class="text-gray-500 text-sm">or click to browse</p>
-                </div>
-                <input type="file" id="image-upload" name="file" accept="image/*" multiple required />
-            </label>
+    <main class="container flex flex-col items-center justify-center p-8 max-w-xl w-full my-8 bg-white rounded-2xl shadow-xl border border-gray-200">
+        <h2 class="text-4xl font-semibold text-gray-800 mb-8 text-center">Upload Your Images</h2>
+        <form id="imageToPdfForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
+            
+            <label for="image-upload" class="custom-file-box w-full">
+                <div id="file-drop-area" class="flex flex-col items-center justify-center">
+                    <i class="fas fa-file-image text-orange-500 text-6xl mb-4"></i>
+                    <p class="text-gray-700 font-medium text-lg mb-2" id="file-label">Drag & Drop your images here</p>
+                    <p class="text-gray-500 text-sm">or click to browse</p>
+                </div>
+                <input type="file" id="image-upload" name="file" accept="image/*" multiple required />
+            </label>
 
-            <div id="file-list" class="w-full text-center text-gray-600"></div>
-            <div id="error-message" class="hidden text-red-500 font-semibold mt-2"></div>
+            <div id="file-list" class="w-full text-center text-gray-600"></div>
+            <div id="error-message" class="hidden text-red-500 font-semibold mt-2"></div>
 
-            <div id="loadingIndicator" class="hidden flex items-center space-x-2 text-orange-600 text-lg font-semibold">
-                <svg class="animate-spin h-5 w-5 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                </svg>
-                <span>Converting... Please wait</span>
-            </div>
+            <div id="loadingIndicator" class="hidden flex items-center space-x-2 text-orange-600 text-lg font-semibold">
+                <svg class="animate-spin h-5 w-5 text-orange-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                </svg>
+                <span>Converting... Please wait</span>
+            </div>
 
-            <button type="submit" class="btn-primary bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-75 text-xl">
-                Convert to PDF
-            </button>
-        </form>
-    </main>
+            <button type="submit" class="btn-primary bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-75 text-xl">
+                Convert to PDF
+            </button>
+        </form>
+    </main>
 
-    <footer class="w-full py-6 text-center text-gray-500 text-sm bg-gray-200 rounded-t-xl mt-auto">
-        <p>&copy; 2025 PDF Toolkit. All rights reserved.</p>
-        <p>Your document privacy and confidentiality are our top priority. All processing is done securely on your device, and your files are never stored on our servers.</p>
-    </footer>
+    <footer class="w-full py-6 text-center text-gray-500 text-sm bg-gray-200 rounded-t-xl mt-auto">
+        <p>&copy; 2025 PDF Toolkit. All rights reserved.</p>
+        <p>Your document privacy and confidentiality are our top priority. All processing is done securely on your device, and your files are never stored on our servers.</p>
+    </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const imageUpload = document.getElementById('image-upload');
-            const fileLabel = document.getElementById('file-label');
-            const fileList = document.getElementById('file-list');
-            const errorMessage = document.getElementById('error-message');
-            const form = document.getElementById('imageToPdfForm');
-            const loadingIndicator = document.getElementById('loadingIndicator');
+    <script>
+        const imageUpload = document.getElementById('image-upload');
+        const fileLabel = document.getElementById('file-label');
+        const fileList = document.getElementById('file-list');
+        const errorMessage = document.getElementById('error-message');
+        const form = document.getElementById('imageToPdfForm');
+        const loadingIndicator = document.getElementById('loadingIndicator');
 
-            const MAX_SIZE_MB = 5;
-            const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+        const MAX_SIZE_MB = 5;
+        const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
-            imageUpload.addEventListener('change', function () {
-                const files = this.files;
-                let totalSize = 0;
-                fileList.innerHTML = '';
-                errorMessage.classList.add('hidden');
+        imageUpload.addEventListener('change', function () {
+            const files = this.files;
+            let totalSize = 0;
+            fileList.innerHTML = '';
+            errorMessage.classList.add('hidden');
 
-                if (files.length > 0) {
-                    fileLabel.textContent = `${files.length} file(s) selected`;
-                    const ul = document.createElement('ul');
-                    for (let i = 0; i < files.length; i++) {
-                        const li = document.createElement('li');
-                        li.textContent = files[i].name;
-                        ul.appendChild(li);
-                        totalSize += files[i].size;
-                    }
-                    fileList.appendChild(ul);
-                } else {
-                    fileLabel.textContent = 'Drag & Drop your images here';
-                }
+            if (files.length > 0) {
+                fileLabel.textContent = `${files.length} file(s) selected`;
+                const ul = document.createElement('ul');
+                for (let i = 0; i < files.length; i++) {
+                    const li = document.createElement('li');
+                    li.textContent = files[i].name;
+                    ul.appendChild(li);
+                    totalSize += files[i].size;
+                }
+                fileList.appendChild(ul);
+            } else {
+                fileLabel.textContent = 'Drag & Drop your images here';
+            }
 
-                if (totalSize > MAX_SIZE_BYTES) {
-                    errorMessage.textContent = `Total file size exceeds the ${MAX_SIZE_MB}MB limit.`;
-                    errorMessage.classList.remove('hidden');
-                    imageUpload.value = ''; // Clear the file input
-                    fileList.innerHTML = ''; // Clear the file list
-                    fileLabel.textContent = 'Drag & Drop your images here';
-                }
-            });
+            if (totalSize > MAX_SIZE_BYTES) {
+                errorMessage.textContent = `Total file size exceeds the ${MAX_SIZE_MB}MB limit.`;
+                errorMessage.classList.remove('hidden');
+                imageUpload.value = ''; // Clear the file input
+                fileList.innerHTML = ''; // Clear the file list
+                fileLabel.textContent = 'Drag & Drop your images here';
+            }
+        });
 
-            form.addEventListener('submit', async function (event) {
-                event.preventDefault();
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
 
-                // Perform a final check before submitting
-                const files = imageUpload.files;
-                if (files.length === 0) {
-                    errorMessage.textContent = 'Please select at least one image file to convert.';
-                    errorMessage.classList.remove('hidden');
-                    return;
-                }
+            // Perform a final check before submitting
+            const files = imageUpload.files;
+            if (files.length === 0) {
+                errorMessage.textContent = 'Please select at least one image file to convert.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
 
-                let totalSize = 0;
-                for (const file of files) {
-                    totalSize += file.size;
-                }
+            let totalSize = 0;
+            for (const file of files) {
+                totalSize += file.size;
+            }
 
-                if (totalSize > MAX_SIZE_BYTES) {
-                    errorMessage.textContent = `Total file size exceeds the ${MAX_SIZE_MB}MB limit.`;
-                    errorMessage.classList.remove('hidden');
-                    return;
-                }
+            if (totalSize > MAX_SIZE_BYTES) {
+                errorMessage.textContent = `Total file size exceeds the ${MAX_SIZE_MB}MB limit.`;
+                errorMessage.classList.remove('hidden');
+                return;
+            }
 
-                const formData = new FormData(this);
-                loadingIndicator.classList.remove('hidden');
-                errorMessage.classList.add('hidden');
+            const formData = new FormData(this);
+            loadingIndicator.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
 
-                try {
-                    const response = await fetch('/image', {
-                        method: 'POST',
-                        body: formData,
-                    });
+            try {
+                const response = await fetch('/image', {
+                    method: 'POST',
+                    body: formData,
+                });
 
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        throw new Error(`Image-to-PDF failed: ${response.status} - ${errorText}`);
-                    }
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Image-to-PDF failed: ${response.status} - ${errorText}`);
+                }
 
-                    const blob = await response.blob();
-                    if (blob.size === 0) {
-                        throw new Error('Received an empty file. Conversion may have failed.');
-                    }
+                const blob = await response.blob();
+                if (blob.size === 0) {
+                    throw new Error('Received an empty file. Conversion may have failed.');
+                }
 
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'converted.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
-                } catch (error) {
-                    alert(error.message);
-                    console.error('Error during image-to-PDF:', error);
-                } finally {
-                    loadingIndicator.classList.add('hidden');
-                }
-            });
-        });
-    </script>
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'converted.pdf';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                alert(error.message);
+                console.error('Error during image-to-PDF:', error);
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
