@@ -158,36 +158,33 @@
             loadingIndicator.classList.remove('hidden');
             errorMessage.classList.add('hidden');
 
-            try {
+                       try {
                 const response = await fetch('/image', {
                     method: 'POST',
                     body: formData,
                 });
-
+            
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`Image-to-PDF failed: ${response.status} - ${errorText}`);
                 }
-
-                const blob = await response.blob();
-                if (blob.size === 0) {
-                    throw new Error('Received an empty file. Conversion may have failed.');
+            
+                const data = await response.json();
+            
+                if (!data.download_url) {
+                    throw new Error('No download URL returned from server.');
                 }
-
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'converted.pdf';
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
+            
+                // Open the signed URL in a new tab/window for downloading
+                window.open(data.download_url, '_blank');
+            
             } catch (error) {
                 alert(error.message);
                 console.error('Error during image-to-PDF:', error);
             } finally {
                 loadingIndicator.classList.add('hidden');
             }
+
         });
     </script>
 </body>
