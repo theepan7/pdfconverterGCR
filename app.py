@@ -10,7 +10,7 @@ from datetime import timedelta
 from google.oauth2 import service_account
 
 # Path to mounted secret (Cloud Run mount location)
-SERVICE_ACCOUNT_PATH = "/secrets/pdftoolkitkey"
+SERVICE_ACCOUNT_PATH = "/secrets/pdftoolkit-key"
 
 if not os.path.exists(SERVICE_ACCOUNT_PATH):
     raise FileNotFoundError(f"Service account file not found at {SERVICE_ACCOUNT_PATH}")
