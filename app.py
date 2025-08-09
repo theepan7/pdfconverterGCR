@@ -10,6 +10,8 @@ from google.oauth2 import service_account
 credentials = service_account.Credentials.from_service_account_file(
     "/secrets/pdftoolkitkey"
 )
+storage_client = storage.Client(credentials=credentials)
+
 
 app = Flask(__name__, static_folder='static')
 CORS(app)
