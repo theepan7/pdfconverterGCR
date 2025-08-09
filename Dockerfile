@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# Install essential system packages for Pillow, Ghostscript, and build tools
+# Install system packages for Pillow, Ghostscript, and build tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ghostscript \
@@ -16,15 +16,12 @@ RUN apt-get update && \
 # Set working directory
 WORKDIR /app
 
-# Copy and install Python dependencies
+# Copy and install Python dependencies (make sure google-cloud-storage is in requirements.txt)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the app source code
+# Copy app source code
 COPY . .
-
-# Make sure upload/processed folders exist (optional, since your app does this too)
-RUN mkdir -p uploads processed
 
 # Expose Flask port
 EXPOSE 8080
