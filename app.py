@@ -5,6 +5,11 @@ from PyPDF2 import PdfMerger, PdfReader, PdfWriter
 from PIL import Image
 from google.cloud import storage
 from datetime import timedelta
+from google.oauth2 import service_account
+
+credentials = service_account.Credentials.from_service_account_file(
+    "/secrets/pdftoolkitkey"
+)
 
 app = Flask(__name__, static_folder='static')
 CORS(app)
