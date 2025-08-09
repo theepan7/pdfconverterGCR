@@ -12,7 +12,7 @@ CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB
 
 # Google Cloud Storage bucket name (set this in your environment or default here)
-GCS_BUCKET = os.environ.get('GCS_BUCKET', 'your-bucket-name')
+GCS_BUCKET = os.environ.get('GCS_BUCKET', 'pdftoolkituploads')
 
 # Initialize Google Cloud Storage client
 storage_client = storage.Client()
