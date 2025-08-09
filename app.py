@@ -1,18 +1,43 @@
-from flask import Flask, request, send_file, render_template
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import os, uuid, subprocess
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter
 from PIL import Image
+from google.cloud import storage
+from datetime import timedelta
 
 app = Flask(__name__, static_folder='static')
 CORS(app)
 
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB
 
-UPLOAD_FOLDER = "uploads"
-PROCESSED_FOLDER = "processed"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(PROCESSED_FOLDER, exist_ok=True)
+# Google Cloud Storage bucket name (set this in your environment or default here)
+GCS_BUCKET = os.environ.get('GCS_BUCKET', 'your-bucket-name')
+
+# Initialize Google Cloud Storage client
+storage_client = storage.Client()
+bucket = storage_client.bucket(GCS_BUCKET)
+
+def upload_blob_from_fileobj(file_obj, destination_blob_name):
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_file(file_obj)
+    return blob
+
+def download_blob_to_tmp(blob_name):
+    local_path = f"/tmp/{os.path.basename(blob_name)}"
+    blob = bucket.blob(blob_name)
+    blob.download_to_filename(local_path)
+    return local_path
+
+def upload_file_to_gcs(local_path, destination_blob_name):
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_filename(local_path)
+    return blob
+
+def generate_signed_url(blob_name, expiration_hours=1):
+    blob = bucket.blob(blob_name)
+    url = blob.generate_signed_url(expiration=timedelta(hours=expiration_hours))
+    return url
 
 @app.errorhandler(413)
 def request_entity_too_large(error):
@@ -43,35 +68,70 @@ def compress():
     uploaded_file = request.files.get('file')
     if uploaded_file and uploaded_file.filename.endswith('.pdf'):
         file_id = str(uuid.uuid4())
-        input_path = os.path.join(UPLOAD_FOLDER, f"{file_id}.pdf")
-        output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_compressed.pdf")
-        uploaded_file.save(input_path)
+        gcs_input_path = f"uploads/{file_id}.pdf"
+        gcs_output_path = f"processed/{file_id}_compressed.pdf"
+
+        # Upload original PDF to GCS
+        upload_blob_from_fileobj(uploaded_file.stream, gcs_input_path)
+
+        # Download to tmp for processing
+        input_tmp_path = download_blob_to_tmp(gcs_input_path)
+        output_tmp_path = f"/tmp/{file_id}_compressed.pdf"
+
         try:
             subprocess.run([
                 "gs", "-sDEVICE=pdfwrite",
                 "-dCompatibilityLevel=1.4",
                 "-dPDFSETTINGS=/ebook",
                 "-dNOPAUSE", "-dQUIET", "-dBATCH",
-                f"-sOutputFile={output_path}", input_path
+                f"-sOutputFile={output_tmp_path}", input_tmp_path
             ], check=True)
-            return send_file(output_path, as_attachment=True)
+
+            # Upload compressed PDF back to GCS
+            upload_file_to_gcs(output_tmp_path, gcs_output_path)
+
+            # Generate signed URL for client download
+            signed_url = generate_signed_url(gcs_output_path)
+
+            # Cleanup temp files
+            os.remove(input_tmp_path)
+            os.remove(output_tmp_path)
+
+            return jsonify({"download_url": signed_url})
+
         except Exception as e:
             return f"Compression failed: {e}", 500
+
     return "Invalid file", 400
 
 @app.route('/merge', methods=['POST'])
 def merge():
     files = request.files.getlist('files')
-    merger = PdfMerger()
     file_id = str(uuid.uuid4())
-    output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_merged.pdf")
+    gcs_output_path = f"processed/{file_id}_merged.pdf"
+
+    merger = PdfMerger()
+
     try:
+        # Upload all files to GCS and append them to merger
         for file in files:
             if file.filename.endswith('.pdf'):
-                merger.append(PdfReader(file.stream))
-        with open(output_path, 'wb') as f_out:
+                gcs_temp_path = f"uploads/{uuid.uuid4()}.pdf"
+                upload_blob_from_fileobj(file.stream, gcs_temp_path)
+                tmp_path = download_blob_to_tmp(gcs_temp_path)
+                merger.append(PdfReader(tmp_path))
+                os.remove(tmp_path)
+                # Optionally, delete uploaded temp input from GCS here
+
+        output_tmp_path = f"/tmp/{file_id}_merged.pdf"
+        with open(output_tmp_path, 'wb') as f_out:
             merger.write(f_out)
-        return send_file(output_path, as_attachment=True)
+
+        upload_file_to_gcs(output_tmp_path, gcs_output_path)
+        signed_url = generate_signed_url(gcs_output_path)
+        os.remove(output_tmp_path)
+
+        return jsonify({"download_url": signed_url})
     except Exception as e:
         return f"Merging failed: {e}", 500
 
@@ -80,24 +140,40 @@ def split():
     file = request.files.get('file')
     start = int(request.form.get('start', 1))
     end = int(request.form.get('end', 1))
+
     if file and file.filename.endswith('.pdf'):
         file_id = str(uuid.uuid4())
-        output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_split.pdf")
-        reader = PdfReader(file.stream)
+        gcs_input_path = f"uploads/{file_id}.pdf"
+        gcs_output_path = f"processed/{file_id}_split.pdf"
+
+        upload_blob_from_fileobj(file.stream, gcs_input_path)
+        input_tmp_path = download_blob_to_tmp(gcs_input_path)
+
+        reader = PdfReader(input_tmp_path)
         writer = PdfWriter()
         try:
             for i in range(start - 1, end):
                 writer.add_page(reader.pages[i])
-            with open(output_path, 'wb') as f_out:
+
+            output_tmp_path = f"/tmp/{file_id}_split.pdf"
+            with open(output_tmp_path, 'wb') as f_out:
                 writer.write(f_out)
-            return send_file(output_path, as_attachment=True)
+
+            upload_file_to_gcs(output_tmp_path, gcs_output_path)
+            signed_url = generate_signed_url(gcs_output_path)
+
+            os.remove(input_tmp_path)
+            os.remove(output_tmp_path)
+
+            return jsonify({"download_url": signed_url})
+
         except Exception as e:
             return f"Splitting failed: {e}", 500
+
     return "Invalid file", 400
 
 @app.route('/image', methods=['POST'])
 def image_to_pdf():
-    from PIL import Image
     files = request.files.getlist('file')
     images = []
 
@@ -113,14 +189,19 @@ def image_to_pdf():
             return "No valid images uploaded", 400
 
         file_id = str(uuid.uuid4())
-        output_path = os.path.join(PROCESSED_FOLDER, f"{file_id}_image2pdf.pdf")
-        images[0].save(output_path, format='PDF', save_all=True, append_images=images[1:])
+        gcs_output_path = f"processed/{file_id}_image2pdf.pdf"
+        output_tmp_path = f"/tmp/{file_id}_image2pdf.pdf"
 
-        return send_file(output_path, mimetype='application/pdf', as_attachment=True)
+        images[0].save(output_tmp_path, format='PDF', save_all=True, append_images=images[1:])
+        upload_file_to_gcs(output_tmp_path, gcs_output_path)
+        signed_url = generate_signed_url(gcs_output_path)
+        os.remove(output_tmp_path)
+
+        return jsonify({"download_url": signed_url})
+
     except Exception as e:
         print("[ERROR] Image to PDF failed:", e)
         return f"Image to PDF failed: {e}", 500
-
 
 
 if __name__ == '__main__':
