@@ -22,8 +22,8 @@ credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCO
 app = Flask(__name__, static_folder='static')
 CORS(app)
 
-# Max upload size = 5 MB
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
+# Max upload size = 32 MB
+app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024
 
 # GCS bucket name (from environment variable or fallback)
 GCS_BUCKET = os.environ.get("GCS_BUCKET", "pdftoolkituploads")
