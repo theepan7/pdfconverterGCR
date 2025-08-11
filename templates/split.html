@@ -251,121 +251,46 @@
           downloadUrl = null;
         }
 
-                <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const pdfUpload = document.getElementById('pdf-upload');
-    const fileLabel = document.getElementById('file-label');
-    const fileList = document.getElementById('file-list');
-    const errorMessage = document.getElementById('error-message');
-    const splitForm = document.getElementById('splitForm');
-    const splitLoadingIndicator = document.getElementById('splitLoadingIndicator');
-    const downloadBtn = document.getElementById('downloadBtn');
+        try {
+          const formData = new FormData(splitForm);
+          const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/split', {
+            method: 'POST',
+            body: formData,
+          });
 
-    const MAX_SIZE_MB = 32;
-    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Splitting failed: ${response.status} - ${errorText}`);
+          }
 
-    let downloadUrl = null;
+          const { download_url } = await response.json();
+          if (!download_url) {
+            throw new Error('No download URL returned by server.');
+          }
 
-    pdfUpload.addEventListener('change', () => {
-      const file = pdfUpload.files[0];
-      errorMessage.classList.add('hidden');
-      fileList.innerHTML = '';
+          downloadUrl = download_url;
 
-      if (file) {
-        fileLabel.textContent = file.name;
-        fileList.textContent = `File selected: ${file.name}`;
+          downloadBtn.classList.remove('hidden');
+          downloadBtn.disabled = false;
 
-        if (file.size > MAX_SIZE_BYTES) {
-          errorMessage.textContent = `File size exceeds the ${MAX_SIZE_MB}MB limit.`;
+          downloadBtn.onclick = () => {
+            window.open(downloadUrl, '_blank');
+          };
+
+        } catch (error) {
+          errorMessage.textContent = error.message;
           errorMessage.classList.remove('hidden');
+          console.error('Error during splitting:', error);
+        } finally {
+          splitLoadingIndicator.classList.add('hidden');
           pdfUpload.value = '';
           fileLabel.textContent = 'Click to upload your PDF';
           fileList.textContent = '';
+          splitForm.start.value = '';
+          splitForm.end.value = '';
         }
-      } else {
-        fileLabel.textContent = 'Click to upload your PDF';
-        fileList.textContent = '';
-      }
-
-      // Hide & disable download button on new selection
-      downloadBtn.classList.add('hidden');
-      downloadBtn.disabled = true;
-      downloadUrl = null;
+      });
     });
-
-    splitForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      const file = pdfUpload.files[0];
-      const startPage = parseInt(splitForm.start.value, 10);
-      const endPage = parseInt(splitForm.end.value, 10);
-
-      if (!file) {
-        errorMessage.textContent = 'Please select a PDF file.';
-        errorMessage.classList.remove('hidden');
-        return;
-      }
-
-      if (file.size > MAX_SIZE_BYTES) {
-        errorMessage.textContent = `File size exceeds the ${MAX_SIZE_MB}MB limit.`;
-        errorMessage.classList.remove('hidden');
-        return;
-      }
-
-      if (!startPage || !endPage || startPage <= 0 || endPage < startPage) {
-        errorMessage.textContent = 'Please enter valid start and end page numbers.';
-        errorMessage.classList.remove('hidden');
-        return;
-      }
-
-      splitLoadingIndicator.classList.remove('hidden');
-      errorMessage.classList.add('hidden');
-
-      downloadBtn.classList.add('hidden');
-      downloadBtn.disabled = true;
-      downloadUrl = null;
-
-      try {
-        const formData = new FormData(splitForm);
-        const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/split', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Splitting failed: ${response.status} - ${errorText}`);
-        }
-
-        // Parse JSON containing download_url
-        const { download_url } = await response.json();
-        if (!download_url) {
-          throw new Error('No download URL returned by server.');
-        }
-
-        downloadUrl = download_url;
-
-        downloadBtn.classList.remove('hidden');
-        downloadBtn.disabled = false;
-
-        downloadBtn.onclick = () => {
-          window.open(downloadUrl, '_blank');
-        };
-
-      } catch (error) {
-        errorMessage.textContent = error.message;
-        errorMessage.classList.remove('hidden');
-        console.error('Error during splitting:', error);
-      } finally {
-        splitLoadingIndicator.classList.add('hidden');
-        pdfUpload.value = '';
-        fileLabel.textContent = 'Click to upload your PDF';
-        fileList.textContent = '';
-        splitForm.start.value = '';
-        splitForm.end.value = '';
-      }
-    });
-  });
-</script>
+  </script>
 </body>
 </html>
