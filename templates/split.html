@@ -5,14 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Split PDF</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        body { font-family: 'Inter', sans-serif; min-height: 100vh; }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
         .btn-primary {
             transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
         }
-        .btn-primary:hover { transform: translateY(-2px); }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
         .custom-file-input {
             border: 2px dashed #cbd5e0;
             padding: 2rem;
@@ -26,7 +31,9 @@
             background-color: #edf2f7;
             border-color: #a0aec0;
         }
-        input[type="file"] { display: none; }
+        input[type="file"] {
+            display: none;
+        }
         .number-input {
             border: 1px solid #e2e8f0;
             padding: 0.75rem 1rem;
@@ -44,12 +51,13 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 flex flex-col items-center justify-between">
+<body class="bg-gray-100 flex flex-col items-center justify-between min-h-screen">
 
     <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg rounded-b-xl relative">
         <div class="max-w-4xl mx-auto text-center relative">
-            <a href="/" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
-                <i class="fas fa-home"></i><span class="hidden sm:inline">Home</span>
+            <a href="/" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
+                <i class="fas fa-home"></i>
+                <span class="hidden sm:inline">Home</span>
             </a>
             <h1 class="text-4xl font-extrabold mb-2">Split PDF</h1>
             <p class="text-lg font-light opacity-90">Extract specific pages or ranges from your PDF documents.</p>
@@ -60,12 +68,12 @@
         <h2 class="text-4xl font-semibold text-gray-800 mb-8 text-center">Upload Your PDF & Select Pages</h2>
 
         <form id="splitForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
-            <div class="custom-file-input w-full" onclick="document.getElementById('pdf-upload').click()">
+            <label for="pdf-upload" class="custom-file-input w-full cursor-pointer">
                 <i class="fas fa-scissors text-red-500 text-6xl mb-4"></i>
                 <p id="file-label" class="text-gray-700 font-medium text-lg mb-2">Click to upload your PDF</p>
                 <p class="text-gray-500 text-sm">Only one PDF file</p>
-            </div>
-            <input type="file" id="pdf-upload" name="file" accept=".pdf" required />
+                <input type="file" id="pdf-upload" name="file" accept=".pdf" required />
+            </label>
             
             <div id="file-list" class="w-full text-center text-gray-600"></div>
             <div id="error-message" class="hidden text-red-500 font-semibold mt-2"></div>
@@ -120,29 +128,25 @@
                 errorMessage.classList.add('hidden');
 
                 if (file) {
-                    // Display the file name
                     fileLabel.textContent = file.name;
                     fileList.textContent = `File selected: ${file.name}`;
                     
-                    // Check for file size limit
                     if (file.size > MAX_SIZE_BYTES) {
                         errorMessage.textContent = `File size exceeds the ${MAX_SIZE_MB}MB limit.`;
                         errorMessage.classList.remove('hidden');
-                        this.value = ''; // Clear the file input
+                        this.value = '';
                         fileLabel.textContent = 'Click to upload your PDF';
                         fileList.textContent = '';
                     }
                 } else {
-                    // No file selected
                     fileLabel.textContent = 'Click to upload your PDF';
                     fileList.textContent = '';
                 }
             });
 
-            splitForm.addEventListener('submit', async function(event) {
+            splitForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
 
-                // Final validation check before submission
                 const file = pdfUpload.files[0];
                 const startPage = parseInt(startPageInput.value, 10);
                 const endPage = parseInt(endPageInput.value, 10);
@@ -171,7 +175,7 @@
                     return;
                 }
 
-                const formData = new FormData(this);
+                const formData = new FormData(splitForm);
                 loadingIndicator.classList.remove('hidden');
                 errorMessage.classList.add('hidden');
 
@@ -200,13 +204,11 @@
                     a.remove();
                     window.URL.revokeObjectURL(url);
                 } catch (error) {
-                    // Display fetch error in the message area
                     errorMessage.textContent = error.message;
                     errorMessage.classList.remove('hidden');
                     console.error('Error during splitting:', error);
                 } finally {
                     loadingIndicator.classList.add('hidden');
-                    // Reset the form for the next use
                     pdfUpload.value = '';
                     fileLabel.textContent = 'Click to upload your PDF';
                     fileList.textContent = '';
