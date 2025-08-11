@@ -9,7 +9,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         /* Custom styles for Inter font and smooth transitions */
@@ -158,34 +158,39 @@
             loadingIndicator.classList.remove('hidden');
             errorMessage.classList.add('hidden');
 
-                       try {
+            try {
                 const response = await fetch('/image', {
                     method: 'POST',
                     body: formData,
                 });
-            
+
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`Image-to-PDF failed: ${response.status} - ${errorText}`);
                 }
-            
+
                 const data = await response.json();
-            
+
                 if (!data.download_url) {
                     throw new Error('No download URL returned from server.');
                 }
-            
+
                 // Open the signed URL in a new tab/window for downloading
                 window.open(data.download_url, '_blank');
-            
+
             } catch (error) {
-                alert(error.message);
+                errorMessage.textContent = error.message;
+                errorMessage.classList.remove('hidden');
                 console.error('Error during image-to-PDF:', error);
             } finally {
                 loadingIndicator.classList.add('hidden');
+                // Reset inputs and labels after completion
+                imageUpload.value = '';
+                fileLabel.textContent = 'Drag & Drop your images here';
+                fileList.innerHTML = '';
             }
-
         });
     </script>
 </body>
 </html>
+
