@@ -215,7 +215,7 @@
 
         try {
           const formData = new FormData(mergeForm);
-          const response = await fetch('/merge', {
+          const response = await fetch('https://pdfcompress-1097766937022.europe-west1.run.app/merge', {
             method: 'POST',
             body: formData,
           });
