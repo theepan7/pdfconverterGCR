@@ -109,7 +109,6 @@
                 const files = this.files;
                 let totalSize = 0;
                 
-                // Reset UI
                 fileListContainer.innerHTML = '';
                 errorMessage.classList.add('hidden');
 
@@ -119,7 +118,6 @@
                     ul.className = "list-disc list-inside text-left mx-auto";
 
                     for (const file of files) {
-                        // Validate file size
                         if (file.size > MAX_SIZE_BYTES) {
                             errorMessage.textContent = `File "${file.name}" exceeds the ${MAX_SIZE_MB}MB limit.`;
                             errorMessage.classList.remove('hidden');
@@ -133,36 +131,33 @@
                     }
                     
                     if (!hasError) {
-                         fileLabel.textContent = `${files.length} files selected.`;
-                         fileListContainer.appendChild(ul);
-                         // Check total size
-                         if (totalSize > MAX_SIZE_BYTES) {
+                        fileLabel.textContent = `${files.length} files selected.`;
+                        fileListContainer.appendChild(ul);
+                        if (totalSize > MAX_SIZE_BYTES) {
                             errorMessage.textContent = `Total file size exceeds the ${MAX_SIZE_MB}MB limit.`;
                             errorMessage.classList.remove('hidden');
                             hasError = true;
-                         }
+                        }
                     }
 
-                    if(hasError) {
-                        this.value = ''; // Clear the file input
+                    if (hasError) {
+                        this.value = '';
                         fileLabel.textContent = 'Drag & Drop your PDFs here';
                         fileListContainer.innerHTML = '';
                     }
-
                 } else if (files.length === 1) {
                     errorMessage.textContent = `Please select at least two PDF files to merge.`;
                     errorMessage.classList.remove('hidden');
-                    this.value = ''; // Clear the file input
+                    this.value = '';
                     fileLabel.textContent = 'Drag & Drop your PDFs here';
                 } else {
                     fileLabel.textContent = 'Drag & Drop your PDFs here';
                 }
             });
 
-            mergeForm.addEventListener('submit', async function (event) {
+            mergeForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
 
-                // Final validation check before submission
                 const files = pdfUpload.files;
                 if (files.length < 2) {
                     errorMessage.textContent = 'Please select at least two PDF files to merge.';
@@ -186,7 +181,7 @@
                     return;
                 }
 
-                const formData = new FormData(this);
+                const formData = new FormData(mergeForm);
                 loadingIndicator.classList.remove('hidden');
                 errorMessage.classList.add('hidden');
 
@@ -215,13 +210,11 @@
                     a.remove();
                     window.URL.revokeObjectURL(url);
                 } catch (error) {
-                    // Display fetch error in the message area
                     errorMessage.textContent = error.message;
                     errorMessage.classList.remove('hidden');
                     console.error('Error during merging:', error);
                 } finally {
                     loadingIndicator.classList.add('hidden');
-                    // Reset the form for the next use
                     pdfUpload.value = '';
                     fileLabel.textContent = 'Drag & Drop your PDFs here';
                     fileListContainer.innerHTML = '';
