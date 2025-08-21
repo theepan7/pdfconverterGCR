@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const MAX_SIZE_MB = 32;
   const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
-  let downloadUrl = null; // Will store signed GCS URL
+  let downloadUrl = null;
 
   pdfUpload.addEventListener('change', () => {
     const file = pdfUpload.files[0];
@@ -224,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadingIndicator.classList.remove('hidden');
     errorMessage.classList.add('hidden');
-
     downloadBtn.classList.add('hidden');
     downloadBtn.disabled = true;
     downloadUrl = null;
@@ -241,24 +240,44 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(`Compression failed: ${response.status} - ${errorText}`);
       }
 
-      const result = await response.json();
-      if (!result.download_url) {
-        throw new Error('No download URL returned from server.');
+      const contentType = response.headers.get("Content-Type") || "";
+
+      if (contentType.includes("application/json")) {
+        // JSON response (large file, signed URL)
+        const result = await response.json();
+        if (!result.download_url) {
+          throw new Error('No download URL returned from server.');
+        }
+        downloadUrl = result.download_url;
+
+        downloadBtn.classList.remove('hidden');
+        downloadBtn.disabled = false;
+        downloadBtn.onclick = () => {
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.download = 'compressed.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        };
+      } else {
+        // Raw PDF response (small file, direct blob)
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        downloadBtn.classList.remove('hidden');
+        downloadBtn.disabled = false;
+        downloadBtn.onclick = () => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'compressed.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        };
       }
 
-      downloadUrl = result.download_url;
-
-      downloadBtn.classList.remove('hidden');
-      downloadBtn.disabled = false;
-
-      downloadBtn.onclick = () => {
-        const a = document.createElement('a');
-        a.href = downloadUrl;
-        a.download = 'compressed.pdf';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      };
     } catch (error) {
       errorMessage.textContent = error.message;
       errorMessage.classList.remove('hidden');
