@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 import os
 import uuid
@@ -23,6 +23,9 @@ CORS(app)
 
 # Max upload size = 32 MB (matches Cloud Run HTTP limit)
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024
+
+# Hybrid threshold
+THRESHOLD_MB = 2
 
 # GCS bucket name (env var or fallback)
 GCS_BUCKET = os.environ.get("GCS_BUCKET", "pdftoolkituploads")
@@ -70,6 +73,15 @@ def json_error(message, code=500, extra=None):
     if extra:
         payload.update(extra)
     return jsonify(payload), code
+
+
+def is_small_file(file_storage):
+    """Check if file size is <= threshold (2MB)."""
+    pos = file_storage.stream.tell()
+    file_storage.stream.seek(0, os.SEEK_END)
+    size = file_storage.stream.tell()
+    file_storage.stream.seek(pos)
+    return size <= THRESHOLD_MB * 1024 * 1024
 
 
 # ---------------- Error Handlers ---------------- #
@@ -127,14 +139,11 @@ def compress():
 
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
-            # Upload original to GCS
-            upload_blob_from_fileobj(uploaded_file.stream, gcs_input_path)
-
-            # Download to tmp
-            input_tmp_path = download_blob_to_tmp(gcs_input_path, tmp_dir)
+            input_tmp_path = os.path.join(tmp_dir, f"{file_id}.pdf")
             output_tmp_path = os.path.join(tmp_dir, f"{file_id}_compressed.pdf")
+            uploaded_file.save(input_tmp_path)
 
-            # Run Ghostscript
+            # Run Ghostscript compression
             gs_cmd = [
                 "gs", "-sDEVICE=pdfwrite",
                 "-dCompatibilityLevel=1.4",
@@ -142,19 +151,20 @@ def compress():
                 "-dNOPAUSE", "-dQUIET", "-dBATCH",
                 f"-sOutputFile={output_tmp_path}", input_tmp_path
             ]
-
             result = subprocess.run(gs_cmd, capture_output=True, text=True)
             if result.returncode != 0 or not os.path.exists(output_tmp_path):
-                print("Ghostscript failed", {
-                    "returncode": result.returncode,
-                    "stdout": result.stdout,
-                    "stderr": result.stderr
-                })
+                print("Ghostscript failed", result.stderr)
                 return json_error("Compression failed while running Ghostscript.", 500)
 
-            upload_file_to_gcs(output_tmp_path, gcs_output_path)
-            signed_url = generate_signed_url(gcs_output_path)
-            return jsonify({"download_url": signed_url})
+            if is_small_file(uploaded_file):
+                # Return directly
+                return send_file(output_tmp_path, as_attachment=True,
+                                 download_name="compressed.pdf")
+            else:
+                # Upload to GCS
+                upload_file_to_gcs(output_tmp_path, gcs_output_path)
+                signed_url = generate_signed_url(gcs_output_path)
+                return jsonify({"download_url": signed_url})
 
     except Exception as e:
         print("Compression exception:", str(e))
@@ -175,12 +185,15 @@ def merge():
         with tempfile.TemporaryDirectory() as tmp_dir:
             merger = PdfMerger()
             valid_files_found = False
+            total_size = 0
 
+            local_paths = []
             for file in files:
                 if file.filename.lower().endswith(".pdf"):
-                    temp_blob_path = f"uploads/{uuid.uuid4()}.pdf"
-                    upload_blob_from_fileobj(file.stream, temp_blob_path)
-                    tmp_path = download_blob_to_tmp(temp_blob_path, tmp_dir)
+                    tmp_path = os.path.join(tmp_dir, f"{uuid.uuid4()}.pdf")
+                    file.save(tmp_path)
+                    local_paths.append(tmp_path)
+                    total_size += os.path.getsize(tmp_path)
                     merger.append(PdfReader(tmp_path))
                     valid_files_found = True
 
@@ -192,9 +205,13 @@ def merge():
                 merger.write(f_out)
             merger.close()
 
-            upload_file_to_gcs(output_tmp_path, gcs_output_path)
-            signed_url = generate_signed_url(gcs_output_path)
-            return jsonify({"download_url": signed_url})
+            if total_size <= THRESHOLD_MB * 1024 * 1024:
+                return send_file(output_tmp_path, as_attachment=True,
+                                 download_name="merged.pdf")
+            else:
+                upload_file_to_gcs(output_tmp_path, gcs_output_path)
+                signed_url = generate_signed_url(gcs_output_path)
+                return jsonify({"download_url": signed_url})
 
     except Exception as e:
         print("Merging exception:", str(e))
@@ -215,13 +232,12 @@ def split():
         return json_error("Invalid page range.", 400)
 
     file_id = str(uuid.uuid4())
-    gcs_input_path = f"uploads/{file_id}.pdf"
     gcs_output_path = f"processed/{file_id}_split.pdf"
 
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
-            upload_blob_from_fileobj(file.stream, gcs_input_path)
-            input_tmp_path = download_blob_to_tmp(gcs_input_path, tmp_dir)
+            input_tmp_path = os.path.join(tmp_dir, f"{file_id}.pdf")
+            file.save(input_tmp_path)
             reader = PdfReader(input_tmp_path)
             num_pages = len(reader.pages)
 
@@ -240,9 +256,13 @@ def split():
             with open(output_tmp_path, "wb") as f_out:
                 writer.write(f_out)
 
-            upload_file_to_gcs(output_tmp_path, gcs_output_path)
-            signed_url = generate_signed_url(gcs_output_path)
-            return jsonify({"download_url": signed_url})
+            if is_small_file(file):
+                return send_file(output_tmp_path, as_attachment=True,
+                                 download_name="split.pdf")
+            else:
+                upload_file_to_gcs(output_tmp_path, gcs_output_path)
+                signed_url = generate_signed_url(gcs_output_path)
+                return jsonify({"download_url": signed_url})
 
     except Exception as e:
         print("Splitting exception:", str(e))
@@ -257,8 +277,12 @@ def image_to_pdf():
 
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
+            total_size = 0
             for file in files:
                 name = file.filename.lower()
+                file.seek(0, os.SEEK_END)
+                total_size += file.tell()
+                file.seek(0)
                 if name.endswith((".png", ".jpg", ".jpeg")):
                     img = Image.open(file.stream).convert("RGB")
                     images.append(img)
@@ -271,9 +295,14 @@ def image_to_pdf():
             output_tmp_path = os.path.join(tmp_dir, f"{file_id}_image2pdf.pdf")
 
             images[0].save(output_tmp_path, format="PDF", save_all=True, append_images=images[1:])
-            upload_file_to_gcs(output_tmp_path, gcs_output_path)
-            signed_url = generate_signed_url(gcs_output_path)
-            return jsonify({"download_url": signed_url})
+
+            if total_size <= THRESHOLD_MB * 1024 * 1024:
+                return send_file(output_tmp_path, as_attachment=True,
+                                 download_name="image2pdf.pdf")
+            else:
+                upload_file_to_gcs(output_tmp_path, gcs_output_path)
+                signed_url = generate_signed_url(gcs_output_path)
+                return jsonify({"download_url": signed_url})
 
     except Exception as e:
         print("Image->PDF exception:", str(e))
