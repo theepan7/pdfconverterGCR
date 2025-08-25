@@ -251,13 +251,9 @@ document.addEventListener('DOMContentLoaded', () => {
       downloadBtn.classList.remove('hidden');
       downloadBtn.disabled = false;
 
+      // ✅ Open download in a new tab/window
       downloadBtn.onclick = () => {
-        const a = document.createElement('a');
-        a.href = downloadUrl;
-        a.download = 'compressed.pdf';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        window.open(downloadUrl, '_blank');
       };
     } catch (error) {
       errorMessage.textContent = error.message;
