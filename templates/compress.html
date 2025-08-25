@@ -90,7 +90,7 @@
         <span class="hidden sm:inline">Home</span>
       </a>
 
-      <h1 class="text-4xl font-extrabold mb-2">Compress PDF</h1>
+      <h1 class="text-3xl font-extrabold mb-2">Compress PDF</h1>
       <p class="text-lg font-light opacity-90">Reduce the size of your PDF files quickly.</p>
     </div>
   </header>
@@ -98,7 +98,7 @@
   <main
     class="container flex flex-col items-center justify-center p-8 max-w-xl w-full my-8 bg-white rounded-2xl shadow-xl border border-gray-200"
   >
-    <h2 class="text-4xl font-semibold text-gray-800 mb-8 text-center">Upload Your PDF</h2>
+    <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center">Upload Your PDF</h2>
 
     <form id="compressForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
       <label for="pdf-upload" class="custom-file-input w-full cursor-pointer">
@@ -115,10 +115,10 @@
 
       <div
         id="compressLoadingIndicator"
-        class="hidden flex items-center space-x-2 text-red-600 text-lg font-semibold"
+        class="hidden flex items-center space-x-2 text-blue-600 text-lg font-semibold"
       >
         <svg
-          class="animate-spin h-5 w-5 text-red-600"
+          class="animate-spin h-5 w-5 text-blue-600"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
       downloadBtn.classList.remove('hidden');
       downloadBtn.disabled = false;
 
-      // ✅ Open download in a new tab/window
+      // Open download in a new tab/window
       downloadBtn.onclick = () => {
         window.open(downloadUrl, '_blank');
       };
