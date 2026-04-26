@@ -1,68 +1,53 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 import os
 import uuid
 import subprocess
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter
 from PIL import Image
-from google.cloud import storage
-from datetime import timedelta
-from google.oauth2 import service_account
 import traceback
 import tempfile
+import json
+import time
+from datetime import datetime, timezone
 
-# ---------------- Config & Auth ---------------- #
-SERVICE_ACCOUNT_PATH = "/secrets/pdftoolkit-key"
-if not os.path.exists(SERVICE_ACCOUNT_PATH):
-    raise FileNotFoundError(f"Service account file not found at {SERVICE_ACCOUNT_PATH}")
-
-credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_PATH)
-
+# ---------------- Config ---------------- #
 app = Flask(__name__, static_folder='static')
 CORS(app)
 
-# Max upload size = 32 MB (matches Cloud Run HTTP limit)
+# Max upload size = 32 MB
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024
 
-# GCS bucket name (env var or fallback)
-GCS_BUCKET = os.environ.get("GCS_BUCKET", "pdftoolkituploads")
 
-# Signed URL lifetime
-SIGNED_URL_HOURS = int(os.environ.get("SIGNED_URL_HOURS", "1"))
+# ---------------- Structured Logging ---------------- #
+def log_event(event: str, status: str, **kwargs):
+    """
+    Emit a structured JSON log line that Cloud Logging can parse and query.
 
-# Initialize GCS client with service account credentials
-storage_client = storage.Client(credentials=credentials)
-bucket = storage_client.bucket(GCS_BUCKET)
+    Fields always present:
+      - timestamp  : ISO-8601 UTC
+      - event      : operation name  (upload, compress, merge, split, image_to_pdf, download)
+      - status     : "success" | "error"
 
-
-# ---------------- Utility Functions ---------------- #
-def upload_blob_from_fileobj(file_obj, destination_blob_name, content_type="application/pdf"):
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_file(file_obj, rewind=True, content_type=content_type)
-    return blob
-
-
-def download_blob_to_tmp(blob_name, tmp_dir):
-    local_path = os.path.join(tmp_dir, f"{uuid.uuid4()}_{os.path.basename(blob_name)}")
-    blob = bucket.blob(blob_name)
-    blob.download_to_filename(local_path)
-    return local_path
-
-
-def upload_file_to_gcs(local_path, destination_blob_name, content_type="application/pdf"):
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_filename(local_path, content_type=content_type)
-    return blob
+    Optional kwargs (pass whatever is relevant):
+      - file_size_kb, page_count, duration_ms, error, filename, file_count, etc.
+    """
+    payload = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "event": event,
+        "status": status,
+        **kwargs,
+    }
+    # Cloud Run captures stdout → Cloud Logging automatically
+    print(json.dumps(payload), flush=True)
 
 
-def generate_signed_url(blob_name, expiration_hours=SIGNED_URL_HOURS):
-    blob = bucket.blob(blob_name)
-    url = blob.generate_signed_url(
-        version="v4",
-        expiration=timedelta(hours=expiration_hours),
-        method="GET",
-    )
-    return url
+# ---------------- Utility ---------------- #
+def get_file_size_kb(path: str) -> float:
+    try:
+        return round(os.path.getsize(path) / 1024, 2)
+    except Exception:
+        return 0.0
 
 
 def json_error(message, code=500, extra=None):
@@ -75,6 +60,7 @@ def json_error(message, code=500, extra=None):
 # ---------------- Error Handlers ---------------- #
 @app.errorhandler(413)
 def request_entity_too_large(_error):
+    log_event("upload", "error", error="File exceeds 32 MB limit")
     return json_error("File too large. Max allowed size is 32 MB.", 413)
 
 
@@ -88,7 +74,7 @@ def internal_error(_error):
     return json_error("Internal Server Error", 500)
 
 
-# ---------------- Routes for HTML Pages ---------------- #
+# ---------------- HTML Pages ---------------- #
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -115,24 +101,30 @@ def image_page():
 
 
 # ---------------- PDF Operations ---------------- #
+
 @app.route("/compress", methods=["POST"])
 def compress():
     uploaded_file = request.files.get("file")
     if not uploaded_file or not uploaded_file.filename.lower().endswith(".pdf"):
         return json_error("Invalid file. Please upload a PDF.", 400)
 
-    file_id = str(uuid.uuid4())
-    gcs_input_path = f"uploads/{file_id}.pdf"
-    gcs_output_path = f"processed/{file_id}_compressed.pdf"
+    original_filename = uploaded_file.filename
+    start_time = time.monotonic()
 
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
-            # Upload original to GCS
-            upload_blob_from_fileobj(uploaded_file.stream, gcs_input_path)
+            file_id = str(uuid.uuid4())
+            input_path = os.path.join(tmp_dir, f"{file_id}_input.pdf")
+            output_path = os.path.join(tmp_dir, f"{file_id}_compressed.pdf")
 
-            # Download to tmp
-            input_tmp_path = download_blob_to_tmp(gcs_input_path, tmp_dir)
-            output_tmp_path = os.path.join(tmp_dir, f"{file_id}_compressed.pdf")
+            # Save upload to tmp
+            uploaded_file.save(input_path)
+            input_size_kb = get_file_size_kb(input_path)
+
+            log_event("upload", "success",
+                      operation="compress",
+                      filename=original_filename,
+                      file_size_kb=input_size_kb)
 
             # Run Ghostscript
             gs_cmd = [
@@ -140,26 +132,45 @@ def compress():
                 "-dCompatibilityLevel=1.4",
                 "-dPDFSETTINGS=/ebook",
                 "-dNOPAUSE", "-dQUIET", "-dBATCH",
-                f"-sOutputFile={output_tmp_path}", input_tmp_path
+                f"-sOutputFile={output_path}", input_path
             ]
-
             result = subprocess.run(gs_cmd, capture_output=True, text=True)
-            if result.returncode != 0 or not os.path.exists(output_tmp_path):
-                print("Ghostscript failed", {
-                    "returncode": result.returncode,
-                    "stdout": result.stdout,
-                    "stderr": result.stderr
-                })
+
+            if result.returncode != 0 or not os.path.exists(output_path):
+                log_event("compress", "error",
+                          filename=original_filename,
+                          error="Ghostscript failed",
+                          gs_stderr=result.stderr[:500])
                 return json_error("Compression failed while running Ghostscript.", 500)
 
-            upload_file_to_gcs(output_tmp_path, gcs_output_path)
-            signed_url = generate_signed_url(gcs_output_path)
-            return jsonify({"download_url": signed_url})
+            output_size_kb = get_file_size_kb(output_path)
+            duration_ms = round((time.monotonic() - start_time) * 1000)
+
+            log_event("compress", "success",
+                      filename=original_filename,
+                      input_size_kb=input_size_kb,
+                      output_size_kb=output_size_kb,
+                      saved_kb=round(input_size_kb - output_size_kb, 2),
+                      duration_ms=duration_ms)
+
+            log_event("download", "success",
+                      operation="compress",
+                      filename=original_filename,
+                      output_size_kb=output_size_kb)
+
+            return send_file(
+                output_path,
+                mimetype="application/pdf",
+                as_attachment=True,
+                download_name=f"compressed_{original_filename}",
+            )
 
     except Exception as e:
-        print("Compression exception:", str(e))
-        print(traceback.format_exc())
-        return json_error("Compression failed due to a server error.", 500, {"exception": str(e)})
+        log_event("compress", "error",
+                  filename=original_filename,
+                  error=str(e),
+                  traceback=traceback.format_exc()[:500])
+        return json_error("Compression failed due to a server error.", 500)
 
 
 @app.route("/merge", methods=["POST"])
@@ -168,38 +179,64 @@ def merge():
     if not files:
         return json_error("No files uploaded.", 400)
 
-    file_id = str(uuid.uuid4())
-    gcs_output_path = f"processed/{file_id}_merged.pdf"
+    start_time = time.monotonic()
+    total_input_kb = 0.0
+    valid_count = 0
 
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
             merger = PdfMerger()
-            valid_files_found = False
 
             for file in files:
                 if file.filename.lower().endswith(".pdf"):
-                    temp_blob_path = f"uploads/{uuid.uuid4()}.pdf"
-                    upload_blob_from_fileobj(file.stream, temp_blob_path)
-                    tmp_path = download_blob_to_tmp(temp_blob_path, tmp_dir)
-                    merger.append(PdfReader(tmp_path))
-                    valid_files_found = True
+                    tmp_path = os.path.join(tmp_dir, f"{uuid.uuid4()}.pdf")
+                    file.save(tmp_path)
+                    size_kb = get_file_size_kb(tmp_path)
+                    total_input_kb += size_kb
+                    valid_count += 1
 
-            if not valid_files_found:
+                    log_event("upload", "success",
+                              operation="merge",
+                              filename=file.filename,
+                              file_size_kb=size_kb)
+
+                    merger.append(PdfReader(tmp_path))
+
+            if valid_count == 0:
                 return json_error("No valid PDF files found.", 400)
 
-            output_tmp_path = os.path.join(tmp_dir, f"{file_id}_merged.pdf")
-            with open(output_tmp_path, "wb") as f_out:
+            file_id = str(uuid.uuid4())
+            output_path = os.path.join(tmp_dir, f"{file_id}_merged.pdf")
+
+            with open(output_path, "wb") as f_out:
                 merger.write(f_out)
             merger.close()
 
-            upload_file_to_gcs(output_tmp_path, gcs_output_path)
-            signed_url = generate_signed_url(gcs_output_path)
-            return jsonify({"download_url": signed_url})
+            output_size_kb = get_file_size_kb(output_path)
+            duration_ms = round((time.monotonic() - start_time) * 1000)
+
+            log_event("merge", "success",
+                      file_count=valid_count,
+                      total_input_size_kb=round(total_input_kb, 2),
+                      output_size_kb=output_size_kb,
+                      duration_ms=duration_ms)
+
+            log_event("download", "success",
+                      operation="merge",
+                      output_size_kb=output_size_kb)
+
+            return send_file(
+                output_path,
+                mimetype="application/pdf",
+                as_attachment=True,
+                download_name="merged.pdf",
+            )
 
     except Exception as e:
-        print("Merging exception:", str(e))
-        print(traceback.format_exc())
-        return json_error("Merging failed due to a server error.", 500, {"exception": str(e)})
+        log_event("merge", "error",
+                  error=str(e),
+                  traceback=traceback.format_exc()[:500])
+        return json_error("Merging failed due to a server error.", 500)
 
 
 @app.route("/split", methods=["POST"])
@@ -214,21 +251,27 @@ def split():
     except Exception:
         return json_error("Invalid page range.", 400)
 
-    file_id = str(uuid.uuid4())
-    gcs_input_path = f"uploads/{file_id}.pdf"
-    gcs_output_path = f"processed/{file_id}_split.pdf"
+    original_filename = file.filename
+    start_time = time.monotonic()
 
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
-            upload_blob_from_fileobj(file.stream, gcs_input_path)
-            input_tmp_path = download_blob_to_tmp(gcs_input_path, tmp_dir)
-            reader = PdfReader(input_tmp_path)
+            file_id = str(uuid.uuid4())
+            input_path = os.path.join(tmp_dir, f"{file_id}_input.pdf")
+            file.save(input_path)
+            input_size_kb = get_file_size_kb(input_path)
+
+            log_event("upload", "success",
+                      operation="split",
+                      filename=original_filename,
+                      file_size_kb=input_size_kb)
+
+            reader = PdfReader(input_path)
             num_pages = len(reader.pages)
 
-            if start < 1:
-                start = 1
-            if end > num_pages:
-                end = num_pages
+            start = max(1, start)
+            end = min(end, num_pages)
+
             if start > end:
                 return json_error("Invalid range: start must be ≤ end.", 400)
 
@@ -236,49 +279,102 @@ def split():
             for i in range(start - 1, end):
                 writer.add_page(reader.pages[i])
 
-            output_tmp_path = os.path.join(tmp_dir, f"{file_id}_split.pdf")
-            with open(output_tmp_path, "wb") as f_out:
+            output_path = os.path.join(tmp_dir, f"{file_id}_split.pdf")
+            with open(output_path, "wb") as f_out:
                 writer.write(f_out)
 
-            upload_file_to_gcs(output_tmp_path, gcs_output_path)
-            signed_url = generate_signed_url(gcs_output_path)
-            return jsonify({"download_url": signed_url})
+            output_size_kb = get_file_size_kb(output_path)
+            duration_ms = round((time.monotonic() - start_time) * 1000)
+            pages_extracted = end - start + 1
+
+            log_event("split", "success",
+                      filename=original_filename,
+                      total_pages=num_pages,
+                      pages_extracted=pages_extracted,
+                      page_range=f"{start}-{end}",
+                      input_size_kb=input_size_kb,
+                      output_size_kb=output_size_kb,
+                      duration_ms=duration_ms)
+
+            log_event("download", "success",
+                      operation="split",
+                      filename=original_filename,
+                      output_size_kb=output_size_kb)
+
+            return send_file(
+                output_path,
+                mimetype="application/pdf",
+                as_attachment=True,
+                download_name=f"split_{original_filename}",
+            )
 
     except Exception as e:
-        print("Splitting exception:", str(e))
-        print(traceback.format_exc())
-        return json_error("Splitting failed due to a server error.", 500, {"exception": str(e)})
+        log_event("split", "error",
+                  filename=original_filename,
+                  error=str(e),
+                  traceback=traceback.format_exc()[:500])
+        return json_error("Splitting failed due to a server error.", 500)
 
 
 @app.route("/image", methods=["POST"])
 def image_to_pdf():
     files = request.files.getlist("file")
     images = []
+    start_time = time.monotonic()
+    total_input_kb = 0.0
+    valid_count = 0
 
     try:
         with tempfile.TemporaryDirectory() as tmp_dir:
             for file in files:
                 name = file.filename.lower()
                 if name.endswith((".png", ".jpg", ".jpeg")):
-                    img = Image.open(file.stream).convert("RGB")
+                    tmp_img_path = os.path.join(tmp_dir, f"{uuid.uuid4()}_{file.filename}")
+                    file.save(tmp_img_path)
+                    size_kb = get_file_size_kb(tmp_img_path)
+                    total_input_kb += size_kb
+                    valid_count += 1
+
+                    log_event("upload", "success",
+                              operation="image_to_pdf",
+                              filename=file.filename,
+                              file_size_kb=size_kb)
+
+                    img = Image.open(tmp_img_path).convert("RGB")
                     images.append(img)
 
             if not images:
                 return json_error("No valid images uploaded.", 400)
 
             file_id = str(uuid.uuid4())
-            gcs_output_path = f"processed/{file_id}_image2pdf.pdf"
-            output_tmp_path = os.path.join(tmp_dir, f"{file_id}_image2pdf.pdf")
+            output_path = os.path.join(tmp_dir, f"{file_id}_image2pdf.pdf")
+            images[0].save(output_path, format="PDF", save_all=True, append_images=images[1:])
 
-            images[0].save(output_tmp_path, format="PDF", save_all=True, append_images=images[1:])
-            upload_file_to_gcs(output_tmp_path, gcs_output_path)
-            signed_url = generate_signed_url(gcs_output_path)
-            return jsonify({"download_url": signed_url})
+            output_size_kb = get_file_size_kb(output_path)
+            duration_ms = round((time.monotonic() - start_time) * 1000)
+
+            log_event("image_to_pdf", "success",
+                      image_count=valid_count,
+                      total_input_size_kb=round(total_input_kb, 2),
+                      output_size_kb=output_size_kb,
+                      duration_ms=duration_ms)
+
+            log_event("download", "success",
+                      operation="image_to_pdf",
+                      output_size_kb=output_size_kb)
+
+            return send_file(
+                output_path,
+                mimetype="application/pdf",
+                as_attachment=True,
+                download_name="images_converted.pdf",
+            )
 
     except Exception as e:
-        print("Image->PDF exception:", str(e))
-        print(traceback.format_exc())
-        return json_error("Image to PDF failed due to a server error.", 500, {"exception": str(e)})
+        log_event("image_to_pdf", "error",
+                  error=str(e),
+                  traceback=traceback.format_exc()[:500])
+        return json_error("Image to PDF failed due to a server error.", 500)
 
     finally:
         for im in images:
@@ -288,7 +384,7 @@ def image_to_pdf():
                 pass
 
 
-# Optional: simple health check
+# ---------------- Health Check ---------------- #
 @app.route("/healthz")
 def healthz():
     return jsonify({"status": "ok"})
