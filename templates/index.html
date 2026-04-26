@@ -4,793 +4,161 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3948770444337260"
      crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-E4B22CRPV6"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-E4B22CRPV6');
-  </script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
+  gtag('config', 'G-E4B22CRPV6');
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Title -->
   <title>Mini PDF Tools - Free Online PDF Toolkit</title>
-  <meta name="description" content="Mini PDF Tools offers a complete and free online PDF toolkit to compress, merge, split, and convert your PDF files securely. Fast, easy-to-use, no signup required.">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Mini PDF Tools offers a complete and free online PDF toolkit to compress, merge, split, and convert your PDF files securely. Our fast and easy-to-use tools let you reduce file size, combine documents, and convert images to PDF without any signup required. Your privacy is our priority—all processing is done on your device.">
   <meta name="keywords" content="PDF tools, compress PDF, merge PDF, split PDF, convert PDF, online PDF editor, free PDF toolkit">
   <meta name="author" content="Mini PDF Tools">
   <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
   <meta property="og:title" content="Mini PDF Tools - Free PDF Toolkit">
   <meta property="og:description" content="Free PDF tools to compress, merge, split and convert PDF files. Fast, secure, and simple to use.">
   <meta property="og:image" content="https://minipdftools.com/preview-image.jpg">
   <meta property="og:url" content="https://minipdftools.com">
   <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Mini PDF Tools - Free PDF Toolkit">
   <meta name="twitter:description" content="Free PDF tools to compress, merge, split and convert PDF files.">
   <meta name="twitter:image" content="https://minipdftools.com/preview-image.jpg">
+
+  <!-- Favicon -->
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts - Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy: #0f1b2d;
-      --navy-mid: #162235;
-      --blue: #2563eb;
-      --blue-light: #3b82f6;
-      --accent: #f59e0b;
-      --white: #ffffff;
-      --gray-50: #f8fafc;
-      --gray-100: #f1f5f9;
-      --gray-400: #94a3b8;
-      --gray-600: #475569;
-      --gray-800: #1e293b;
-    }
-
-    html { scroll-behavior: smooth; }
-
+    /* Custom styles for Inter font and smooth transitions */
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--gray-50);
-      color: var(--gray-800);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      font-family: 'Inter', sans-serif;
     }
-
-    /* ── NAVBAR ── */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--navy);
-      box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+    .card {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
     }
-
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.25rem;
-      color: var(--white);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .btn-primary {
+      transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
     }
-
-    .nav-logo span {
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.75);
-      text-decoration: none;
-      padding: 0.5rem 0.85rem;
-      border-radius: 6px;
-      transition: color 0.2s, background 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .nav-links a:hover {
-      color: var(--white);
-      background: rgba(255,255,255,0.08);
-    }
-
-    /* Tools dropdown */
-    .dropdown {
-      position: relative;
-    }
-
-    .dropdown-toggle {
-      cursor: pointer;
-    }
-
-    .dropdown-toggle .chevron {
-      font-size: 0.7rem;
-      transition: transform 0.2s;
-    }
-
-    .dropdown:hover .chevron {
-      transform: rotate(180deg);
-    }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--white);
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.06);
-      min-width: 220px;
-      overflow: hidden;
-      animation: dropIn 0.18s ease;
-    }
-
-    @keyframes dropIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
-    .dropdown:hover .dropdown-menu {
-      display: block;
-    }
-
-    .dropdown-menu a {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1.25rem;
-      color: var(--gray-800) !important;
-      font-size: 0.875rem;
-      font-weight: 500;
-      border-radius: 0 !important;
-      background: transparent !important;
-      transition: background 0.15s;
-    }
-
-    .dropdown-menu a:hover {
-      background: var(--gray-100) !important;
-      color: var(--blue) !important;
-    }
-
-    .dropdown-menu a .icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      flex-shrink: 0;
-    }
-
-    .dropdown-menu a:not(:last-child) {
-      border-bottom: 1px solid var(--gray-100);
-    }
-
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    .mobile-menu {
-      display: none;
-      background: var(--navy-mid);
-      padding: 1rem 2rem 1.5rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .mobile-menu.open { display: block; }
-
-    .mobile-menu a {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      color: rgba(255,255,255,0.8);
-      text-decoration: none;
-      padding: 0.6rem 0;
-      font-size: 0.95rem;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .mobile-menu a:last-child { border-bottom: none; }
-
-    .mobile-menu .mobile-section-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0.75rem 0 0.25rem;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 60%, #0f2744 100%);
-      padding: 5rem 2rem 4rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 70% 50%, rgba(37,99,235,0.18) 0%, transparent 70%),
-                  radial-gradient(ellipse at 20% 80%, rgba(245,158,11,0.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(245,158,11,0.12);
-      border: 1px solid rgba(245,158,11,0.3);
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.35rem 0.85rem;
-      border-radius: 100px;
-      margin-bottom: 1.5rem;
-      letter-spacing: 0.04em;
-    }
-
-    .hero h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.15;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero h1 .highlight {
-      color: var(--accent);
-    }
-
-    .hero p {
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.65);
-      max-width: 540px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.7;
-      font-weight: 300;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--blue);
-      color: var(--white);
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 0.85rem 2rem;
-      border-radius: 100px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(37,99,235,0.4);
-    }
-
-    .hero-cta:hover {
-      background: var(--blue-light);
+    .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(37,99,235,0.5);
     }
-
-    /* ── TOOLS SECTION ── */
-    .tools-section {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-    }
-
-    .section-label {
-      text-align: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      font-weight: 800;
-      text-align: center;
-      color: var(--gray-800);
-      margin-bottom: 0.75rem;
-    }
-
-    .section-sub {
-      text-align: center;
-      color: var(--gray-600);
-      font-size: 1rem;
-      margin-bottom: 3rem;
-      font-weight: 300;
-    }
-
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .tool-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 2rem 1.75rem;
-      border: 1px solid #e2e8f0;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-      text-decoration: none;
-      color: inherit;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .tool-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--card-accent);
-      transform: scaleX(0);
-      transition: transform 0.25s;
-      transform-origin: left;
-    }
-
-    .tool-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.1);
-      border-color: transparent;
-    }
-
-    .tool-card:hover::after {
-      transform: scaleX(1);
-    }
-
-    .tool-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      background: var(--card-bg);
-      color: var(--card-color);
-      flex-shrink: 0;
-    }
-
-    .tool-card h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--gray-800);
-    }
-
-    .tool-card p {
-      font-size: 0.9rem;
-      color: var(--gray-600);
-      line-height: 1.6;
-      font-weight: 300;
-      flex: 1;
-    }
-
-    .tool-arrow {
-      font-size: 0.85rem;
-      color: var(--card-color);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      margin-top: 0.25rem;
-      transition: gap 0.2s;
-    }
-
-    .tool-card:hover .tool-arrow {
-      gap: 0.6rem;
-    }
-
-    /* Card color themes */
-    .card-blue  { --card-accent: #2563eb; --card-bg: #eff6ff; --card-color: #2563eb; }
-    .card-green { --card-accent: #16a34a; --card-bg: #f0fdf4; --card-color: #16a34a; }
-    .card-red   { --card-accent: #dc2626; --card-bg: #fef2f2; --card-color: #dc2626; }
-    .card-purple{ --card-accent: #7c3aed; --card-bg: #f5f3ff; --card-color: #7c3aed; }
-
-    /* ── WHY SECTION ── */
-    .why-section {
-      background: var(--navy);
-      padding: 4rem 2rem;
-    }
-
-    .why-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .why-section .section-label { color: var(--accent); }
-    .why-section .section-title { color: var(--white); }
-    .why-section .section-sub   { color: rgba(255,255,255,0.55); }
-
-    .why-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .why-item {
-      text-align: center;
-    }
-
-    .why-item .why-icon {
-      width: 52px;
-      height: 52px;
-      background: rgba(37,99,235,0.15);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      color: var(--blue-light);
-      margin: 0 auto 1rem;
-    }
-
-    .why-item h4 {
-      font-family: 'Syne', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 0.4rem;
-    }
-
-    .why-item p {
-      font-size: 0.875rem;
-      color: rgba(255,255,255,0.5);
-      line-height: 1.6;
-      font-weight: 300;
-    }
-
-    /* ── FOOTER ── */
     footer {
-      background: #080f1a;
-      color: rgba(255,255,255,0.5);
-      padding: 3rem 2rem 1.5rem;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #a0aec0;
+      width: 100%;
       margin-top: auto;
-    }
-
-    .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 3rem;
-      padding-bottom: 2.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-brand .brand-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 0.75rem;
-    }
-
-    .footer-brand .brand-name span { color: var(--accent); }
-
-    .footer-brand p {
-      font-size: 0.875rem;
-      line-height: 1.7;
-      max-width: 280px;
-      font-weight: 300;
-    }
-
-    .footer-col h5 {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--white);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 1rem;
-    }
-
-    .footer-col ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .footer-col ul a {
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: color 0.2s;
-      font-weight: 300;
-    }
-
-    .footer-col ul a:hover { color: var(--white); }
-
-    .footer-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      font-size: 0.8rem;
-    }
-
-    .footer-bottom a {
-      color: rgba(255,255,255,0.4);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-bottom a:hover { color: var(--white); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-
-      .footer-top {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .tools-grid {
-        grid-template-columns: 1fr;
-      }
     }
   </style>
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-between">
+  <!-- Header Section -->
+  <header class="w-full py-4 px-8 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-3xl font-extrabold mb-4 leading-tight">
+        <span class="block animate-fade-in-down">Mini PDF Toolkit</span>
+      </h1>
+      <p class="text-xl font-light opacity-90 animate-fade-in-up">
+        Your lightweight solution for compressing, merging, splitting PDFs and converting images to PDF with ease.
+      </p>
+    </div>
+  </header>
 
-  <!-- ── NAVBAR ── -->
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="nav-logo">
-        <i class="fas fa-file-pdf"></i>
-        Mini<span>PDF</span>Tools
+  <!-- Main Content Container -->
+  <main class="container flex flex-wrap justify-center gap-8 p-8 max-w-5xl w-full my-8">
+
+    <!-- Card: Compress PDF -->
+    <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
+      <svg class="w-16 h-16 mb-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9V5a2 2 0 00-2-2H6a2 2 0 00-2 2v14a2 2 0 002 2h6m-6-6h6m-6-6h6m-4-6h4m4 6l4-4m-4 4l-4-4m4 4l4 4m-4-4v4"></path>
+      </svg>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-3">Compress PDF</h2>
+      <p class="text-gray-600 text-center mb-6 text-lg">
+        Reduce file size without compromising on quality. Optimize your documents effortlessly.
+      </p>
+      <a href="/compress-page" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+       Compress Now
       </a>
-
-      <ul class="nav-links">
-        <li>
-          <a href="/"><i class="fas fa-home"></i> Home</a>
-        </li>
-
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">
-            <i class="fas fa-tools"></i> Tools
-            <i class="fas fa-chevron-down chevron"></i>
-          </a>
-          <div class="dropdown-menu">
-            <a href="/compress-page">
-              <span class="icon" style="background:#eff6ff; color:#2563eb;"><i class="fas fa-compress-alt"></i></span>
-              Compress PDF
-            </a>
-            <a href="/merge-page">
-              <span class="icon" style="background:#f0fdf4; color:#16a34a;"><i class="fas fa-object-group"></i></span>
-              Merge PDF
-            </a>
-            <a href="/split-page">
-              <span class="icon" style="background:#fef2f2; color:#dc2626;"><i class="fas fa-scissors"></i></span>
-              Split PDF
-            </a>
-            <a href="/image-page">
-              <span class="icon" style="background:#f5f3ff; color:#7c3aed;"><i class="fas fa-file-image"></i></span>
-              Image to PDF
-            </a>
-          </div>
-        </li>
-
-        <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
-        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
-      </ul>
-
-      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-      </div>
     </div>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="/"><i class="fas fa-home"></i> Home</a>
-      <div class="mobile-section-label">Tools</div>
-      <a href="/compress-page"><i class="fas fa-compress-alt" style="color:#2563eb"></i> Compress PDF</a>
-      <a href="/merge-page"><i class="fas fa-object-group" style="color:#16a34a"></i> Merge PDF</a>
-      <a href="/split-page"><i class="fas fa-scissors" style="color:#dc2626"></i> Split PDF</a>
-      <a href="/image-page"><i class="fas fa-file-image" style="color:#7c3aed"></i> Image to PDF</a>
-      <a href="#about"><i class="fas fa-info-circle"></i> About</a>
-      <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
-    </div>
-  </nav>
-
-  <!-- ── HERO ── -->
-  <section class="hero">
-    <div class="hero-badge"><i class="fas fa-lock"></i> 100% Free &amp; Secure</div>
-    <h1>Your <span class="highlight">PDF toolkit</span>,<br>simple &amp; powerful</h1>
-    <p>Compress, merge, split, and convert PDF files in seconds. No signup, no limits, no storage — your files never leave your session.</p>
-    <a href="#tools" class="hero-cta">Explore Tools <i class="fas fa-arrow-down"></i></a>
-  </section>
-
-  <!-- ── TOOLS ── -->
-  <section class="tools-section" id="tools">
-    <div class="section-label">What we offer</div>
-    <h2 class="section-title">Pick your tool</h2>
-    <p class="section-sub">Everything you need for everyday PDF tasks, in one place.</p>
-
-    <div class="tools-grid">
-
-      <a href="/compress-page" class="tool-card card-blue">
-        <div class="tool-icon"><i class="fas fa-compress-alt"></i></div>
-        <h3>Compress PDF</h3>
-        <p>Shrink your PDF file size without sacrificing quality. Perfect for email attachments and uploads.</p>
-        <span class="tool-arrow">Compress now <i class="fas fa-arrow-right"></i></span>
+    <!-- Card: Merge PDFs -->
+    <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
+      <svg class="w-16 h-16 mb-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+      </svg>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-3">Merge PDFs</h2>
+      <p class="text-gray-600 text-center mb-6 text-lg">
+        Combine multiple PDF documents into a single, organized file. Simplify your workflow.
+      </p>
+      <a href="/merge-page" class="btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75">
+       Merge Now
       </a>
-
-      <a href="/merge-page" class="tool-card card-green">
-        <div class="tool-icon"><i class="fas fa-object-group"></i></div>
-        <h3>Merge PDFs</h3>
-        <p>Combine multiple PDF documents into one clean, organized file in seconds.</p>
-        <span class="tool-arrow">Merge now <i class="fas fa-arrow-right"></i></span>
-      </a>
-
-      <a href="/split-page" class="tool-card card-red">
-        <div class="tool-icon"><i class="fas fa-scissors"></i></div>
-        <h3>Split PDF</h3>
-        <p>Extract specific pages or a range from any PDF. Get exactly the pages you need.</p>
-        <span class="tool-arrow">Split now <i class="fas fa-arrow-right"></i></span>
-      </a>
-
-      <a href="/image-page" class="tool-card card-purple">
-        <div class="tool-icon"><i class="fas fa-file-image"></i></div>
-        <h3>Image to PDF</h3>
-        <p>Convert JPG and PNG images into a single professional PDF file instantly.</p>
-        <span class="tool-arrow">Convert now <i class="fas fa-arrow-right"></i></span>
-      </a>
-
     </div>
-  </section>
 
-  <!-- ── WHY US ── -->
-  <section class="why-section" id="about">
-    <div class="why-inner">
-      <div class="section-label">Why Mini PDF Tools</div>
-      <h2 class="section-title">Built for simplicity</h2>
-      <p class="section-sub">No bloat. No accounts. Just tools that work.</p>
-
-      <div class="why-grid">
-        <div class="why-item">
-          <div class="why-icon"><i class="fas fa-bolt"></i></div>
-          <h4>Lightning Fast</h4>
-          <p>Processing happens in seconds. No waiting around.</p>
-        </div>
-        <div class="why-item">
-          <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
-          <h4>Private & Secure</h4>
-          <p>Files are processed and immediately discarded. Nothing is stored.</p>
-        </div>
-        <div class="why-item">
-          <div class="why-icon"><i class="fas fa-ban"></i></div>
-          <h4>No Signup Needed</h4>
-          <p>Jump straight in. No accounts, no emails, no friction.</p>
-        </div>
-        <div class="why-item">
-          <div class="why-icon"><i class="fas fa-infinity"></i></div>
-          <h4>Always Free</h4>
-          <p>All tools are completely free with no hidden limits.</p>
-        </div>
-      </div>
+    <!-- Card: Split PDF -->
+    <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
+      <svg class="w-16 h-16 mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h4m-2 0V7m0 8h.01"></path>
+      </svg>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-3">Split PDF</h2>
+      <p class="text-gray-600 text-center mb-6 text-lg">
+        Extract specific pages or ranges from a PDF document. Get exactly what you need.
+      </p>
+      <a href="/split-page" class="btn-primary bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
+      Split Now
+      </a>
     </div>
-  </section>
 
-  <!-- ── FOOTER ── -->
-  <footer id="contact">
-    <div class="footer-inner">
-      <div class="footer-top">
-
-        <div class="footer-brand">
-          <div class="brand-name">Mini<span>PDF</span>Tools</div>
-          <p>A lightweight, free PDF toolkit built for everyday users. Fast, private, and always free.</p>
-        </div>
-
-        <div class="footer-col">
-          <h5>Tools</h5>
-          <ul>
-            <li><a href="/compress-page">Compress PDF</a></li>
-            <li><a href="/merge-page">Merge PDF</a></li>
-            <li><a href="/split-page">Split PDF</a></li>
-            <li><a href="/image-page">Image to PDF</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h5>Contact</h5>
-          <ul>
-            <li><a href="mailto:hello@minipdftools.com"><i class="fas fa-envelope"></i> hello@minipdftools.com</a></li>
-            <li><a href="#about"><i class="fas fa-info-circle"></i> About Us</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-      <div class="footer-bottom">
-        <span>&copy; 2025 Mini PDF Tools. All rights reserved.</span>
-        <span>Your files are never stored on our servers.</span>
-      </div>
+    <!-- Card: Image to PDF -->
+    <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
+      <svg class="w-16 h-16 mb-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v-1a4 4 0 014-4h8a4 4 0 014 4v1"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12v6"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 18h8"></path>
+      </svg>
+      <h2 class="text-3xl font-semibold text-gray-800 mb-3">Convert to PDF</h2>
+      <p class="text-gray-600 text-center mb-6 text-lg">
+        Convert your images into PDF or PDF files into image quickly and easily.
+        
+        <br>
+        <br>
+      </p>
+      <a href="/image-page" class="btn-primary bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75">
+       Convert Now
+      </a>
     </div>
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+       <p>Your document privacy and confidentiality are our top priority. All processing is done securely on your device, and your files are never stored on our servers.</p>
+     <p>&copy; 2025 PDF Toolkit. All rights reserved.</p>
   </footer>
 
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('mobileMenu');
-      menu.classList.toggle('open');
-    }
-
-    // Close mobile menu when a link is clicked
-    document.querySelectorAll('.mobile-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        document.getElementById('mobileMenu').classList.remove('open');
-      });
-    });
-  </script>
-
 </body>
-</html>
+  </html>
