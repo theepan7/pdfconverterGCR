@@ -32,7 +32,7 @@
 </head>
 <body class="bg-gray-100 flex flex-col items-center justify-between min-h-screen">
 
-  <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg-relative">
+  <header class="w-full py-8 px-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg relative">
     <div class="max-w-4xl mx-auto text-center relative">
       <a href="/" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white text-blue-600 hover:bg-blue-100 px-4 py-2 rounded-full shadow-md flex items-center space-x-2 transition-all duration-300 ease-in-out">
         <i class="fas fa-home"></i>
@@ -47,13 +47,13 @@
     <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center">Upload Your Images</h2>
 
     <form id="imageToPdfForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
-      <label for="image-upload" class="custom-file-box w-full cursor-pointer">
+      <label for="image-upload" class="custom-file-box w-full cursor-pointer" id="file-drop-area">
         <div class="flex flex-col items-center justify-center">
           <i class="fas fa-file-image text-purple-500 text-6xl mb-4"></i>
           <p class="text-gray-700 font-medium text-lg mb-2" id="file-label">Drag & Drop your images here</p>
-          <p class="text-gray-500 text-sm">or click to browse</p>
+          <p class="text-gray-500 text-sm">or click to browse (.jpg, .jpeg, .png)</p>
         </div>
-        <input type="file" id="image-upload" name="file" accept="image/*" multiple required />
+        <input type="file" id="image-upload" name="file" accept=".jpg,.jpeg,.png" multiple required />
       </label>
 
       <div id="file-list" class="w-full text-center text-gray-600"></div>
@@ -70,17 +70,12 @@
       <button type="submit" class="btn-primary bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-10 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 text-xl">
         Convert to PDF
       </button>
-
-      <!-- Download button -->
-      <a id="downloadBtn" href="#" download class="btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-10 rounded-full shadow-lg mt-4 hidden text-center">
-        Download PDF
-      </a>
     </form>
   </main>
 
   <footer class="w-full py-6 text-center text-gray-500 text-sm bg-gray-200 rounded-t-xl mt-auto">
-   <p>Your document privacy and confidentiality are our top priority. All processing is done securely on your device, and your files are never stored on our servers.</p>
-     <p>&copy; 2025 PDF Toolkit. All rights reserved.
+    <p>Your document privacy and confidentiality are our top priority. All processing is done securely on your device, and your files are never stored on our servers.</p>
+    <p>&copy; 2025 PDF Toolkit. All rights reserved.</p>
   </footer>
 
   <script>
@@ -91,19 +86,18 @@
       const errorMessage = document.getElementById('error-message');
       const form = document.getElementById('imageToPdfForm');
       const loadingIndicator = document.getElementById('loadingIndicator');
-      const downloadBtn = document.getElementById('downloadBtn');
+      const fileDropArea = document.getElementById('file-drop-area');
 
       const MAX_SIZE_MB = 32;
       const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 
-      imageUpload.addEventListener('change', function () {
-        const files = this.files;
+      function updateFileList(files) {
         let totalSize = 0;
         fileList.innerHTML = '';
         errorMessage.classList.add('hidden');
 
         if (files.length > 0) {
-          fileLabel.textContent = `${files.length} file(s) selected`;
+          fileLabel.textContent = `${files.length} image(s) selected`;
           const ul = document.createElement('ul');
           for (let i = 0; i < files.length; i++) {
             const li = document.createElement('li');
@@ -119,13 +113,22 @@
         if (totalSize > MAX_SIZE_BYTES) {
           errorMessage.textContent = `Total file size exceeds the ${MAX_SIZE_MB}MB limit.`;
           errorMessage.classList.remove('hidden');
-          this.value = '';
+          imageUpload.value = '';
           fileList.innerHTML = '';
           fileLabel.textContent = 'Drag & Drop your images here';
         }
+      }
 
-        // Hide download button
-        downloadBtn.classList.add('hidden');
+      imageUpload.addEventListener('change', function () {
+        updateFileList(this.files);
+      });
+
+      // Drag & Drop
+      fileDropArea.addEventListener('dragover', e => e.preventDefault());
+      fileDropArea.addEventListener('drop', e => {
+        e.preventDefault();
+        imageUpload.files = e.dataTransfer.files;
+        updateFileList(imageUpload.files);
       });
 
       form.addEventListener('submit', async function (event) {
@@ -137,6 +140,7 @@
           errorMessage.classList.remove('hidden');
           return;
         }
+
         let totalSize = 0;
         for (const f of files) totalSize += f.size;
         if (totalSize > MAX_SIZE_BYTES) {
@@ -147,7 +151,6 @@
 
         loadingIndicator.classList.remove('hidden');
         errorMessage.classList.add('hidden');
-        downloadBtn.classList.add('hidden');
 
         try {
           const formData = new FormData(form);
@@ -161,17 +164,26 @@
             throw new Error(`Conversion failed: ${response.status} - ${errorText}`);
           }
 
-          const data = await response.json();
-          if (!data.download_url) throw new Error('No download URL returned from server.');
+          // Direct streaming — server sends the file, browser downloads it automatically
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'images_converted.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
 
-          downloadBtn.href = data.download_url;
-          downloadBtn.classList.remove('hidden');
         } catch (error) {
           errorMessage.textContent = error.message;
           errorMessage.classList.remove('hidden');
           console.error('Error during image to PDF conversion:', error);
         } finally {
           loadingIndicator.classList.add('hidden');
+          imageUpload.value = '';
+          fileLabel.textContent = 'Drag & Drop your images here';
+          fileList.innerHTML = '';
         }
       });
     });
