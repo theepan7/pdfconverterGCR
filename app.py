@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import os
 import uuid
@@ -12,8 +12,17 @@ import time
 from datetime import datetime, timezone
 
 # ---------------- Config ---------------- #
-app = Flask(__name__, static_folder='static')
-CORS(app)
+app = Flask(__name__)
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "https://minipdftool.com",
+            "https://www.minipdftool.com",
+        ],
+        "methods": ["POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+    }
+})
 
 # Max upload size = 32 MB
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024
@@ -72,32 +81,6 @@ def not_found(_error):
 @app.errorhandler(500)
 def internal_error(_error):
     return json_error("Internal Server Error", 500)
-
-
-# ---------------- HTML Pages ---------------- #
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-
-@app.route("/compress-page")
-def compress_page():
-    return render_template("compress.html")
-
-
-@app.route("/merge-page")
-def merge_page():
-    return render_template("merge.html")
-
-
-@app.route("/split-page")
-def split_page():
-    return render_template("split.html")
-
-
-@app.route("/image-page")
-def image_page():
-    return render_template("image.html")
 
 
 # ---------------- PDF Operations ---------------- #
