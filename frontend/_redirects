@@ -1,7 +1,0 @@
-# Cloudflare Pages _redirects
-# Maps Flask route names → static HTML files
-
-/compress-page  /compress-page.html  200
-/merge-page     /merge-page.html    200
-/split-page     /split-page.html    200
-/image-page     /image-page.html    200
