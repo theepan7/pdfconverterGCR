@@ -18,6 +18,7 @@ CORS(app, resources={
         "origins": [
             "https://minipdftools.com",
             "https://www.minipdftools.com",
+            "https://93adaee1.minipdftools.pages.dev"
         ],
         "methods": ["POST", "OPTIONS"],
         "allow_headers": ["Content-Type"],
