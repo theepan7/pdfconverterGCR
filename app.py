@@ -16,8 +16,8 @@ app = Flask(__name__)
 CORS(app, resources={
     r"/*": {
         "origins": [
-            "https://minipdftool.com",
-            "https://www.minipdftool.com",
+            "https://minipdftools.com",
+            "https://www.minipdftools.com",
         ],
         "methods": ["POST", "OPTIONS"],
         "allow_headers": ["Content-Type"],
