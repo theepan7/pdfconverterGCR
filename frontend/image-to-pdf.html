@@ -11,37 +11,34 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mini PDF Tools - Free Online PDF Toolkit | Compress, Merge, Split & Convert</title>
-  <meta name="description" content="Mini PDF Tools – free online PDF toolkit. Compress PDF, merge PDF files, split PDF pages, and convert images to PDF. Fast, secure, no signup required.">
-  <meta name="keywords" content="PDF tools, compress PDF, merge PDF, split PDF, image to PDF, convert PDF, online PDF editor, free PDF toolkit">
+  <title>Image to PDF Converter Online Free – JPG PNG to PDF | Mini PDF Tools</title>
+  <meta name="description" content="Convert JPG, JPEG, and PNG images to PDF online for free. Turn multiple photos into a single PDF document instantly. No signup, no watermark.">
+  <meta name="keywords" content="image to PDF, JPG to PDF, PNG to PDF, convert image to PDF, photo to PDF, picture to PDF, free image PDF converter">
   <meta name="author" content="Mini PDF Tools">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://minipdftools.com/">
-  <meta property="og:title" content="Mini PDF Tools - Free PDF Toolkit">
-  <meta property="og:description" content="Free PDF tools to compress, merge, split and convert PDF files. Fast, secure, and simple to use.">
+  <link rel="canonical" href="https://minipdftools.com/image-to-pdf.html">
+  <meta property="og:title" content="Image to PDF Converter Online Free | Mini PDF Tools">
+  <meta property="og:description" content="Convert JPG and PNG images to PDF online for free. No signup needed.">
   <meta property="og:image" content="https://minipdftools.com/preview-image.jpg">
-  <meta property="og:url" content="https://minipdftools.com/">
+  <meta property="og:url" content="https://minipdftools.com/image-to-pdf.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mini PDF Tools - Free PDF Toolkit">
-  <meta name="twitter:description" content="Free PDF tools to compress, merge, split and convert PDF files.">
+  <meta name="twitter:title" content="Image to PDF Converter Online Free | Mini PDF Tools">
+  <meta name="twitter:description" content="Convert JPG and PNG images to PDF online for free. No signup needed.">
   <meta name="twitter:image" content="https://minipdftools.com/preview-image.jpg">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Mini PDF Tools",
-    "url": "https://minipdftools.com/",
-    "description": "Free online PDF tools to compress, merge, split and convert PDFs.",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://minipdftools.com/?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
+    "@type": "WebApplication",
+    "name": "Image to PDF Converter – Mini PDF Tools",
+    "url": "https://minipdftools.com/image-to-pdf.html",
+    "description": "Free online tool to convert JPG, JPEG, and PNG images into a PDF document.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
   }
   </script>
 
@@ -50,7 +47,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body { font-family: 'Inter', sans-serif; }
-    :root { --slate-nav:#475569; --slate-footer:#1e1b4b; --indigo-accent:#4338ca; }
     .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
     .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
     .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
@@ -60,8 +56,9 @@
     .dropdown-item { display:flex; align-items:center; gap:0.6rem; padding:0.75rem 1.1rem; color:#374151; font-size:0.9rem; font-weight:500; transition:background 0.15s; text-decoration:none; }
     .dropdown-item:hover { background:#f3f4f6; }
     .site-header { background: linear-gradient(135deg, #475569, #4338ca); }
-    .card { transition:transform 0.3s,box-shadow 0.3s; }
-    .card:hover { transform:translateY(-8px); box-shadow:0 15px 30px rgba(0,0,0,0.15); }
+    .custom-file-box { border:2px dashed #cbd5e0; padding:2rem; border-radius:0.75rem; text-align:center; cursor:pointer; background-color:#f7fafc; transition:background-color 0.3s,border-color 0.3s; }
+    .custom-file-box:hover { background-color:#edf2f7; border-color:#a0aec0; }
+    input[type='file'] { display:none; }
     .btn-primary { transition:background-color 0.3s,transform 0.2s; }
     .btn-primary:hover { transform:translateY(-2px); }
     .site-footer { background:linear-gradient(135deg,#1e293b,#312e81); color:rgba(255,255,255,0.75); }
@@ -82,9 +79,7 @@
   <nav class="navbar w-full shadow-lg sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2 text-white" style="text-decoration:none">
-        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-          <i class="fas fa-file-pdf text-white text-sm"></i>
-        </div>
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
         <span class="font-bold text-lg tracking-tight">Mini PDF Tools</span>
       </a>
       <div class="hidden md:flex items-center gap-1">
@@ -100,8 +95,8 @@
             <a href="/image-to-pdf.html" class="dropdown-item"><i class="fas fa-image text-purple-500"></i> Image to PDF</a>
           </div>
         </div>
-        <a href="#about"   class="nav-link">About</a>
-        <a href="#contact" class="nav-link">Contact</a>
+        <a href="/#about"   class="nav-link">About</a>
+        <a href="/#contact" class="nav-link">Contact</a>
       </div>
       <button id="hamburger" class="md:hidden text-white p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition" onclick="toggleMobileMenu()">
         <i class="fas fa-bars text-lg"></i>
@@ -119,82 +114,69 @@
         <a href="/split-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
         <a href="/image-to-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
       </div>
-      <a href="#about"   class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-info-circle mr-2"></i>About</a>
-      <a href="#contact" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-envelope mr-2"></i>Contact</a>
+      <a href="/#about"   class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-info-circle mr-2"></i>About</a>
+      <a href="/#contact" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-envelope mr-2"></i>Contact</a>
     </div>
   </nav>
 
   <!-- HERO -->
-  <header class="site-header w-full py-10 px-8 text-white shadow-lg">
+  <header class="site-header w-full py-8 px-8 text-white shadow-lg">
     <div class="max-w-4xl mx-auto text-center">
-      <h1 class="text-4xl font-extrabold mb-3 leading-tight">Free Online PDF Tools</h1>
-      <p class="text-xl font-light opacity-80">Compress, merge, split PDFs and convert images to PDF — fast, free, and secure. No signup required.</p>
+      <h1 class="text-3xl font-extrabold mb-2">Image to PDF Converter – Free</h1>
+      <p class="text-lg font-light opacity-80">Convert JPG, JPEG, and PNG images into a PDF document instantly. No signup required.</p>
     </div>
   </header>
 
-  <!-- MAIN -->
-  <main class="flex-1 w-full flex flex-col items-center py-10 px-4">
-    <div class="flex flex-wrap justify-center gap-8 max-w-5xl w-full">
+  <!-- BREADCRUMB -->
+  <div class="w-full max-w-4xl mx-auto px-4 pt-4 text-sm text-gray-500">
+    <a href="/" class="hover:text-indigo-600">Home</a> &rsaquo; <span class="text-gray-700 font-medium">Image to PDF</span>
+  </div>
 
-      <!-- Compress -->
-      <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
-        <svg class="w-16 h-16 mb-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 9V5a2 2 0 00-2-2H6a2 2 0 00-2 2v14a2 2 0 002 2h6m-6-6h6m-6-6h6m-4-6h4m4 6l4-4m-4 4l-4-4m4 4l4 4m-4-4v4"/></svg>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-3">Compress PDF</h2>
-        <p class="text-gray-600 text-center mb-6">Reduce PDF file size without losing quality. Optimize documents for email and web sharing.</p>
-        <a href="/compress-pdf.html" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg">Compress Now</a>
-      </div>
-
-      <!-- Merge -->
-      <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
-        <svg class="w-16 h-16 mb-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-3">Merge PDFs</h2>
-        <p class="text-gray-600 text-center mb-6">Combine multiple PDF documents into one organized file. Simplify document management.</p>
-        <a href="/merge-pdf.html" class="btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg">Merge Now</a>
-      </div>
-
-      <!-- Split -->
-      <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
-        <svg class="w-16 h-16 mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h4m-2 0V7m0 8h.01"/></svg>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-3">Split PDF</h2>
-        <p class="text-gray-600 text-center mb-6">Extract specific pages or page ranges from any PDF document. Get exactly what you need.</p>
-        <a href="/split-pdf.html" class="btn-primary bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full shadow-lg">Split Now</a>
-      </div>
-
-      <!-- Image to PDF -->
-      <div class="card bg-white p-8 rounded-2xl shadow-xl border border-gray-200 flex flex-col items-center w-full sm:w-80 lg:w-96">
-        <svg class="w-16 h-16 mb-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-3">Image to PDF</h2>
-        <p class="text-gray-600 text-center mb-6">Convert JPG, JPEG, and PNG images into a PDF document quickly and easily.</p>
-        <a href="/image-to-pdf.html" class="btn-primary bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg">Convert Now</a>
-      </div>
-
+  <!-- TOOL -->
+  <main class="flex-1 w-full flex flex-col items-center py-8 px-4">
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+      <form id="imageToPdfForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
+        <label for="image-upload" class="custom-file-box w-full cursor-pointer" id="image-drop-area">
+          <div class="flex flex-col items-center justify-center">
+            <i class="fas fa-file-image text-purple-500 text-6xl mb-4"></i>
+            <p class="text-gray-700 font-medium text-lg mb-2" id="image-file-label">Drag &amp; Drop your images here</p>
+            <p class="text-gray-500 text-sm">or click to browse (.jpg, .jpeg, .png) – max 32 MB total</p>
+          </div>
+          <input type="file" id="image-upload" name="file" accept=".jpg,.jpeg,.png" multiple required />
+        </label>
+        <div id="image-file-list" class="w-full text-center text-gray-600"></div>
+        <div id="image-error" class="hidden text-red-500 font-semibold mt-2"></div>
+        <div id="image-loading" class="hidden flex items-center space-x-2 text-indigo-600 text-lg font-semibold">
+          <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+          </svg>
+          <span>Converting... Please wait</span>
+        </div>
+        <button type="submit" class="btn-primary bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-10 rounded-full shadow-lg text-xl">Convert to PDF</button>
+      </form>
     </div>
 
-    <!-- SEO Text Block -->
-    <section id="about" class="max-w-4xl w-full mt-16 px-4">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Why Use Mini PDF Tools?</h2>
-      <div class="grid md:grid-cols-3 gap-6 text-center">
-        <div class="bg-white rounded-xl p-6 shadow border border-gray-100">
-          <i class="fas fa-lock text-indigo-500 text-3xl mb-3"></i>
-          <h3 class="font-semibold text-gray-800 mb-2">100% Secure</h3>
-          <p class="text-gray-500 text-sm">Your files are processed in memory and never stored on our servers.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 shadow border border-gray-100">
-          <i class="fas fa-bolt text-yellow-500 text-3xl mb-3"></i>
-          <h3 class="font-semibold text-gray-800 mb-2">Lightning Fast</h3>
-          <p class="text-gray-500 text-sm">Powered by cloud infrastructure for instant PDF processing.</p>
-        </div>
-        <div class="bg-white rounded-xl p-6 shadow border border-gray-100">
-          <i class="fas fa-gift text-green-500 text-3xl mb-3"></i>
-          <h3 class="font-semibold text-gray-800 mb-2">Completely Free</h3>
-          <p class="text-gray-500 text-sm">All tools are free to use. No account or credit card needed.</p>
-        </div>
+    <!-- SEO content -->
+    <section class="max-w-3xl w-full mt-12 px-4">
+      <h2 class="text-xl font-bold text-gray-800 mb-3">How to Convert Images to PDF</h2>
+      <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
+        <li>Click the upload area above or drag and drop your image files (JPG, JPEG, PNG).</li>
+        <li>Select one or more images to include in the PDF.</li>
+        <li>Click <strong>Convert to PDF</strong> — your PDF will download automatically.</li>
+      </ol>
+      <h2 class="text-xl font-bold text-gray-800 mb-3">Why Convert Images to PDF?</h2>
+      <p class="text-gray-600 mb-4">PDF files are universally supported, preserve image quality, and are easier to share as a single file. Converting photos, scans, or screenshots to PDF is ideal for submitting documents, archiving records, or sharing presentations.</p>
+      <div class="flex flex-wrap gap-4 mt-4">
+        <a href="/compress-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-compress-alt mr-1"></i>Compress PDF</a>
+        <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
+        <a href="/split-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-cut mr-1"></i>Split PDF</a>
       </div>
     </section>
   </main>
 
   <!-- FOOTER -->
-  <footer class="site-footer w-full mt-auto" id="contact">
+  <footer class="site-footer w-full mt-auto">
     <div class="max-w-6xl mx-auto px-6 py-10">
       <div class="flex flex-col md:flex-row justify-between gap-8 mb-8">
         <div class="flex flex-col gap-3">
@@ -236,6 +218,54 @@
   </footer>
 
   <script>
+    const API = 'https://pdfcompress-1097766937022.europe-west1.run.app';
+    const MAX_BYTES = 32 * 1024 * 1024;
+
+    function downloadBlob(blob, filename) {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      window.URL.revokeObjectURL(url);
+    }
+
+    const imageUpload   = document.getElementById('image-upload');
+    const imageLabel    = document.getElementById('image-file-label');
+    const imageFileList = document.getElementById('image-file-list');
+    const imageErr      = document.getElementById('image-error');
+    const imageLoad     = document.getElementById('image-loading');
+    const imageDropArea = document.getElementById('image-drop-area');
+
+    function updateImageList(files) {
+      let total = 0; imageFileList.innerHTML = ''; imageErr.classList.add('hidden');
+      if (files.length > 0) {
+        imageLabel.textContent = `${files.length} image(s) selected`;
+        const ul = document.createElement('ul');
+        for (const f of files) { const li = document.createElement('li'); li.textContent = f.name; ul.appendChild(li); total += f.size; }
+        imageFileList.appendChild(ul);
+      } else { imageLabel.textContent = 'Drag & Drop your images here'; }
+      if (total > MAX_BYTES) { imageErr.textContent = 'Total exceeds 32MB.'; imageErr.classList.remove('hidden'); imageUpload.value = ''; imageFileList.innerHTML = ''; imageLabel.textContent = 'Drag & Drop your images here'; }
+    }
+    imageUpload.addEventListener('change', function() { updateImageList(this.files); });
+    imageDropArea.addEventListener('dragover', e => e.preventDefault());
+    imageDropArea.addEventListener('drop', e => { e.preventDefault(); imageUpload.files = e.dataTransfer.files; updateImageList(imageUpload.files); });
+
+    document.getElementById('imageToPdfForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const files = imageUpload.files;
+      if (!files.length) { imageErr.textContent = 'Please select images.'; imageErr.classList.remove('hidden'); return; }
+      let total = 0; for (const f of files) total += f.size;
+      if (total > MAX_BYTES) { imageErr.textContent = 'Total exceeds 32MB.'; imageErr.classList.remove('hidden'); return; }
+      imageLoad.classList.remove('hidden'); imageErr.classList.add('hidden');
+      try {
+        const fd = new FormData(document.getElementById('imageToPdfForm'));
+        const res = await fetch(`${API}/image`, { method: 'POST', body: fd });
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+        downloadBlob(await res.blob(), 'images_converted.pdf');
+      } catch(err) { imageErr.textContent = err.message; imageErr.classList.remove('hidden'); }
+      finally { imageLoad.classList.add('hidden'); imageUpload.value = ''; imageLabel.textContent = 'Drag & Drop your images here'; imageFileList.innerHTML = ''; }
+    });
+
     function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
     function toggleMobileTools() {
       document.getElementById('mobile-tool-links').classList.toggle('open');
