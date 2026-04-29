@@ -12,24 +12,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Compress PDF Online Free – Reduce PDF File Size | Mini PDF Tools</title>
-  <meta name="description" content="Compress PDF files online for free. Reduce PDF size without losing quality. No signup required. Fast, secure, and easy to use PDF compressor.">
+  <meta name="description" content="Compress up to 3 PDF files online for free. Reduce PDF size without losing quality. No signup required. Fast, secure, and easy to use PDF compressor.">
   <meta name="keywords" content="compress PDF, reduce PDF size, PDF compressor online, shrink PDF, PDF file size reducer, free PDF compress">
   <meta name="author" content="Mini PDF Tools">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://minipdftools.com/compress-pdf.html">
   <meta property="og:title" content="Compress PDF Online Free | Mini PDF Tools">
-  <meta property="og:description" content="Reduce your PDF file size instantly. Free online PDF compressor — no signup needed.">
+  <meta property="og:description" content="Compress up to 3 PDFs at once. Free online PDF compressor — no signup needed.">
   <meta property="og:image" content="https://minipdftools.com/preview-image.jpg">
   <meta property="og:url" content="https://minipdftools.com/compress-pdf.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Compress PDF Online Free | Mini PDF Tools">
-  <meta name="twitter:description" content="Reduce your PDF file size instantly. Free online PDF compressor — no signup needed.">
+  <meta name="twitter:description" content="Compress up to 3 PDFs at once. Free online PDF compressor — no signup needed.">
   <meta name="twitter:image" content="https://minipdftools.com/preview-image.jpg">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -44,8 +43,10 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <style>
     body { font-family: 'Inter', sans-serif; }
     .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
@@ -57,11 +58,6 @@
     .dropdown-item { display:flex; align-items:center; gap:0.6rem; padding:0.75rem 1.1rem; color:#374151; font-size:0.9rem; font-weight:500; transition:background 0.15s; text-decoration:none; }
     .dropdown-item:hover { background:#f3f4f6; }
     .site-header { background: linear-gradient(135deg, #475569, #4338ca); }
-    .custom-file-input { border:2px dashed #cbd5e0; padding:2rem; border-radius:0.75rem; text-align:center; cursor:pointer; background-color:#f7fafc; transition:background-color 0.3s,border-color 0.3s; }
-    .custom-file-input:hover { background-color:#edf2f7; border-color:#a0aec0; }
-    input[type='file'] { display:none; }
-    .btn-primary { transition:background-color 0.3s,transform 0.2s; }
-    .btn-primary:hover { transform:translateY(-2px); }
     .site-footer { background:linear-gradient(135deg,#1e293b,#312e81); color:rgba(255,255,255,0.75); }
     .footer-link { color:rgba(255,255,255,0.65); transition:color 0.2s; font-size:0.875rem; text-decoration:none; }
     .footer-link:hover { color:#fff; }
@@ -72,6 +68,158 @@
     #mobile-menu.open { display:block; }
     .mobile-tool-links { display:none; }
     .mobile-tool-links.open { display:block; }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2px dashed #93c5fd;
+      border-radius: 1rem;
+      background: #f0f7ff;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      background: #dbeafe;
+      border-color: #2563eb;
+      transform: scale(1.005);
+    }
+
+    /* ── File list ── */
+    #file-list { list-style: none; padding: 0; margin: 0; }
+
+    .file-item {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.6rem;
+      cursor: grab;
+      transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+    .file-item:hover { border-color: #93c5fd; box-shadow: 0 2px 12px rgba(37,99,235,0.08); }
+    .file-item.dragging {
+      opacity: 0.4; transform: scale(0.98);
+      box-shadow: 0 8px 24px rgba(37,99,235,0.15);
+      border-color: #2563eb; cursor: grabbing;
+    }
+    .file-item.drag-over {
+      border-color: #2563eb; background: #dbeafe;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 14px rgba(37,99,235,0.12);
+    }
+
+    .item-top {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .drag-handle { color: #94a3b8; font-size: 1rem; cursor: grab; flex-shrink: 0; padding: 0 2px; }
+    .drag-handle:active { cursor: grabbing; }
+
+    .file-index {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      color: #fff; font-size: 0.68rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .file-name {
+      flex: 1; font-size: 0.88rem; color: #1e293b; font-weight: 600;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+    }
+    .file-meta {
+      display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end;
+    }
+    .badge {
+      font-size: 0.72rem; color: #64748b; background: #f1f5f9;
+      border: 1px solid #e2e8f0; border-radius: 999px;
+      padding: 0.15rem 0.55rem; white-space: nowrap;
+    }
+    .badge-pages { color: #2563eb; border-color: #bfdbfe; background: #eff6ff; font-weight: 600; }
+
+    /* Move buttons */
+    .move-btn {
+      background: none; border: 1px solid #e2e8f0; color: #64748b;
+      cursor: pointer; width: 24px; height: 24px; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; transition: all 0.15s; flex-shrink: 0;
+    }
+    .move-btn:hover { background: #f1f5f9; border-color: #94a3b8; color: #1e293b; }
+    .move-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+    .file-remove {
+      background: none; border: none; color: #cbd5e1; cursor: pointer;
+      font-size: 0.85rem; padding: 4px 6px; border-radius: 4px;
+      transition: color 0.15s, background 0.15s; flex-shrink: 0;
+    }
+    .file-remove:hover { color: #ef4444; background: #fef2f2; }
+
+    /* Totals bar */
+    .totals-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8rem; color: #64748b; padding: 0.5rem 0.1rem 0;
+    }
+
+    /* Add more button */
+    .add-more-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.55rem 1.1rem;
+      background: #f1f5f9; border: 1.5px dashed #94a3b8; border-radius: 0.6rem;
+      color: #475569; font-size: 0.85rem; font-weight: 500; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .add-more-btn:hover:not(:disabled) { background: #eff6ff; border-color: #2563eb; color: #2563eb; }
+    .add-more-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* Warning banner */
+    .warn-banner {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      background: #fffbeb; border: 1px solid #fcd34d;
+      border-radius: 0.65rem; padding: 0.75rem 1rem;
+      font-size: 0.82rem; color: #92400e; line-height: 1.5;
+      margin-top: 0.75rem;
+    }
+    .warn-banner i { color: #d97706; margin-top: 2px; flex-shrink: 0; }
+
+    /* Max-reached banner */
+    .max-banner {
+      display: flex; align-items: center; gap: 0.6rem;
+      background: #fef2f2; border: 1px solid #fca5a5;
+      border-radius: 0.65rem; padding: 0.65rem 1rem;
+      font-size: 0.82rem; color: #991b1b;
+      margin-top: 0.75rem;
+    }
+    .max-banner i { color: #dc2626; flex-shrink: 0; }
+
+    /* Compress button */
+    .btn-compress {
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      color: white; font-weight: 700; font-size: 1.05rem;
+      padding: 0.85rem 2.5rem; border-radius: 999px; border: none;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(37,99,235,0.32);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    .btn-compress:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.38); }
+    .btn-compress:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+    /* Slide-in */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .file-item { animation: slideIn 0.16s ease; }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; display: inline-block; }
+
+    /* Progress items */
+    .progress-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; padding: 0.3rem 0;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-pending { background: #e2e8f0; }
+    .dot-running { background: #f59e0b; animation: spin 0.8s linear infinite; }
+    .dot-done    { background: #22c55e; }
+    .dot-error   { background: #ef4444; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -80,7 +228,9 @@
   <nav class="navbar w-full shadow-lg sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2 text-white" style="text-decoration:none">
-        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-file-pdf text-white text-sm"></i>
+        </div>
         <span class="font-bold text-lg tracking-tight">Mini PDF Tools</span>
       </a>
       <div class="hidden md:flex items-center gap-1">
@@ -124,56 +274,130 @@
   <header class="site-header w-full py-8 px-8 text-white shadow-lg">
     <div class="max-w-4xl mx-auto text-center">
       <h1 class="text-3xl font-extrabold mb-2">Compress PDF Online – Free</h1>
-      <p class="text-lg font-light opacity-80">Reduce your PDF file size without losing quality. Fast, secure, and no signup required.</p>
+      <p class="text-lg font-light opacity-80">Reduce PDF file size without losing quality. Compress up to 3 files at once — fast, secure, no signup.</p>
     </div>
   </header>
 
   <!-- BREADCRUMB -->
   <div class="w-full max-w-4xl mx-auto px-4 pt-4 text-sm text-gray-500">
-    <a href="/" class="hover:text-indigo-600">Home</a> &rsaquo; <span class="text-gray-700 font-medium">Compress PDF</span>
+    <a href="/" class="hover:text-blue-600">Home</a> &rsaquo;
+    <span class="text-gray-700 font-medium">Compress PDF</span>
   </div>
 
   <!-- TOOL -->
   <main class="flex-1 w-full flex flex-col items-center py-8 px-4">
-    <div class="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
-      <form id="compressForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6">
-        <label for="pdf-upload-compress" class="custom-file-input w-full cursor-pointer">
-          <div class="flex flex-col items-center justify-center">
-            <i class="fas fa-file-upload text-blue-500 text-6xl mb-4"></i>
-            <p id="compress-file-label" class="text-gray-700 font-medium text-lg mb-2">Click or drag &amp; drop your PDF here</p>
-            <p class="text-gray-500 text-sm">Only one PDF file – max 32 MB</p>
-          </div>
-          <input type="file" id="pdf-upload-compress" name="file" accept=".pdf" required />
-        </label>
-        <div id="compress-file-list" class="w-full text-center text-gray-600"></div>
-        <div id="compress-error" class="hidden text-red-500 font-semibold mt-2"></div>
-        <div id="compress-loading" class="hidden flex items-center space-x-2 text-indigo-600 text-lg font-semibold">
-          <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
-          </svg>
-          <span>Compressing... Please wait</span>
-        </div>
-        <button type="submit" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-full shadow-lg text-xl">Compress PDF</button>
-      </form>
-    </div>
+    <div class="w-full max-w-2xl">
 
-    <!-- SEO content block -->
-    <section class="max-w-3xl w-full mt-12 px-4">
-      <h2 class="text-xl font-bold text-gray-800 mb-3">How to Compress a PDF Online</h2>
-      <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
-        <li>Click the upload box above or drag and drop your PDF file.</li>
-        <li>Click the <strong>Compress PDF</strong> button.</li>
-        <li>Your compressed PDF will download automatically.</li>
-      </ol>
-      <h2 class="text-xl font-bold text-gray-800 mb-3">Why Compress a PDF?</h2>
-      <p class="text-gray-600 mb-4">Large PDF files are hard to share by email or upload to forms. Compressing reduces file size while preserving readability, making PDFs faster to send and easier to store.</p>
-      <div class="flex flex-wrap gap-4 mt-4">
-        <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
-        <a href="/split-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-cut mr-1"></i>Split PDF</a>
-        <a href="/image-to-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-image mr-1"></i>Image to PDF</a>
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+
+        <!-- Drop zone -->
+        <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input-main').click()">
+          <i class="fas fa-file-archive text-blue-400 text-5xl mb-4 block"></i>
+          <p class="text-gray-700 font-semibold text-lg mb-1">Drop PDFs here or click to browse</p>
+          <p class="text-gray-400 text-sm">Up to 3 PDF files — max 32 MB total</p>
+        </div>
+
+        <!-- Hidden file inputs -->
+        <input type="file" id="file-input-main"    accept=".pdf" multiple style="display:none" />
+        <input type="file" id="file-input-addmore" accept=".pdf" multiple style="display:none" />
+
+        <!-- File manager -->
+        <div id="file-list-area" style="display:none">
+
+          <!-- List header -->
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+              Files to compress &nbsp;<span class="normal-case font-normal text-gray-400">(drag to reorder)</span>
+            </p>
+            <button onclick="clearAll()" class="text-xs text-red-400 hover:text-red-600 transition bg-transparent border-0 cursor-pointer">
+              <i class="fas fa-trash-alt mr-1"></i>Clear all
+            </button>
+          </div>
+
+          <!-- Sortable file list -->
+          <ul id="file-list"></ul>
+
+          <!-- Totals bar -->
+          <div class="totals-bar">
+            <span id="file-count-label">0 files</span>
+            <span id="file-size-label"></span>
+          </div>
+
+          <!-- Multi-file warning (shown when >1 file) -->
+          <div id="multi-warn" class="warn-banner" style="display:none">
+            <i class="fas fa-clock"></i>
+            <span><strong>Heads up:</strong> Compressing multiple files is processed one by one and may take longer than a single file. Each compressed PDF will download automatically when ready.</span>
+          </div>
+
+          <!-- Max reached notice (shown when =3 files) -->
+          <div id="max-notice" class="max-banner" style="display:none">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Maximum of <strong>3 files</strong> reached. Remove a file to add another.</span>
+          </div>
+
+          <!-- Add more button -->
+          <div class="flex items-center gap-3 mt-5 flex-wrap">
+            <button id="add-more-btn" class="add-more-btn" onclick="document.getElementById('file-input-addmore').click()">
+              <i class="fas fa-plus-circle"></i> Add more files
+            </button>
+            <span class="text-xs text-gray-400" id="add-more-hint">add up to 3 files total</span>
+          </div>
+
+          <!-- Error -->
+          <div id="compress-error" class="hidden mt-3 text-red-500 font-semibold text-sm"></div>
+
+          <!-- Progress log -->
+          <div id="compress-progress" class="hidden mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-1">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Compression progress</p>
+            <div id="progress-list"></div>
+          </div>
+
+          <!-- Loading indicator -->
+          <div id="compress-loading" class="hidden mt-3 flex items-center gap-2 text-blue-700 font-semibold text-sm">
+            <svg class="spinner w-4 h-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+            </svg>
+            <span id="loading-text">Compressing… please wait</span>
+          </div>
+
+          <!-- Compress button -->
+          <div class="flex justify-center mt-7">
+            <button id="compress-btn" class="btn-compress" onclick="doCompress()">
+              <i class="fas fa-compress-alt mr-2"></i>Compress PDF
+            </button>
+          </div>
+
+        </div><!-- /file-list-area -->
+      </div><!-- /card -->
+
+      <!-- Steps hint -->
+      <div class="mt-5 flex flex-col sm:flex-row gap-3 text-sm text-gray-500 justify-center text-center">
+        <span><span class="font-bold text-blue-400">1.</span> Add up to 3 PDFs</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-blue-400">2.</span> Drag to reorder if needed</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-blue-400">3.</span> Compress &amp; download each</span>
       </div>
-    </section>
+
+      <!-- SEO content -->
+      <section class="mt-12 px-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-3">How to Compress a PDF Online</h2>
+        <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
+          <li>Drop your PDF files onto the upload area above, or click to browse.</li>
+          <li>Add up to 3 PDFs at once using the <strong>Add more files</strong> button.</li>
+          <li>Drag rows to reorder the compression queue if needed.</li>
+          <li>Click <strong>Compress PDF</strong> — each file downloads automatically when done.</li>
+        </ol>
+        <h2 class="text-xl font-bold text-gray-800 mb-3">Why Compress a PDF?</h2>
+        <p class="text-gray-600 mb-4">Large PDF files are hard to share by email or upload to forms. Compressing reduces file size while preserving readability, making PDFs faster to send and easier to store.</p>
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
+          <a href="/split-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-cut mr-1"></i>Split PDF</a>
+          <a href="/image-to-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-image mr-1"></i>Image to PDF</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <!-- FOOTER -->
@@ -218,64 +442,377 @@
     </div>
   </footer>
 
-  <script>
-    const API = 'https://pdfcompress-1097766937022.europe-west1.run.app';
-    const MAX_BYTES = 32 * 1024 * 1024;
+<script>
+/* ═══════════════════════════════════════════════════════
+   COMPRESS PDF  — up to 3 files, PDF.js page count,
+   drag-to-reorder, add-more, multi-file warning,
+   per-file progress log
+   ═══════════════════════════════════════════════════════ */
 
-    function downloadBlob(blob, filename) {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename;
-      document.body.appendChild(a); a.click(); a.remove();
-      window.URL.revokeObjectURL(url);
+const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
+const MAX_BYTES = 32 * 1024 * 1024;
+const MAX_FILES = 3;
+
+// PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ── State ─────────────────────────────────────────────
+let fileList  = [];   // [{ id, file, pages }]
+let idCtr     = 0;
+let dragSrcId = null;
+
+// ── DOM ───────────────────────────────────────────────
+const dropZone       = document.getElementById('drop-zone');
+const fileListArea   = document.getElementById('file-list-area');
+const fileListEl     = document.getElementById('file-list');
+const compressErr    = document.getElementById('compress-error');
+const compressLoad   = document.getElementById('compress-loading');
+const compressProgress = document.getElementById('compress-progress');
+const progressList   = document.getElementById('progress-list');
+const compressBtn    = document.getElementById('compress-btn');
+const loadingText    = document.getElementById('loading-text');
+const fileCountLbl   = document.getElementById('file-count-label');
+const fileSizeLbl    = document.getElementById('file-size-label');
+const multiWarn      = document.getElementById('multi-warn');
+const maxNotice      = document.getElementById('max-notice');
+const addMoreBtn     = document.getElementById('add-more-btn');
+const addMoreHint    = document.getElementById('add-more-hint');
+const inputMain      = document.getElementById('file-input-main');
+const inputAddMore   = document.getElementById('file-input-addmore');
+
+// ── File inputs ───────────────────────────────────────
+inputMain.addEventListener('change',    () => addFiles(inputMain.files));
+inputAddMore.addEventListener('change', () => addFiles(inputAddMore.files));
+
+// ── Drop zone ─────────────────────────────────────────
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault(); dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  addFiles(e.dataTransfer.files);
+});
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => {
+  if (e.target.closest('#drop-zone') || e.target.closest('#file-list')) return;
+  e.preventDefault();
+  if (fileList.length > 0 && fileList.length < MAX_FILES) addFiles(e.dataTransfer.files);
+});
+
+// ── Add files ─────────────────────────────────────────
+function addFiles(incoming) {
+  const pdfs = Array.from(incoming).filter(
+    f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
+  );
+  if (!pdfs.length) { showError('Only PDF files are supported.'); return; }
+
+  let skippedDup = 0, skippedMax = 0;
+  pdfs.forEach(f => {
+    if (fileList.length >= MAX_FILES) { skippedMax++; return; }
+    if (fileList.some(x => x.file.name === f.name && x.file.size === f.size)) { skippedDup++; return; }
+    fileList.push({ id: ++idCtr, file: f, pages: null });
+  });
+
+  if (skippedMax > 0) showError(`Maximum ${MAX_FILES} files allowed. ${skippedMax} file(s) not added.`);
+  else hideError();
+
+  render();
+
+  // Count pages for any new items (pages === null)
+  fileList.filter(x => x.pages === null).forEach(item => countPages(item));
+}
+
+// ── Count pages via PDF.js ────────────────────────────
+async function countPages(item) {
+  try {
+    const buf = await item.file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
+    item.pages = pdf.numPages;
+    // Update badge in DOM without full re-render
+    const badge = document.getElementById(`pages-badge-${item.id}`);
+    if (badge) badge.textContent = `${item.pages} page${item.pages !== 1 ? 's' : ''}`;
+  } catch {
+    item.pages = 0;
+  }
+}
+
+// ── Render ────────────────────────────────────────────
+function render() {
+  fileListEl.innerHTML = '';
+
+  if (fileList.length === 0) {
+    fileListArea.style.display = 'none';
+    dropZone.style.display     = '';
+    compressProgress.classList.add('hidden');
+    return;
+  }
+
+  dropZone.style.display     = 'none';
+  fileListArea.style.display = '';
+
+  let totalBytes = 0;
+  fileList.forEach((item, idx) => {
+    totalBytes += item.file.size;
+    fileListEl.appendChild(buildRow(item, idx));
+  });
+
+  fileCountLbl.textContent = `${fileList.length} file${fileList.length !== 1 ? 's' : ''}`;
+  fileSizeLbl.textContent  = formatBytes(totalBytes) + ' total';
+
+  // Warnings
+  multiWarn.style.display = fileList.length > 1  ? 'flex' : 'none';
+  maxNotice.style.display = fileList.length >= MAX_FILES ? 'flex' : 'none';
+
+  // Add-more button state
+  const atMax = fileList.length >= MAX_FILES;
+  addMoreBtn.disabled = atMax;
+  addMoreHint.textContent = atMax
+    ? 'Maximum 3 files reached'
+    : `${MAX_FILES - fileList.length} slot${MAX_FILES - fileList.length !== 1 ? 's' : ''} remaining`;
+
+  // Size guard
+  if (totalBytes > MAX_BYTES) {
+    showError('Total size exceeds 32 MB — please remove some files.');
+    compressBtn.disabled = true;
+  } else {
+    if (compressErr.textContent.includes('32 MB')) hideError();
+    compressBtn.disabled = false;
+  }
+
+  // Button label
+  compressBtn.innerHTML = fileList.length > 1
+    ? `<i class="fas fa-compress-alt mr-2"></i>Compress ${fileList.length} PDFs`
+    : `<i class="fas fa-compress-alt mr-2"></i>Compress PDF`;
+}
+
+// ── Build a file row ──────────────────────────────────
+function buildRow(item, idx) {
+  const li = document.createElement('li');
+  li.className  = 'file-item';
+  li.draggable  = true;
+  li.dataset.id = item.id;
+
+  const pagesText = item.pages === null
+    ? '…'
+    : item.pages > 0
+      ? `${item.pages} page${item.pages !== 1 ? 's' : ''}`
+      : '';
+
+  li.innerHTML = `
+    <div class="item-top">
+      <span class="drag-handle" title="Drag to reorder"><i class="fas fa-grip-vertical"></i></span>
+      <span class="file-index">${idx + 1}</span>
+      <span class="file-name" title="${esc(item.file.name)}">${esc(item.file.name)}</span>
+      <div class="file-meta">
+        <span class="badge">${formatBytes(item.file.size)}</span>
+        <span class="badge badge-pages" id="pages-badge-${item.id}">${pagesText}</span>
+        <div class="flex gap-1">
+          <button class="move-btn" title="Move up"
+                  onclick="moveItem(${item.id}, -1)"
+                  ${idx === 0 ? 'disabled' : ''}>
+            <i class="fas fa-chevron-up"></i>
+          </button>
+          <button class="move-btn" title="Move down"
+                  onclick="moveItem(${item.id}, 1)"
+                  ${idx === fileList.length - 1 ? 'disabled' : ''}>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+        <button class="file-remove" title="Remove file" onclick="removeItem(${item.id})">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+  `;
+
+  // ── Drag events ───────────────────────────────────
+  li.addEventListener('dragstart', e => {
+    dragSrcId = item.id;
+    li.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(item.id));
+  });
+  li.addEventListener('dragend', () => {
+    dragSrcId = null;
+    document.querySelectorAll('.file-item').forEach(el =>
+      el.classList.remove('dragging', 'drag-over')
+    );
+  });
+  li.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (dragSrcId !== null && dragSrcId !== item.id) {
+      document.querySelectorAll('.file-item').forEach(el => el.classList.remove('drag-over'));
+      li.classList.add('drag-over');
     }
+  });
+  li.addEventListener('dragleave', e => {
+    if (!li.contains(e.relatedTarget)) li.classList.remove('drag-over');
+  });
+  li.addEventListener('drop', e => {
+    e.preventDefault();
+    li.classList.remove('drag-over');
+    const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    if (src && src !== item.id) reorderById(src, item.id);
+  });
 
-    const compressUpload = document.getElementById('pdf-upload-compress');
-    const compressLabel  = document.getElementById('compress-file-label');
-    const compressFiles  = document.getElementById('compress-file-list');
-    const compressErr    = document.getElementById('compress-error');
-    const compressLoad   = document.getElementById('compress-loading');
+  return li;
+}
 
-    compressUpload.addEventListener('change', () => {
-      const file = compressUpload.files[0];
-      compressErr.classList.add('hidden'); compressFiles.innerHTML = '';
-      if (file) {
-        compressLabel.textContent = file.name;
-        compressFiles.textContent = `Selected: ${file.name}`;
-        if (file.size > MAX_BYTES) {
-          compressErr.textContent = 'File exceeds 32MB limit.';
-          compressErr.classList.remove('hidden');
-          compressUpload.value = ''; compressLabel.textContent = 'Click or drag & drop your PDF here'; compressFiles.innerHTML = '';
-        }
-      } else { compressLabel.textContent = 'Click or drag & drop your PDF here'; }
-    });
+// ── Reorder helpers ───────────────────────────────────
+function reorderById(srcId, targetId) {
+  const si = fileList.findIndex(x => x.id === srcId);
+  const ti = fileList.findIndex(x => x.id === targetId);
+  if (si < 0 || ti < 0) return;
+  const [moved] = fileList.splice(si, 1);
+  fileList.splice(ti, 0, moved);
+  render();
+}
 
-    document.getElementById('compressForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const file = compressUpload.files[0];
-      if (!file) { compressErr.textContent = 'Please select a PDF.'; compressErr.classList.remove('hidden'); return; }
-      if (file.size > MAX_BYTES) { compressErr.textContent = 'File exceeds 32MB.'; compressErr.classList.remove('hidden'); return; }
-      compressLoad.classList.remove('hidden'); compressErr.classList.add('hidden');
-      try {
-        const fd = new FormData(); fd.append('file', file);
-        const res = await fetch(`${API}/compress`, { method: 'POST', body: fd });
-        if (!res.ok) throw new Error(`Error ${res.status}`);
-        downloadBlob(await res.blob(), `compressed_${file.name}`);
-      } catch(err) { compressErr.textContent = err.message; compressErr.classList.remove('hidden'); }
-      finally { compressLoad.classList.add('hidden'); compressUpload.value = ''; compressLabel.textContent = 'Click or drag & drop your PDF here'; compressFiles.innerHTML = ''; }
-    });
+function moveItem(id, dir) {
+  const i = fileList.findIndex(x => x.id === id);
+  const j = i + dir;
+  if (j < 0 || j >= fileList.length) return;
+  [fileList[i], fileList[j]] = [fileList[j], fileList[i]];
+  render();
+}
 
-    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
-    function toggleMobileTools() {
-      document.getElementById('mobile-tool-links').classList.toggle('open');
-      const c = document.getElementById('tools-chevron');
-      c.classList.toggle('fa-chevron-down'); c.classList.toggle('fa-chevron-up');
+function removeItem(id) {
+  fileList = fileList.filter(x => x.id !== id);
+  render();
+  hideError();
+}
+
+function clearAll() {
+  fileList = [];
+  render();
+  hideError();
+}
+
+// ── Compress & download ───────────────────────────────
+async function doCompress() {
+  if (!fileList.length) { showError('Please add at least one PDF.'); return; }
+
+  let total = 0;
+  fileList.forEach(x => { total += x.file.size; });
+  if (total > MAX_BYTES) { showError('Total exceeds 32 MB — please remove some files.'); return; }
+
+  // Build progress UI
+  progressList.innerHTML = '';
+  fileList.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'progress-item';
+    div.innerHTML = `
+      <span class="dot dot-pending" id="dot-${item.id}"></span>
+      <span id="prog-text-${item.id}" class="text-gray-600">
+        File ${idx + 1}: ${esc(item.file.name)}
+      </span>
+    `;
+    progressList.appendChild(div);
+  });
+
+  compressProgress.classList.remove('hidden');
+  compressLoad.classList.remove('hidden');
+  compressBtn.disabled = true;
+  hideError();
+
+  let errorCount = 0;
+
+  for (let i = 0; i < fileList.length; i++) {
+    const item = fileList[i];
+    const dot      = document.getElementById(`dot-${item.id}`);
+    const progText = document.getElementById(`prog-text-${item.id}`);
+
+    loadingText.textContent = fileList.length > 1
+      ? `Compressing file ${i + 1} of ${fileList.length}… please wait`
+      : 'Compressing… please wait';
+
+    dot.className = 'dot dot-running';
+
+    try {
+      const fd = new FormData();
+      fd.append('file', item.file);
+
+      const res = await fetch(`${API}/compress`, { method: 'POST', body: fd });
+      if (!res.ok) throw new Error(`Server error ${res.status}`);
+
+      const blob         = await res.blob();
+      const outName      = `compressed_${item.file.name}`;
+      const originalSize = item.file.size;
+      const newSize      = blob.size;
+      const saving       = originalSize > 0
+        ? Math.round((1 - newSize / originalSize) * 100)
+        : 0;
+
+      downloadBlob(blob, outName);
+
+      dot.className = 'dot dot-done';
+      progText.innerHTML = `
+        <span class="text-green-600 font-medium">
+          ✓ ${esc(item.file.name)}
+          — ${formatBytes(originalSize)} → ${formatBytes(newSize)}
+          <span class="text-green-500 font-bold">(${saving > 0 ? '-' + saving + '%' : 'no change'})</span>
+        </span>`;
+
+    } catch (err) {
+      dot.className = 'dot dot-error';
+      progText.innerHTML = `<span class="text-red-500">✗ ${esc(item.file.name)} — ${esc(err.message)}</span>`;
+      errorCount++;
     }
-    document.addEventListener('click', function(e) {
-      const menu = document.getElementById('mobile-menu');
-      const hamburger = document.getElementById('hamburger');
-      if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) menu.classList.remove('open');
-    });
-  </script>
+  }
+
+  compressLoad.classList.add('hidden');
+  compressBtn.disabled = false;
+  loadingText.textContent = 'Compressing… please wait';
+
+  if (errorCount > 0) {
+    showError(`${errorCount} file(s) failed. Check the progress log above.`);
+  } else {
+    hideError();
+  }
+}
+
+// ── Utilities ─────────────────────────────────────────
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function formatBytes(b) {
+  if (b < 1024)          return b + ' B';
+  if (b < 1024 * 1024)   return (b / 1024).toFixed(1) + ' KB';
+  return (b / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showError(msg) { compressErr.textContent = msg; compressErr.classList.remove('hidden'); }
+function hideError()    { compressErr.classList.add('hidden'); }
+
+// ── Navbar helpers ────────────────────────────────────
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function toggleMobileTools() {
+  document.getElementById('mobile-tool-links').classList.toggle('open');
+  const c = document.getElementById('tools-chevron');
+  c.classList.toggle('fa-chevron-down');
+  c.classList.toggle('fa-chevron-up');
+}
+document.addEventListener('click', e => {
+  const menu      = document.getElementById('mobile-menu');
+  const hamburger = document.getElementById('hamburger');
+  if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+</script>
 </body>
 </html>
