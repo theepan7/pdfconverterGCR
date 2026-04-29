@@ -12,19 +12,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Split PDF Online Free – Extract Pages from PDF | Mini PDF Tools</title>
-  <meta name="description" content="Split a PDF file online for free. Extract specific pages or page ranges from any PDF document. No signup, no watermark, 100% secure.">
-  <meta name="keywords" content="split PDF, extract PDF pages, PDF splitter online, separate PDF pages, cut PDF, free PDF split">
+  <meta name="description" content="Split PDF files online for free. Add multiple PDFs, set page ranges for each, drag to reorder, then extract instantly. No signup, no watermark, 100% secure.">
+  <meta name="keywords" content="split PDF, extract PDF pages, PDF splitter online, separate PDF pages, cut PDF, free PDF split, page range extractor">
   <meta name="author" content="Mini PDF Tools">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://minipdftools.com/split-pdf.html">
   <meta property="og:title" content="Split PDF Online Free | Mini PDF Tools">
-  <meta property="og:description" content="Extract pages or page ranges from any PDF online for free. No signup needed.">
+  <meta property="og:description" content="Add PDFs from any folder, set page ranges, drag to reorder, and extract pages instantly for free.">
   <meta property="og:image" content="https://minipdftools.com/preview-image.jpg">
   <meta property="og:url" content="https://minipdftools.com/split-pdf.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Split PDF Online Free | Mini PDF Tools">
-  <meta name="twitter:description" content="Extract pages or page ranges from any PDF online for free. No signup needed.">
+  <meta name="twitter:description" content="Add PDFs from any folder, set page ranges, and extract pages instantly for free.">
   <meta name="twitter:image" content="https://minipdftools.com/preview-image.jpg">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -45,6 +45,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <style>
     body { font-family: 'Inter', sans-serif; }
     .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
@@ -56,13 +57,6 @@
     .dropdown-item { display:flex; align-items:center; gap:0.6rem; padding:0.75rem 1.1rem; color:#374151; font-size:0.9rem; font-weight:500; transition:background 0.15s; text-decoration:none; }
     .dropdown-item:hover { background:#f3f4f6; }
     .site-header { background: linear-gradient(135deg, #475569, #4338ca); }
-    .custom-file-input { border:2px dashed #cbd5e0; padding:2rem; border-radius:0.75rem; text-align:center; cursor:pointer; background-color:#f7fafc; transition:background-color 0.3s,border-color 0.3s; }
-    .custom-file-input:hover { background-color:#edf2f7; border-color:#a0aec0; }
-    input[type='file'] { display:none; }
-    .number-input { border:1px solid #e2e8f0; padding:0.75rem 1rem; border-radius:0.5rem; width:100%; max-width:150px; text-align:center; font-size:1.125rem; color:#2d3748; outline:none; }
-    .number-input:focus { border-color:#4338ca; box-shadow:0 0 0 3px rgba(67,56,202,0.2); }
-    .btn-primary { transition:background-color 0.3s,transform 0.2s; }
-    .btn-primary:hover { transform:translateY(-2px); }
     .site-footer { background:linear-gradient(135deg,#1e293b,#312e81); color:rgba(255,255,255,0.75); }
     .footer-link { color:rgba(255,255,255,0.65); transition:color 0.2s; font-size:0.875rem; text-decoration:none; }
     .footer-link:hover { color:#fff; }
@@ -73,6 +67,151 @@
     #mobile-menu.open { display:block; }
     .mobile-tool-links { display:none; }
     .mobile-tool-links.open { display:block; }
+
+    /* Drop zone */
+    .drop-zone {
+      border: 2px dashed #fca5a5;
+      border-radius: 1rem;
+      background: #fff8f8;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      background: #fef2f2;
+      border-color: #dc2626;
+    }
+    .drop-zone.dragover { transform: scale(1.01); }
+
+    /* File list */
+    #file-list { list-style: none; padding: 0; margin: 0; }
+
+    .file-item {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.6rem;
+      transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+    .file-item:hover { border-color: #fca5a5; box-shadow: 0 2px 12px rgba(220,38,38,0.08); }
+    .file-item.dragging {
+      opacity: 0.4;
+      transform: scale(0.98);
+      box-shadow: 0 8px 24px rgba(220,38,38,0.15);
+      border-color: #dc2626;
+      cursor: grabbing;
+    }
+    .file-item.drag-over {
+      border-color: #dc2626;
+      background: #fef2f2;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 16px rgba(220,38,38,0.12);
+    }
+
+    /* Top row inside each item */
+    .item-top {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: grab;
+    }
+    .item-top:active { cursor: grabbing; }
+
+    .drag-handle { color: #94a3b8; font-size: 1rem; padding: 0 2px; flex-shrink: 0; }
+    .file-index {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: linear-gradient(135deg, #dc2626, #f87171);
+      color: white; font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .file-name {
+      flex: 1; font-size: 0.88rem; color: #1e293b; font-weight: 500;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+    }
+    .file-size { font-size: 0.75rem; color: #94a3b8; flex-shrink: 0; }
+
+    /* Move buttons */
+    .move-btn {
+      background: none; border: 1px solid #e2e8f0; color: #64748b;
+      cursor: pointer; width: 24px; height: 24px; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; transition: all 0.15s; flex-shrink: 0;
+    }
+    .move-btn:hover { background: #f1f5f9; border-color: #94a3b8; color: #1e293b; }
+    .move-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+    .file-remove {
+      background: none; border: none; color: #cbd5e1; cursor: pointer;
+      font-size: 0.85rem; padding: 4px 6px; border-radius: 4px;
+      transition: color 0.15s, background 0.15s; flex-shrink: 0;
+    }
+    .file-remove:hover { color: #ef4444; background: #fef2f2; }
+
+    /* Page range row */
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.65rem;
+      padding-top: 0.65rem;
+      border-top: 1px dashed #f1f5f9;
+      flex-wrap: wrap;
+    }
+    .range-label { font-size: 0.78rem; color: #64748b; font-weight: 500; white-space: nowrap; }
+    .range-input {
+      width: 72px;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.4rem;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.82rem;
+      text-align: center;
+      color: #1e293b;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .range-input:focus { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.12); }
+    .range-input.invalid { border-color: #ef4444; background: #fef2f2; }
+    .range-hint { font-size: 0.72rem; color: #94a3b8; }
+    .range-sep { color: #94a3b8; font-size: 0.8rem; }
+
+    /* Totals bar */
+    .totals-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8rem; color: #64748b; padding: 0.5rem 0.1rem 0;
+    }
+
+    /* Add more button */
+    .add-more-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.55rem 1.1rem;
+      background: #f1f5f9; border: 1.5px dashed #94a3b8; border-radius: 0.6rem;
+      color: #475569; font-size: 0.85rem; font-weight: 500; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .add-more-btn:hover { background: #fef2f2; border-color: #dc2626; color: #dc2626; }
+
+    /* Split button */
+    .btn-split {
+      background: linear-gradient(135deg, #dc2626, #f87171);
+      color: white; font-weight: 700; font-size: 1.05rem;
+      padding: 0.85rem 2.5rem; border-radius: 999px; border: none;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(220,38,38,0.32);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    .btn-split:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(220,38,38,0.38); }
+    .btn-split:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+    /* Slide-in */
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .file-item { animation: slideIn 0.16s ease; }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; display: inline-block; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -81,7 +220,9 @@
   <nav class="navbar w-full shadow-lg sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2 text-white" style="text-decoration:none">
-        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-file-pdf text-white text-sm"></i>
+        </div>
         <span class="font-bold text-lg tracking-tight">Mini PDF Tools</span>
       </a>
       <div class="hidden md:flex items-center gap-1">
@@ -125,64 +266,111 @@
   <header class="site-header w-full py-8 px-8 text-white shadow-lg">
     <div class="max-w-4xl mx-auto text-center">
       <h1 class="text-3xl font-extrabold mb-2">Split PDF Online – Free</h1>
-      <p class="text-lg font-light opacity-80">Extract specific pages or page ranges from any PDF document. Instant and secure.</p>
+      <p class="text-lg font-light opacity-80">Add PDFs from any folder, set page ranges, drag to reorder, then extract instantly.</p>
     </div>
   </header>
 
   <!-- BREADCRUMB -->
   <div class="w-full max-w-4xl mx-auto px-4 pt-4 text-sm text-gray-500">
-    <a href="/" class="hover:text-indigo-600">Home</a> &rsaquo; <span class="text-gray-700 font-medium">Split PDF</span>
+    <a href="/" class="hover:text-red-600">Home</a> &rsaquo;
+    <span class="text-gray-700 font-medium">Split PDF</span>
   </div>
 
   <!-- TOOL -->
   <main class="flex-1 w-full flex flex-col items-center py-8 px-4">
-    <div class="w-full max-w-xl bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
-      <form id="splitForm" enctype="multipart/form-data" class="w-full flex flex-col items-center space-y-6" novalidate>
-        <div class="custom-file-input w-full cursor-pointer" onclick="document.getElementById('pdf-upload-split').click()">
-          <i class="fas fa-scissors text-red-500 text-6xl mb-4"></i>
-          <p id="split-file-label" class="text-gray-700 font-medium text-lg mb-2">Click to upload your PDF</p>
-          <p class="text-gray-500 text-sm">One PDF file – max 32 MB</p>
-        </div>
-        <input type="file" id="pdf-upload-split" name="file" accept=".pdf" required />
-        <div id="split-file-list" class="w-full text-center text-gray-600"></div>
-        <div id="split-error" class="hidden text-red-500 font-semibold mt-2"></div>
-        <div class="w-full flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-          <div class="flex flex-col items-center">
-            <label for="start-page" class="text-gray-700 font-medium text-lg mb-2">Start Page:</label>
-            <input type="number" id="start-page" name="start" min="1" required class="number-input" placeholder="e.g., 1" />
-          </div>
-          <div class="flex flex-col items-center">
-            <label for="end-page" class="text-gray-700 font-medium text-lg mb-2">End Page:</label>
-            <input type="number" id="end-page" name="end" min="1" required class="number-input" placeholder="e.g., 5" />
-          </div>
-        </div>
-        <div id="split-loading" class="hidden flex items-center space-x-2 text-indigo-600 text-lg font-semibold">
-          <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
-          </svg>
-          <span>Splitting... Please wait</span>
-        </div>
-        <button type="submit" class="btn-primary bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-10 rounded-full shadow-lg text-xl">Split PDF</button>
-      </form>
-    </div>
+    <div class="w-full max-w-2xl">
 
-    <!-- SEO content -->
-    <section class="max-w-3xl w-full mt-12 px-4">
-      <h2 class="text-xl font-bold text-gray-800 mb-3">How to Split a PDF Online</h2>
-      <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
-        <li>Click the upload area above and select your PDF file.</li>
-        <li>Enter the start page and end page numbers you want to extract.</li>
-        <li>Click <strong>Split PDF</strong> — your extracted pages will download as a new PDF.</li>
-      </ol>
-      <h2 class="text-xl font-bold text-gray-800 mb-3">When to Split a PDF</h2>
-      <p class="text-gray-600 mb-4">Splitting a PDF is handy when you need to share only part of a document, extract a chapter from a book, or separate invoices bundled into a single file.</p>
-      <div class="flex flex-wrap gap-4 mt-4">
-        <a href="/compress-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-compress-alt mr-1"></i>Compress PDF</a>
-        <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
-        <a href="/image-to-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-image mr-1"></i>Image to PDF</a>
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+
+        <!-- Drop zone -->
+        <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input-main').click()">
+          <i class="fas fa-file-export text-red-400 text-5xl mb-4 block"></i>
+          <p class="text-gray-700 font-semibold text-lg mb-1">Drop PDFs here or click to browse</p>
+          <p class="text-gray-400 text-sm">Add files from any folder — set a page range for each</p>
+        </div>
+
+        <!-- Hidden file inputs -->
+        <input type="file" id="file-input-main"    accept=".pdf" multiple style="display:none" />
+        <input type="file" id="file-input-addmore" accept=".pdf" multiple style="display:none" />
+
+        <!-- File manager -->
+        <div id="file-list-area" style="display:none">
+
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+              Files to split &nbsp;<span class="normal-case font-normal text-gray-400">(drag to reorder)</span>
+            </p>
+            <button onclick="clearAll()" class="text-xs text-red-400 hover:text-red-600 transition bg-transparent border-0 cursor-pointer">
+              <i class="fas fa-trash-alt mr-1"></i>Clear all
+            </button>
+          </div>
+
+          <!-- Sortable list -->
+          <ul id="file-list"></ul>
+
+          <!-- Totals -->
+          <div class="totals-bar">
+            <span id="file-count-label">0 files</span>
+            <span id="file-size-label">0 KB total</span>
+          </div>
+
+          <!-- Add more -->
+          <div class="flex items-center gap-3 mt-5 flex-wrap">
+            <button class="add-more-btn" onclick="document.getElementById('file-input-addmore').click()">
+              <i class="fas fa-plus-circle"></i> Add more files
+            </button>
+            <span class="text-xs text-gray-400">browse a different folder</span>
+          </div>
+
+          <!-- Error / loading -->
+          <div id="split-error" class="hidden mt-3 text-red-500 font-semibold text-sm"></div>
+          <div id="split-loading" class="hidden mt-3 flex items-center gap-2 text-red-700 font-semibold text-sm">
+            <svg class="spinner w-4 h-4 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+            </svg>
+            Splitting your PDFs… please wait
+          </div>
+
+          <!-- Split button -->
+          <div class="flex justify-center mt-7">
+            <button id="split-btn" class="btn-split" onclick="doSplit()">
+              <i class="fas fa-cut mr-2"></i>Split PDFs
+            </button>
+          </div>
+
+        </div><!-- /file-list-area -->
+      </div><!-- /card -->
+
+      <!-- Steps hint -->
+      <div class="mt-5 flex flex-col sm:flex-row gap-3 text-sm text-gray-500 justify-center text-center">
+        <span><span class="font-bold text-red-400">1.</span> Add PDFs from any folders</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-red-400">2.</span> Set page range for each</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-red-400">3.</span> Drag to reorder &amp; split</span>
       </div>
-    </section>
+
+      <!-- SEO content -->
+      <section class="mt-12 px-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-3">How to Split PDFs Online</h2>
+        <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
+          <li>Drop your PDF files onto the upload area, or click to browse.</li>
+          <li>Click <strong>Add more files</strong> to pick PDFs stored in other folders.</li>
+          <li>Set a <strong>Start</strong> and <strong>End</strong> page for each file you want to extract from.</li>
+          <li>Drag the rows up or down to set the processing order.</li>
+          <li>Click <strong>Split PDFs</strong> — each extracted range downloads as a separate file.</li>
+        </ol>
+        <h2 class="text-xl font-bold text-gray-800 mb-3">When to Split a PDF</h2>
+        <p class="text-gray-600 mb-4">Splitting a PDF is handy when you need to share only part of a document, extract a chapter from a book, or separate invoices bundled into a single file.</p>
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a href="/compress-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-compress-alt mr-1"></i>Compress PDF</a>
+          <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
+          <a href="/image-to-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-image mr-1"></i>Image to PDF</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <!-- FOOTER -->
@@ -227,61 +415,339 @@
     </div>
   </footer>
 
-  <script>
-    const API = 'https://pdfcompress-1097766937022.europe-west1.run.app';
-    const MAX_BYTES = 32 * 1024 * 1024;
+<script>
+/* ═══════════════════════════════════════════════════════
+   SPLIT PDF — file manager with add-more, page ranges
+   & drag-to-sort  (mirrors merge-pdf pattern)
+   ═══════════════════════════════════════════════════════ */
 
-    function downloadBlob(blob, filename) {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename;
-      document.body.appendChild(a); a.click(); a.remove();
-      window.URL.revokeObjectURL(url);
+const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
+const MAX_BYTES = 32 * 1024 * 1024;
+
+// ── State ─────────────────────────────────────────────
+let fileList = [];   // [{ id, file, start, end }]
+let idCtr    = 0;
+let dragSrcId = null;
+
+// ── DOM ───────────────────────────────────────────────
+const dropZone     = document.getElementById('drop-zone');
+const fileListArea = document.getElementById('file-list-area');
+const fileListEl   = document.getElementById('file-list');
+const splitErr     = document.getElementById('split-error');
+const splitLoad    = document.getElementById('split-loading');
+const splitBtn     = document.getElementById('split-btn');
+const fileCountLbl = document.getElementById('file-count-label');
+const fileSizeLbl  = document.getElementById('file-size-label');
+const inputMain    = document.getElementById('file-input-main');
+const inputAddMore = document.getElementById('file-input-addmore');
+
+// ── File inputs ───────────────────────────────────────
+inputMain.addEventListener('change',    () => addFiles(inputMain.files));
+inputAddMore.addEventListener('change', () => addFiles(inputAddMore.files));
+
+// ── Drop zone ─────────────────────────────────────────
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  addFiles(e.dataTransfer.files);
+});
+
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => {
+  if (e.target.closest('#drop-zone') || e.target.closest('#file-list')) return;
+  e.preventDefault();
+  if (fileList.length > 0) addFiles(e.dataTransfer.files);
+});
+
+// ── Add files ─────────────────────────────────────────
+function addFiles(incoming) {
+  const pdfs = Array.from(incoming).filter(
+    f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
+  );
+  if (!pdfs.length) { showError('Only PDF files are supported.'); return; }
+
+  pdfs.forEach(f => {
+    if (!fileList.some(x => x.file.name === f.name && x.file.size === f.size)) {
+      fileList.push({ id: ++idCtr, file: f, start: 1, end: '' });
     }
+  });
 
-    const splitUpload = document.getElementById('pdf-upload-split');
-    const splitLabel  = document.getElementById('split-file-label');
-    const splitFileList = document.getElementById('split-file-list');
-    const splitErr    = document.getElementById('split-error');
-    const splitLoad   = document.getElementById('split-loading');
+  hideError();
+  render();
+}
 
-    splitUpload.addEventListener('change', () => {
-      const file = splitUpload.files[0]; splitErr.classList.add('hidden'); splitFileList.innerHTML = '';
-      if (file) {
-        splitLabel.textContent = file.name; splitFileList.textContent = `Selected: ${file.name}`;
-        if (file.size > MAX_BYTES) { splitErr.textContent = 'File exceeds 32MB.'; splitErr.classList.remove('hidden'); splitUpload.value = ''; splitLabel.textContent = 'Click to upload your PDF'; splitFileList.innerHTML = ''; }
-      } else { splitLabel.textContent = 'Click to upload your PDF'; }
-    });
+// ── Render ────────────────────────────────────────────
+function render() {
+  fileListEl.innerHTML = '';
 
-    document.getElementById('splitForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const file = splitUpload.files[0];
-      const start = parseInt(document.getElementById('start-page').value, 10);
-      const end   = parseInt(document.getElementById('end-page').value, 10);
-      if (!file) { splitErr.textContent = 'Please select a PDF.'; splitErr.classList.remove('hidden'); return; }
-      if (file.size > MAX_BYTES) { splitErr.textContent = 'File exceeds 32MB.'; splitErr.classList.remove('hidden'); return; }
-      if (!start || !end || start <= 0 || end < start) { splitErr.textContent = 'Enter valid page numbers.'; splitErr.classList.remove('hidden'); return; }
-      splitLoad.classList.remove('hidden'); splitErr.classList.add('hidden');
-      try {
-        const fd = new FormData(document.getElementById('splitForm'));
-        const res = await fetch(`${API}/split`, { method: 'POST', body: fd });
-        if (!res.ok) throw new Error(`Error ${res.status}`);
-        downloadBlob(await res.blob(), `split_${file.name}`);
-      } catch(err) { splitErr.textContent = err.message; splitErr.classList.remove('hidden'); }
-      finally { splitLoad.classList.add('hidden'); splitUpload.value = ''; splitLabel.textContent = 'Click to upload your PDF'; splitFileList.innerHTML = ''; document.getElementById('start-page').value = ''; document.getElementById('end-page').value = ''; }
-    });
+  if (fileList.length === 0) {
+    fileListArea.style.display = 'none';
+    dropZone.style.display     = '';
+    return;
+  }
 
-    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
-    function toggleMobileTools() {
-      document.getElementById('mobile-tool-links').classList.toggle('open');
-      const c = document.getElementById('tools-chevron');
-      c.classList.toggle('fa-chevron-down'); c.classList.toggle('fa-chevron-up');
+  dropZone.style.display     = 'none';
+  fileListArea.style.display = '';
+
+  let totalBytes = 0;
+  fileList.forEach((item, idx) => {
+    totalBytes += item.file.size;
+    fileListEl.appendChild(buildRow(item, idx));
+  });
+
+  fileCountLbl.textContent = `${fileList.length} file${fileList.length !== 1 ? 's' : ''}`;
+  fileSizeLbl.textContent  = formatBytes(totalBytes) + ' total';
+
+  if (totalBytes > MAX_BYTES) {
+    showError('Total size exceeds 32 MB — please remove some files.');
+    splitBtn.disabled = true;
+  } else {
+    if (splitErr.textContent.includes('32 MB')) hideError();
+    splitBtn.disabled = false;
+  }
+}
+
+// ── Build a row ───────────────────────────────────────
+function buildRow(item, idx) {
+  const li = document.createElement('li');
+  li.className  = 'file-item';
+  li.dataset.id = item.id;
+
+  // Top bar (draggable area)
+  const topDiv = document.createElement('div');
+  topDiv.className = 'item-top';
+  topDiv.draggable = true;
+  topDiv.innerHTML = `
+    <span class="drag-handle" title="Drag to reorder"><i class="fas fa-grip-vertical"></i></span>
+    <span class="file-index">${idx + 1}</span>
+    <span class="file-name" title="${esc(item.file.name)}">${esc(item.file.name)}</span>
+    <span class="file-size">${formatBytes(item.file.size)}</span>
+    <div class="flex gap-1 flex-shrink-0">
+      <button class="move-btn" title="Move up"
+              onclick="moveItem(${item.id}, -1)"
+              ${idx === 0 ? 'disabled' : ''}>
+        <i class="fas fa-chevron-up"></i>
+      </button>
+      <button class="move-btn" title="Move down"
+              onclick="moveItem(${item.id}, 1)"
+              ${idx === fileList.length - 1 ? 'disabled' : ''}>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
+    <button class="file-remove" title="Remove file" onclick="removeItem(${item.id})">
+      <i class="fas fa-times"></i>
+    </button>
+  `;
+
+  // Page range row
+  const rangeDiv = document.createElement('div');
+  rangeDiv.className = 'range-row';
+  rangeDiv.innerHTML = `
+    <span class="range-label"><i class="fas fa-file-alt mr-1 text-red-300"></i>Pages:</span>
+    <input type="number" class="range-input" id="start-${item.id}"
+           min="1" placeholder="Start" value="${item.start || ''}"
+           title="Start page" />
+    <span class="range-sep">—</span>
+    <input type="number" class="range-input" id="end-${item.id}"
+           min="1" placeholder="End" value="${item.end || ''}"
+           title="End page (leave blank = last page)" />
+    <span class="range-hint">leave End blank to go to last page</span>
+  `;
+
+  li.appendChild(topDiv);
+  li.appendChild(rangeDiv);
+
+  // Save range values on change
+  rangeDiv.querySelector(`#start-${item.id}`).addEventListener('input', e => {
+    item.start = e.target.value;
+    validateRange(item);
+  });
+  rangeDiv.querySelector(`#end-${item.id}`).addEventListener('input', e => {
+    item.end = e.target.value;
+    validateRange(item);
+  });
+
+  // ── Drag events (on topDiv so inputs aren't grabbed) ──
+  topDiv.addEventListener('dragstart', e => {
+    dragSrcId = item.id;
+    li.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(item.id));
+  });
+  topDiv.addEventListener('dragend', () => {
+    dragSrcId = null;
+    document.querySelectorAll('.file-item').forEach(el =>
+      el.classList.remove('dragging', 'drag-over')
+    );
+  });
+  li.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (dragSrcId !== null && dragSrcId !== item.id) {
+      document.querySelectorAll('.file-item').forEach(el => el.classList.remove('drag-over'));
+      li.classList.add('drag-over');
     }
-    document.addEventListener('click', function(e) {
-      const menu = document.getElementById('mobile-menu');
-      const hamburger = document.getElementById('hamburger');
-      if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) menu.classList.remove('open');
-    });
-  </script>
+  });
+  li.addEventListener('dragleave', e => {
+    if (!li.contains(e.relatedTarget)) li.classList.remove('drag-over');
+  });
+  li.addEventListener('drop', e => {
+    e.preventDefault();
+    li.classList.remove('drag-over');
+    const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    if (src && src !== item.id) reorderById(src, item.id);
+  });
+
+  return li;
+}
+
+// ── Validate page range inline ────────────────────────
+function validateRange(item) {
+  const startEl = document.getElementById(`start-${item.id}`);
+  const endEl   = document.getElementById(`end-${item.id}`);
+  if (!startEl || !endEl) return;
+
+  const s = parseInt(startEl.value, 10);
+  const e = parseInt(endEl.value, 10);
+
+  startEl.classList.toggle('invalid', startEl.value !== '' && (isNaN(s) || s < 1));
+  endEl.classList.toggle('invalid',   endEl.value !== '' && (!isNaN(s) && !isNaN(e) && e < s));
+}
+
+// ── Reorder helpers ───────────────────────────────────
+function reorderById(srcId, targetId) {
+  const si = fileList.findIndex(x => x.id === srcId);
+  const ti = fileList.findIndex(x => x.id === targetId);
+  if (si < 0 || ti < 0) return;
+  const [moved] = fileList.splice(si, 1);
+  fileList.splice(ti, 0, moved);
+  render();
+}
+
+function moveItem(id, dir) {
+  const i = fileList.findIndex(x => x.id === id);
+  const j = i + dir;
+  if (j < 0 || j >= fileList.length) return;
+  [fileList[i], fileList[j]] = [fileList[j], fileList[i]];
+  render();
+}
+
+function removeItem(id) {
+  fileList = fileList.filter(x => x.id !== id);
+  render();
+}
+
+function clearAll() {
+  fileList = [];
+  render();
+  hideError();
+}
+
+// ── Split & download ──────────────────────────────────
+async function doSplit() {
+  if (!fileList.length) { showError('Please add at least one PDF.'); return; }
+
+  // Collect current range values from DOM
+  fileList.forEach(item => {
+    const sEl = document.getElementById(`start-${item.id}`);
+    const eEl = document.getElementById(`end-${item.id}`);
+    if (sEl) item.start = sEl.value;
+    if (eEl) item.end   = eEl.value;
+  });
+
+  // Validate all ranges
+  for (const item of fileList) {
+    const s = parseInt(item.start, 10);
+    const e = item.end === '' ? null : parseInt(item.end, 10);
+    if (isNaN(s) || s < 1) {
+      showError(`"${item.file.name}": Start page must be a number ≥ 1.`);
+      return;
+    }
+    if (e !== null && e < s) {
+      showError(`"${item.file.name}": End page must be ≥ Start page.`);
+      return;
+    }
+  }
+
+  let total = 0;
+  fileList.forEach(x => { total += x.file.size; });
+  if (total > MAX_BYTES) { showError('Total exceeds 32 MB — please remove some files.'); return; }
+
+  splitLoad.classList.remove('hidden');
+  splitBtn.disabled = true;
+  hideError();
+
+  let successCount = 0;
+
+  try {
+    for (const item of fileList) {
+      const fd = new FormData();
+      fd.append('file',  item.file);
+      fd.append('start', item.start || '1');
+      if (item.end !== '') fd.append('end', item.end);
+
+      const res = await fetch(`${API}/split`, { method: 'POST', body: fd });
+      if (!res.ok) throw new Error(`"${item.file.name}": server error ${res.status}`);
+
+      const blob = await res.blob();
+      const outName = fileList.length === 1
+        ? `split_${item.file.name}`
+        : `split_${successCount + 1}_${item.file.name}`;
+      downloadBlob(blob, outName);
+      successCount++;
+    }
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    splitLoad.classList.add('hidden');
+    splitBtn.disabled = false;
+  }
+}
+
+// ── Utilities ─────────────────────────────────────────
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function formatBytes(b) {
+  if (b < 1024)          return b + ' B';
+  if (b < 1024 * 1024)   return (b / 1024).toFixed(1) + ' KB';
+  return (b / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showError(msg) { splitErr.textContent = msg; splitErr.classList.remove('hidden'); }
+function hideError()    { splitErr.classList.add('hidden'); }
+
+// ── Navbar helpers ────────────────────────────────────
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function toggleMobileTools() {
+  document.getElementById('mobile-tool-links').classList.toggle('open');
+  const c = document.getElementById('tools-chevron');
+  c.classList.toggle('fa-chevron-down');
+  c.classList.toggle('fa-chevron-up');
+}
+document.addEventListener('click', e => {
+  const menu      = document.getElementById('mobile-menu');
+  const hamburger = document.getElementById('hamburger');
+  if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+</script>
 </body>
 </html>
