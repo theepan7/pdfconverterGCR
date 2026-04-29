@@ -11,23 +11,18 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Split PDF Online Free – Extract Pages from PDF | Mini PDF Tools</title>
-  <meta name="description" content="Split PDF files online for free. Add multiple PDFs, set page ranges for each, drag to reorder, then extract instantly. No signup, no watermark, 100% secure.">
-  <meta name="keywords" content="split PDF, extract PDF pages, PDF splitter online, separate PDF pages, cut PDF, free PDF split, page range extractor">
+  <title>Split PDF Online Free – Extract Multiple Page Ranges | Mini PDF Tools</title>
+  <meta name="description" content="Split a PDF into multiple page ranges online for free. Extract pages 1-10, 20-30, 50-60 and more in one go. No signup, no watermark, 100% secure.">
+  <meta name="keywords" content="split PDF, extract PDF pages, multiple page ranges, PDF splitter online, separate PDF pages, cut PDF, free PDF split">
   <meta name="author" content="Mini PDF Tools">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://minipdftools.com/split-pdf.html">
-  <meta property="og:title" content="Split PDF Online Free | Mini PDF Tools">
-  <meta property="og:description" content="Add PDFs from any folder, set page ranges, drag to reorder, and extract pages instantly for free.">
+  <meta property="og:title" content="Split PDF – Extract Multiple Page Ranges | Mini PDF Tools">
+  <meta property="og:description" content="Upload one PDF, define as many page ranges as you need, and download each as a separate file. Free and instant.">
   <meta property="og:image" content="https://minipdftools.com/preview-image.jpg">
   <meta property="og:url" content="https://minipdftools.com/split-pdf.html">
   <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Split PDF Online Free | Mini PDF Tools">
-  <meta name="twitter:description" content="Add PDFs from any folder, set page ranges, and extract pages instantly for free.">
-  <meta name="twitter:image" content="https://minipdftools.com/preview-image.jpg">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
   <script type="application/ld+json">
   {
@@ -35,7 +30,7 @@
     "@type": "WebApplication",
     "name": "Split PDF Online – Mini PDF Tools",
     "url": "https://minipdftools.com/split-pdf.html",
-    "description": "Free online tool to split a PDF and extract specific pages or page ranges.",
+    "description": "Free online tool to split a PDF into multiple custom page ranges.",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "All",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
@@ -68,7 +63,7 @@
     .mobile-tool-links { display:none; }
     .mobile-tool-links.open { display:block; }
 
-    /* Drop zone */
+    /* ── Drop zone ── */
     .drop-zone {
       border: 2px dashed #fca5a5;
       border-radius: 1rem;
@@ -79,57 +74,100 @@
     .drop-zone:hover, .drop-zone.dragover {
       background: #fef2f2;
       border-color: #dc2626;
-    }
-    .drop-zone.dragover { transform: scale(1.01); }
-
-    /* File list */
-    #file-list { list-style: none; padding: 0; margin: 0; }
-
-    .file-item {
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.75rem;
-      padding: 0.85rem 1rem;
-      margin-bottom: 0.6rem;
-      transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-      user-select: none;
-    }
-    .file-item:hover { border-color: #fca5a5; box-shadow: 0 2px 12px rgba(220,38,38,0.08); }
-    .file-item.dragging {
-      opacity: 0.4;
-      transform: scale(0.98);
-      box-shadow: 0 8px 24px rgba(220,38,38,0.15);
-      border-color: #dc2626;
-      cursor: grabbing;
-    }
-    .file-item.drag-over {
-      border-color: #dc2626;
-      background: #fef2f2;
-      transform: translateY(-3px);
-      box-shadow: 0 4px 16px rgba(220,38,38,0.12);
+      transform: scale(1.005);
     }
 
-    /* Top row inside each item */
-    .item-top {
+    /* ── File info bar ── */
+    .file-info-bar {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      cursor: grab;
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      border-radius: 0.75rem;
+      padding: 0.85rem 1rem;
     }
-    .item-top:active { cursor: grabbing; }
-
-    .drag-handle { color: #94a3b8; font-size: 1rem; padding: 0 2px; flex-shrink: 0; }
-    .file-index {
-      width: 24px; height: 24px; border-radius: 50%;
+    .file-icon-badge {
+      width: 38px; height: 38px; border-radius: 0.5rem;
       background: linear-gradient(135deg, #dc2626, #f87171);
-      color: white; font-size: 0.7rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
-    .file-name {
-      flex: 1; font-size: 0.88rem; color: #1e293b; font-weight: 500;
+    .file-info-name {
+      flex: 1; font-size: 0.9rem; font-weight: 600; color: #1e293b;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
     }
-    .file-size { font-size: 0.75rem; color: #94a3b8; flex-shrink: 0; }
+    .file-info-size { font-size: 0.78rem; color: #94a3b8; flex-shrink: 0; }
+    .btn-change {
+      background: none; border: 1px solid #fca5a5; color: #dc2626;
+      font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.7rem;
+      border-radius: 0.4rem; cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+    }
+    .btn-change:hover { background: #dc2626; color: #fff; }
+
+    /* ── Range list ── */
+    #range-list { list-style: none; padding: 0; margin: 0; }
+
+    .range-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      cursor: grab;
+      transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+    .range-item:hover { border-color: #fca5a5; box-shadow: 0 2px 10px rgba(220,38,38,0.08); }
+    .range-item.dragging {
+      opacity: 0.4; transform: scale(0.98);
+      box-shadow: 0 8px 24px rgba(220,38,38,0.15);
+      border-color: #dc2626; cursor: grabbing;
+    }
+    .range-item.drag-over {
+      border-color: #dc2626; background: #fef2f2;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 14px rgba(220,38,38,0.12);
+    }
+
+    .drag-handle { color: #94a3b8; font-size: 0.95rem; cursor: grab; flex-shrink: 0; padding: 0 2px; }
+    .range-badge {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: linear-gradient(135deg, #dc2626, #f87171);
+      color: #fff; font-size: 0.68rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .range-input {
+      width: 70px;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.4rem;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.85rem;
+      text-align: center;
+      color: #1e293b;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      background: #f8fafc;
+    }
+    .range-input:focus { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.12); background: #fff; }
+    .range-input.invalid { border-color: #ef4444; background: #fef2f2; }
+    .range-sep { color: #94a3b8; font-size: 0.8rem; font-weight: 600; flex-shrink: 0; }
+    .range-label-text { font-size: 0.78rem; color: #94a3b8; flex-shrink: 0; }
+
+    .range-label-name {
+      flex: 1;
+      font-size: 0.82rem;
+      color: #475569;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
 
     /* Move buttons */
     .move-btn {
@@ -141,55 +179,28 @@
     .move-btn:hover { background: #f1f5f9; border-color: #94a3b8; color: #1e293b; }
     .move-btn:disabled { opacity: 0.25; cursor: not-allowed; }
 
-    .file-remove {
+    .range-remove {
       background: none; border: none; color: #cbd5e1; cursor: pointer;
       font-size: 0.85rem; padding: 4px 6px; border-radius: 4px;
       transition: color 0.15s, background 0.15s; flex-shrink: 0;
     }
-    .file-remove:hover { color: #ef4444; background: #fef2f2; }
+    .range-remove:hover { color: #ef4444; background: #fef2f2; }
 
-    /* Page range row */
-    .range-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.65rem;
-      padding-top: 0.65rem;
-      border-top: 1px dashed #f1f5f9;
-      flex-wrap: wrap;
-    }
-    .range-label { font-size: 0.78rem; color: #64748b; font-weight: 500; white-space: nowrap; }
-    .range-input {
-      width: 72px;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.4rem;
-      padding: 0.3rem 0.5rem;
-      font-size: 0.82rem;
-      text-align: center;
-      color: #1e293b;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    .range-input:focus { border-color: #dc2626; box-shadow: 0 0 0 2px rgba(220,38,38,0.12); }
-    .range-input.invalid { border-color: #ef4444; background: #fef2f2; }
-    .range-hint { font-size: 0.72rem; color: #94a3b8; }
-    .range-sep { color: #94a3b8; font-size: 0.8rem; }
-
-    /* Totals bar */
-    .totals-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.8rem; color: #64748b; padding: 0.5rem 0.1rem 0;
-    }
-
-    /* Add more button */
-    .add-more-btn {
+    /* Add range button */
+    .add-range-btn {
       display: inline-flex; align-items: center; gap: 0.5rem;
       padding: 0.55rem 1.1rem;
       background: #f1f5f9; border: 1.5px dashed #94a3b8; border-radius: 0.6rem;
       color: #475569; font-size: 0.85rem; font-weight: 500; cursor: pointer;
       transition: all 0.15s;
     }
-    .add-more-btn:hover { background: #fef2f2; border-color: #dc2626; color: #dc2626; }
+    .add-range-btn:hover { background: #fef2f2; border-color: #dc2626; color: #dc2626; }
+
+    /* Totals bar */
+    .totals-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8rem; color: #64748b; padding: 0.5rem 0.1rem 0;
+    }
 
     /* Split button */
     .btn-split {
@@ -202,16 +213,28 @@
     .btn-split:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(220,38,38,0.38); }
     .btn-split:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
 
-    /* Slide-in */
+    /* Animations */
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .file-item { animation: slideIn 0.16s ease; }
+    .range-item { animation: slideIn 0.16s ease; }
 
-    /* Spinner */
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { animation: spin 0.8s linear infinite; display: inline-block; }
+
+    /* Progress indicator */
+    .progress-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; padding: 0.3rem 0;
+    }
+    .progress-item .dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .dot-pending  { background: #e2e8f0; }
+    .dot-running  { background: #f59e0b; animation: spin 0.8s linear infinite; }
+    .dot-done     { background: #22c55e; }
+    .dot-error    { background: #ef4444; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -266,7 +289,7 @@
   <header class="site-header w-full py-8 px-8 text-white shadow-lg">
     <div class="max-w-4xl mx-auto text-center">
       <h1 class="text-3xl font-extrabold mb-2">Split PDF Online – Free</h1>
-      <p class="text-lg font-light opacity-80">Add PDFs from any folder, set page ranges, drag to reorder, then extract instantly.</p>
+      <p class="text-lg font-light opacity-80">Upload one PDF, define as many page ranges as you need, and download each as a separate file.</p>
     </div>
   </header>
 
@@ -282,88 +305,104 @@
 
       <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
 
-        <!-- Drop zone -->
-        <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input-main').click()">
+        <!-- Step 1: Drop zone -->
+        <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input').click()">
           <i class="fas fa-file-export text-red-400 text-5xl mb-4 block"></i>
-          <p class="text-gray-700 font-semibold text-lg mb-1">Drop PDFs here or click to browse</p>
-          <p class="text-gray-400 text-sm">Add files from any folder — set a page range for each</p>
+          <p class="text-gray-700 font-semibold text-lg mb-1">Drop your PDF here or click to browse</p>
+          <p class="text-gray-400 text-sm">One PDF file — max 32 MB</p>
         </div>
 
-        <!-- Hidden file inputs -->
-        <input type="file" id="file-input-main"    accept=".pdf" multiple style="display:none" />
-        <input type="file" id="file-input-addmore" accept=".pdf" multiple style="display:none" />
+        <input type="file" id="file-input" accept=".pdf" style="display:none" />
 
-        <!-- File manager -->
-        <div id="file-list-area" style="display:none">
+        <!-- Step 2: Range manager (hidden until file loaded) -->
+        <div id="range-area" style="display:none">
 
-          <!-- Header -->
+          <!-- File info bar -->
+          <div class="file-info-bar mb-6">
+            <div class="file-icon-badge">
+              <i class="fas fa-file-pdf text-white text-base"></i>
+            </div>
+            <span class="file-info-name" id="file-name-display"></span>
+            <span class="file-info-size" id="file-size-display"></span>
+            <button class="btn-change" onclick="changeFile()">
+              <i class="fas fa-sync-alt mr-1"></i>Change
+            </button>
+          </div>
+
+          <!-- Range list header -->
           <div class="flex items-center justify-between mb-3">
             <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-              Files to split &nbsp;<span class="normal-case font-normal text-gray-400">(drag to reorder)</span>
+              Page ranges &nbsp;<span class="normal-case font-normal text-gray-400">(drag to reorder)</span>
             </p>
-            <button onclick="clearAll()" class="text-xs text-red-400 hover:text-red-600 transition bg-transparent border-0 cursor-pointer">
+            <button onclick="clearRanges()" class="text-xs text-red-400 hover:text-red-600 transition bg-transparent border-0 cursor-pointer">
               <i class="fas fa-trash-alt mr-1"></i>Clear all
             </button>
           </div>
 
-          <!-- Sortable list -->
-          <ul id="file-list"></ul>
+          <!-- Sortable range list -->
+          <ul id="range-list"></ul>
 
           <!-- Totals -->
           <div class="totals-bar">
-            <span id="file-count-label">0 files</span>
-            <span id="file-size-label">0 KB total</span>
+            <span id="range-count-label">0 ranges</span>
+            <span id="range-pages-label"></span>
           </div>
 
-          <!-- Add more -->
+          <!-- Add range button -->
           <div class="flex items-center gap-3 mt-5 flex-wrap">
-            <button class="add-more-btn" onclick="document.getElementById('file-input-addmore').click()">
-              <i class="fas fa-plus-circle"></i> Add more files
+            <button class="add-range-btn" onclick="addRange()">
+              <i class="fas fa-plus-circle"></i> Add range
             </button>
-            <span class="text-xs text-gray-400">browse a different folder</span>
+            <span class="text-xs text-gray-400">e.g. pages 1–10, 20–30, 50–60…</span>
           </div>
 
-          <!-- Error / loading -->
+          <!-- Error / progress / loading -->
           <div id="split-error" class="hidden mt-3 text-red-500 font-semibold text-sm"></div>
+
+          <div id="split-progress" class="hidden mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-1">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Processing ranges</p>
+            <div id="progress-list"></div>
+          </div>
+
           <div id="split-loading" class="hidden mt-3 flex items-center gap-2 text-red-700 font-semibold text-sm">
             <svg class="spinner w-4 h-4 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
             </svg>
-            Splitting your PDFs… please wait
+            <span id="loading-text">Splitting… please wait</span>
           </div>
 
           <!-- Split button -->
           <div class="flex justify-center mt-7">
             <button id="split-btn" class="btn-split" onclick="doSplit()">
-              <i class="fas fa-cut mr-2"></i>Split PDFs
+              <i class="fas fa-cut mr-2"></i>Split PDF
             </button>
           </div>
 
-        </div><!-- /file-list-area -->
+        </div><!-- /range-area -->
       </div><!-- /card -->
 
       <!-- Steps hint -->
       <div class="mt-5 flex flex-col sm:flex-row gap-3 text-sm text-gray-500 justify-center text-center">
-        <span><span class="font-bold text-red-400">1.</span> Add PDFs from any folders</span>
+        <span><span class="font-bold text-red-400">1.</span> Upload your PDF</span>
         <span class="hidden sm:block text-gray-300">•</span>
-        <span><span class="font-bold text-red-400">2.</span> Set page range for each</span>
+        <span><span class="font-bold text-red-400">2.</span> Add as many page ranges as you need</span>
         <span class="hidden sm:block text-gray-300">•</span>
-        <span><span class="font-bold text-red-400">3.</span> Drag to reorder &amp; split</span>
+        <span><span class="font-bold text-red-400">3.</span> Split &amp; download each range</span>
       </div>
 
       <!-- SEO content -->
       <section class="mt-12 px-1">
-        <h2 class="text-xl font-bold text-gray-800 mb-3">How to Split PDFs Online</h2>
+        <h2 class="text-xl font-bold text-gray-800 mb-3">How to Split a PDF into Multiple Ranges</h2>
         <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
-          <li>Drop your PDF files onto the upload area, or click to browse.</li>
-          <li>Click <strong>Add more files</strong> to pick PDFs stored in other folders.</li>
-          <li>Set a <strong>Start</strong> and <strong>End</strong> page for each file you want to extract from.</li>
-          <li>Drag the rows up or down to set the processing order.</li>
-          <li>Click <strong>Split PDFs</strong> — each extracted range downloads as a separate file.</li>
+          <li>Upload your PDF by clicking the drop zone or dragging a file onto it.</li>
+          <li>Click <strong>Add range</strong> and enter a Start and End page (e.g. 1–10).</li>
+          <li>Keep adding more ranges — 20–30, 50–60, or any pages you need.</li>
+          <li>Drag the range rows to reorder them if needed.</li>
+          <li>Click <strong>Split PDF</strong> — each range downloads as its own file.</li>
         </ol>
         <h2 class="text-xl font-bold text-gray-800 mb-3">When to Split a PDF</h2>
-        <p class="text-gray-600 mb-4">Splitting a PDF is handy when you need to share only part of a document, extract a chapter from a book, or separate invoices bundled into a single file.</p>
+        <p class="text-gray-600 mb-4">Splitting is ideal for extracting chapters from a long report, sharing only relevant pages with a client, or breaking a 100-page document into smaller, focused sections.</p>
         <div class="flex flex-wrap gap-4 mt-4">
           <a href="/compress-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-compress-alt mr-1"></i>Compress PDF</a>
           <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
@@ -417,33 +456,42 @@
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   SPLIT PDF — file manager with add-more, page ranges
-   & drag-to-sort  (mirrors merge-pdf pattern)
+   SPLIT PDF  —  single file, multiple page ranges
+   each range downloads as its own file
    ═══════════════════════════════════════════════════════ */
 
 const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
 const MAX_BYTES = 32 * 1024 * 1024;
 
 // ── State ─────────────────────────────────────────────
-let fileList = [];   // [{ id, file, start, end }]
-let idCtr    = 0;
+let pdfFile   = null;   // the single uploaded File
+let ranges    = [];     // [{ id, start, end }]
+let idCtr     = 0;
 let dragSrcId = null;
 
 // ── DOM ───────────────────────────────────────────────
-const dropZone     = document.getElementById('drop-zone');
-const fileListArea = document.getElementById('file-list-area');
-const fileListEl   = document.getElementById('file-list');
-const splitErr     = document.getElementById('split-error');
-const splitLoad    = document.getElementById('split-loading');
-const splitBtn     = document.getElementById('split-btn');
-const fileCountLbl = document.getElementById('file-count-label');
-const fileSizeLbl  = document.getElementById('file-size-label');
-const inputMain    = document.getElementById('file-input-main');
-const inputAddMore = document.getElementById('file-input-addmore');
+const dropZone      = document.getElementById('drop-zone');
+const rangeArea     = document.getElementById('range-area');
+const fileInput     = document.getElementById('file-input');
+const rangeListEl   = document.getElementById('range-list');
+const splitErr      = document.getElementById('split-error');
+const splitLoad     = document.getElementById('split-loading');
+const splitProgress = document.getElementById('split-progress');
+const progressList  = document.getElementById('progress-list');
+const splitBtn      = document.getElementById('split-btn');
+const loadingText   = document.getElementById('loading-text');
+const rangeCountLbl = document.getElementById('range-count-label');
+const rangePagesLbl = document.getElementById('range-pages-label');
 
-// ── File inputs ───────────────────────────────────────
-inputMain.addEventListener('change',    () => addFiles(inputMain.files));
-inputAddMore.addEventListener('change', () => addFiles(inputAddMore.files));
+// ── File input ────────────────────────────────────────
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) loadFile(fileInput.files[0]);
+});
+
+function changeFile() {
+  fileInput.value = '';
+  fileInput.click();
+}
 
 // ── Drop zone ─────────────────────────────────────────
 dropZone.addEventListener('dragover', e => {
@@ -454,142 +502,151 @@ dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover
 dropZone.addEventListener('drop', e => {
   e.preventDefault();
   dropZone.classList.remove('dragover');
-  addFiles(e.dataTransfer.files);
+  const f = e.dataTransfer.files[0];
+  if (f) loadFile(f);
 });
 
-document.addEventListener('dragover', e => e.preventDefault());
-document.addEventListener('drop', e => {
-  if (e.target.closest('#drop-zone') || e.target.closest('#file-list')) return;
-  e.preventDefault();
-  if (fileList.length > 0) addFiles(e.dataTransfer.files);
-});
+// ── Load file ─────────────────────────────────────────
+function loadFile(f) {
+  if (!f.name.toLowerCase().endsWith('.pdf') && f.type !== 'application/pdf') {
+    showError('Please select a PDF file.'); return;
+  }
+  if (f.size > MAX_BYTES) {
+    showError('File exceeds the 32 MB limit.'); return;
+  }
 
-// ── Add files ─────────────────────────────────────────
-function addFiles(incoming) {
-  const pdfs = Array.from(incoming).filter(
-    f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
-  );
-  if (!pdfs.length) { showError('Only PDF files are supported.'); return; }
-
-  pdfs.forEach(f => {
-    if (!fileList.some(x => x.file.name === f.name && x.file.size === f.size)) {
-      fileList.push({ id: ++idCtr, file: f, start: 1, end: '' });
-    }
-  });
-
+  pdfFile = f;
   hideError();
-  render();
+
+  // Show file info bar
+  document.getElementById('file-name-display').textContent = f.name;
+  document.getElementById('file-size-display').textContent = formatBytes(f.size);
+
+  // Switch views
+  dropZone.style.display  = 'none';
+  rangeArea.style.display = '';
+
+  // Start with one default range if list is empty
+  if (ranges.length === 0) addRange();
+  else renderRanges();
 }
 
-// ── Render ────────────────────────────────────────────
-function render() {
-  fileListEl.innerHTML = '';
+// ── Add a range ───────────────────────────────────────
+function addRange(startVal, endVal) {
+  ranges.push({ id: ++idCtr, start: startVal || '', end: endVal || '' });
+  renderRanges();
+  // Auto-focus the start input of the new row
+  setTimeout(() => {
+    const el = document.getElementById(`start-${idCtr}`);
+    if (el) el.focus();
+  }, 50);
+}
 
-  if (fileList.length === 0) {
-    fileListArea.style.display = 'none';
-    dropZone.style.display     = '';
-    return;
-  }
+// ── Clear all ranges ──────────────────────────────────
+function clearRanges() {
+  ranges = [];
+  renderRanges();
+  hideError();
+  splitProgress.classList.add('hidden');
+}
 
-  dropZone.style.display     = 'none';
-  fileListArea.style.display = '';
+// ── Render ranges ─────────────────────────────────────
+function renderRanges() {
+  rangeListEl.innerHTML = '';
 
-  let totalBytes = 0;
-  fileList.forEach((item, idx) => {
-    totalBytes += item.file.size;
-    fileListEl.appendChild(buildRow(item, idx));
+  ranges.forEach((r, idx) => {
+    rangeListEl.appendChild(buildRangeRow(r, idx));
   });
 
-  fileCountLbl.textContent = `${fileList.length} file${fileList.length !== 1 ? 's' : ''}`;
-  fileSizeLbl.textContent  = formatBytes(totalBytes) + ' total';
+  const count = ranges.length;
+  rangeCountLbl.textContent = `${count} range${count !== 1 ? 's' : ''}`;
 
-  if (totalBytes > MAX_BYTES) {
-    showError('Total size exceeds 32 MB — please remove some files.');
-    splitBtn.disabled = true;
-  } else {
-    if (splitErr.textContent.includes('32 MB')) hideError();
-    splitBtn.disabled = false;
-  }
+  // Summary of total pages across all valid ranges
+  let totalPages = 0;
+  ranges.forEach(r => {
+    const s = parseInt(r.start, 10);
+    const e = parseInt(r.end,   10);
+    if (!isNaN(s) && !isNaN(e) && e >= s) totalPages += (e - s + 1);
+  });
+  rangePagesLbl.textContent = totalPages > 0 ? `${totalPages} pages total` : '';
+
+  splitBtn.disabled = count === 0;
 }
 
-// ── Build a row ───────────────────────────────────────
-function buildRow(item, idx) {
+// ── Build a single range row ──────────────────────────
+function buildRangeRow(r, idx) {
   const li = document.createElement('li');
-  li.className  = 'file-item';
-  li.dataset.id = item.id;
+  li.className  = 'range-item';
+  li.draggable  = true;
+  li.dataset.id = r.id;
 
-  // Top bar (draggable area)
-  const topDiv = document.createElement('div');
-  topDiv.className = 'item-top';
-  topDiv.draggable = true;
-  topDiv.innerHTML = `
+  li.innerHTML = `
     <span class="drag-handle" title="Drag to reorder"><i class="fas fa-grip-vertical"></i></span>
-    <span class="file-index">${idx + 1}</span>
-    <span class="file-name" title="${esc(item.file.name)}">${esc(item.file.name)}</span>
-    <span class="file-size">${formatBytes(item.file.size)}</span>
+    <span class="range-badge">${idx + 1}</span>
+    <span class="range-label-text">Pages</span>
+    <input type="number" class="range-input" id="start-${r.id}"
+           min="1" placeholder="Start" value="${esc(String(r.start))}"
+           title="Start page" />
+    <span class="range-sep">–</span>
+    <input type="number" class="range-input" id="end-${r.id}"
+           min="1" placeholder="End" value="${esc(String(r.end))}"
+           title="End page" />
     <div class="flex gap-1 flex-shrink-0">
       <button class="move-btn" title="Move up"
-              onclick="moveItem(${item.id}, -1)"
+              onclick="moveRange(${r.id}, -1)"
               ${idx === 0 ? 'disabled' : ''}>
         <i class="fas fa-chevron-up"></i>
       </button>
       <button class="move-btn" title="Move down"
-              onclick="moveItem(${item.id}, 1)"
-              ${idx === fileList.length - 1 ? 'disabled' : ''}>
+              onclick="moveRange(${r.id}, 1)"
+              ${idx === ranges.length - 1 ? 'disabled' : ''}>
         <i class="fas fa-chevron-down"></i>
       </button>
     </div>
-    <button class="file-remove" title="Remove file" onclick="removeItem(${item.id})">
+    <button class="range-remove" title="Remove range"
+            onclick="removeRange(${r.id})">
       <i class="fas fa-times"></i>
     </button>
   `;
 
-  // Page range row
-  const rangeDiv = document.createElement('div');
-  rangeDiv.className = 'range-row';
-  rangeDiv.innerHTML = `
-    <span class="range-label"><i class="fas fa-file-alt mr-1 text-red-300"></i>Pages:</span>
-    <input type="number" class="range-input" id="start-${item.id}"
-           min="1" placeholder="Start" value="${item.start || ''}"
-           title="Start page" />
-    <span class="range-sep">—</span>
-    <input type="number" class="range-input" id="end-${item.id}"
-           min="1" placeholder="End" value="${item.end || ''}"
-           title="End page (leave blank = last page)" />
-    <span class="range-hint">leave End blank to go to last page</span>
-  `;
-
-  li.appendChild(topDiv);
-  li.appendChild(rangeDiv);
-
-  // Save range values on change
-  rangeDiv.querySelector(`#start-${item.id}`).addEventListener('input', e => {
-    item.start = e.target.value;
-    validateRange(item);
+  // Save values on input
+  li.querySelector(`#start-${r.id}`).addEventListener('input', e => {
+    r.start = e.target.value;
+    validateRow(r);
+    updateTotals();
   });
-  rangeDiv.querySelector(`#end-${item.id}`).addEventListener('input', e => {
-    item.end = e.target.value;
-    validateRange(item);
+  li.querySelector(`#end-${r.id}`).addEventListener('input', e => {
+    r.end = e.target.value;
+    validateRow(r);
+    updateTotals();
   });
 
-  // ── Drag events (on topDiv so inputs aren't grabbed) ──
-  topDiv.addEventListener('dragstart', e => {
-    dragSrcId = item.id;
+  // Allow Tab from Start to go to End, then Tab from End to add new row
+  li.querySelector(`#end-${r.id}`).addEventListener('keydown', e => {
+    if (e.key === 'Tab' && !e.shiftKey && idx === ranges.length - 1) {
+      e.preventDefault();
+      addRange();
+    }
+  });
+
+  // ── Drag events ───────────────────────────────────
+  li.addEventListener('dragstart', e => {
+    dragSrcId = r.id;
     li.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', String(item.id));
+    e.dataTransfer.setData('text/plain', String(r.id));
   });
-  topDiv.addEventListener('dragend', () => {
+  li.addEventListener('dragend', () => {
     dragSrcId = null;
-    document.querySelectorAll('.file-item').forEach(el =>
+    document.querySelectorAll('.range-item').forEach(el =>
       el.classList.remove('dragging', 'drag-over')
     );
   });
   li.addEventListener('dragover', e => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    if (dragSrcId !== null && dragSrcId !== item.id) {
-      document.querySelectorAll('.file-item').forEach(el => el.classList.remove('drag-over'));
+    if (dragSrcId !== null && dragSrcId !== r.id) {
+      document.querySelectorAll('.range-item').forEach(el => el.classList.remove('drag-over'));
       li.classList.add('drag-over');
     }
   });
@@ -600,112 +657,152 @@ function buildRow(item, idx) {
     e.preventDefault();
     li.classList.remove('drag-over');
     const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
-    if (src && src !== item.id) reorderById(src, item.id);
+    if (src && src !== r.id) reorderById(src, r.id);
   });
 
   return li;
 }
 
-// ── Validate page range inline ────────────────────────
-function validateRange(item) {
-  const startEl = document.getElementById(`start-${item.id}`);
-  const endEl   = document.getElementById(`end-${item.id}`);
-  if (!startEl || !endEl) return;
+// ── Validate a single row inline ──────────────────────
+function validateRow(r) {
+  const sEl = document.getElementById(`start-${r.id}`);
+  const eEl = document.getElementById(`end-${r.id}`);
+  if (!sEl || !eEl) return;
+  const s = parseInt(sEl.value, 10);
+  const e = parseInt(eEl.value, 10);
+  sEl.classList.toggle('invalid', sEl.value !== '' && (isNaN(s) || s < 1));
+  eEl.classList.toggle('invalid', eEl.value !== '' && sEl.value !== '' && !isNaN(s) && !isNaN(e) && e < s);
+}
 
-  const s = parseInt(startEl.value, 10);
-  const e = parseInt(endEl.value, 10);
-
-  startEl.classList.toggle('invalid', startEl.value !== '' && (isNaN(s) || s < 1));
-  endEl.classList.toggle('invalid',   endEl.value !== '' && (!isNaN(s) && !isNaN(e) && e < s));
+function updateTotals() {
+  let totalPages = 0;
+  ranges.forEach(r => {
+    const s = parseInt(r.start, 10);
+    const e = parseInt(r.end, 10);
+    if (!isNaN(s) && !isNaN(e) && e >= s) totalPages += (e - s + 1);
+  });
+  rangePagesLbl.textContent = totalPages > 0 ? `${totalPages} pages total` : '';
 }
 
 // ── Reorder helpers ───────────────────────────────────
 function reorderById(srcId, targetId) {
-  const si = fileList.findIndex(x => x.id === srcId);
-  const ti = fileList.findIndex(x => x.id === targetId);
+  const si = ranges.findIndex(x => x.id === srcId);
+  const ti = ranges.findIndex(x => x.id === targetId);
   if (si < 0 || ti < 0) return;
-  const [moved] = fileList.splice(si, 1);
-  fileList.splice(ti, 0, moved);
-  render();
+  const [moved] = ranges.splice(si, 1);
+  ranges.splice(ti, 0, moved);
+  renderRanges();
 }
 
-function moveItem(id, dir) {
-  const i = fileList.findIndex(x => x.id === id);
+function moveRange(id, dir) {
+  const i = ranges.findIndex(x => x.id === id);
   const j = i + dir;
-  if (j < 0 || j >= fileList.length) return;
-  [fileList[i], fileList[j]] = [fileList[j], fileList[i]];
-  render();
+  if (j < 0 || j >= ranges.length) return;
+  [ranges[i], ranges[j]] = [ranges[j], ranges[i]];
+  renderRanges();
 }
 
-function removeItem(id) {
-  fileList = fileList.filter(x => x.id !== id);
-  render();
-}
-
-function clearAll() {
-  fileList = [];
-  render();
-  hideError();
+function removeRange(id) {
+  ranges = ranges.filter(x => x.id !== id);
+  renderRanges();
 }
 
 // ── Split & download ──────────────────────────────────
 async function doSplit() {
-  if (!fileList.length) { showError('Please add at least one PDF.'); return; }
+  if (!pdfFile) { showError('No file loaded.'); return; }
+  if (!ranges.length) { showError('Please add at least one page range.'); return; }
 
-  // Collect current range values from DOM
-  fileList.forEach(item => {
-    const sEl = document.getElementById(`start-${item.id}`);
-    const eEl = document.getElementById(`end-${item.id}`);
-    if (sEl) item.start = sEl.value;
-    if (eEl) item.end   = eEl.value;
+  // Collect current DOM values
+  ranges.forEach(r => {
+    const sEl = document.getElementById(`start-${r.id}`);
+    const eEl = document.getElementById(`end-${r.id}`);
+    if (sEl) r.start = sEl.value;
+    if (eEl) r.end   = eEl.value;
   });
 
   // Validate all ranges
-  for (const item of fileList) {
-    const s = parseInt(item.start, 10);
-    const e = item.end === '' ? null : parseInt(item.end, 10);
+  for (const r of ranges) {
+    const s = parseInt(r.start, 10);
+    const e = parseInt(r.end,   10);
     if (isNaN(s) || s < 1) {
-      showError(`"${item.file.name}": Start page must be a number ≥ 1.`);
+      showError(`Range ${ranges.indexOf(r) + 1}: Start page must be a valid number ≥ 1.`);
       return;
     }
-    if (e !== null && e < s) {
-      showError(`"${item.file.name}": End page must be ≥ Start page.`);
+    if (isNaN(e) || e < 1) {
+      showError(`Range ${ranges.indexOf(r) + 1}: End page must be a valid number ≥ 1.`);
+      return;
+    }
+    if (e < s) {
+      showError(`Range ${ranges.indexOf(r) + 1}: End page (${e}) must be ≥ Start page (${s}).`);
       return;
     }
   }
 
-  let total = 0;
-  fileList.forEach(x => { total += x.file.size; });
-  if (total > MAX_BYTES) { showError('Total exceeds 32 MB — please remove some files.'); return; }
+  // Build progress UI
+  progressList.innerHTML = '';
+  const progressItems = ranges.map((r, idx) => {
+    const div = document.createElement('div');
+    div.className = 'progress-item';
+    div.id = `prog-${r.id}`;
+    div.innerHTML = `
+      <span class="dot dot-pending" id="dot-${r.id}"></span>
+      <span class="text-gray-600" id="prog-text-${r.id}">
+        Range ${idx + 1}: pages ${r.start}–${r.end}
+      </span>
+    `;
+    progressList.appendChild(div);
+    return div;
+  });
 
+  splitProgress.classList.remove('hidden');
   splitLoad.classList.remove('hidden');
   splitBtn.disabled = true;
   hideError();
 
-  let successCount = 0;
+  let errorCount = 0;
 
-  try {
-    for (const item of fileList) {
+  for (let i = 0; i < ranges.length; i++) {
+    const r = ranges[i];
+    const dot      = document.getElementById(`dot-${r.id}`);
+    const progText = document.getElementById(`prog-text-${r.id}`);
+
+    loadingText.textContent = `Splitting range ${i + 1} of ${ranges.length}…`;
+    dot.className = 'dot dot-running';
+
+    try {
       const fd = new FormData();
-      fd.append('file',  item.file);
-      fd.append('start', item.start || '1');
-      if (item.end !== '') fd.append('end', item.end);
+      fd.append('file',  pdfFile);
+      fd.append('start', r.start);
+      fd.append('end',   r.end);
 
       const res = await fetch(`${API}/split`, { method: 'POST', body: fd });
-      if (!res.ok) throw new Error(`"${item.file.name}": server error ${res.status}`);
+      if (!res.ok) throw new Error(`Server error ${res.status}`);
 
       const blob = await res.blob();
-      const outName = fileList.length === 1
-        ? `split_${item.file.name}`
-        : `split_${successCount + 1}_${item.file.name}`;
-      downloadBlob(blob, outName);
-      successCount++;
+      const name = ranges.length === 1
+        ? `split_p${r.start}-p${r.end}_${pdfFile.name}`
+        : `split_${i + 1}_p${r.start}-p${r.end}_${pdfFile.name}`;
+
+      downloadBlob(blob, name);
+
+      dot.className = 'dot dot-done';
+      progText.innerHTML = `<span class="text-green-600 font-medium">✓ Range ${i + 1}: pages ${r.start}–${r.end} — downloaded</span>`;
+
+    } catch (err) {
+      dot.className = 'dot dot-error';
+      progText.innerHTML = `<span class="text-red-500">✗ Range ${i + 1}: pages ${r.start}–${r.end} — ${esc(err.message)}</span>`;
+      errorCount++;
     }
-  } catch (err) {
-    showError(err.message);
-  } finally {
-    splitLoad.classList.add('hidden');
-    splitBtn.disabled = false;
+  }
+
+  splitLoad.classList.add('hidden');
+  splitBtn.disabled = false;
+  loadingText.textContent = 'Splitting… please wait';
+
+  if (errorCount === 0) {
+    hideError();
+  } else {
+    showError(`${errorCount} range(s) failed. Check the progress log above.`);
   }
 }
 
@@ -725,7 +822,7 @@ function formatBytes(b) {
 }
 
 function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function showError(msg) { splitErr.textContent = msg; splitErr.classList.remove('hidden'); }
