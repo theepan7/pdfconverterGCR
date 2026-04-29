@@ -38,6 +38,7 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -324,6 +325,7 @@
             </div>
             <span class="file-info-name" id="file-name-display"></span>
             <span class="file-info-size" id="file-size-display"></span>
+            <span class="file-info-size" id="file-pages-display" style="color:#dc2626;font-weight:600"></span>
             <button class="btn-change" onclick="changeFile()">
               <i class="fas fa-sync-alt mr-1"></i>Change
             </button>
@@ -464,8 +466,9 @@ const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
 const MAX_BYTES = 32 * 1024 * 1024;
 
 // ── State ─────────────────────────────────────────────
-let pdfFile   = null;   // the single uploaded File
-let ranges    = [];     // [{ id, start, end }]
+let pdfFile     = null;   // the single uploaded File
+let pdfPageCount = 0;     // total pages detected via PDF.js
+let ranges      = [];     // [{ id, start, end }]
 let idCtr     = 0;
 let dragSrcId = null;
 
@@ -489,6 +492,8 @@ fileInput.addEventListener('change', () => {
 });
 
 function changeFile() {
+  pdfPageCount = 0;
+  document.getElementById('file-pages-display').textContent = '';
   fileInput.value = '';
   fileInput.click();
 }
@@ -518,13 +523,31 @@ function loadFile(f) {
   pdfFile = f;
   hideError();
 
-  // Show file info bar
-  document.getElementById('file-name-display').textContent = f.name;
-  document.getElementById('file-size-display').textContent = formatBytes(f.size);
+  // Show file info bar immediately with size
+  document.getElementById('file-name-display').textContent  = f.name;
+  document.getElementById('file-size-display').textContent  = formatBytes(f.size);
+  document.getElementById('file-pages-display').textContent = '…';
 
   // Switch views
   dropZone.style.display  = 'none';
   rangeArea.style.display = '';
+
+  // Count pages using PDF.js (reads locally — never leaves the browser)
+  const pagesEl = document.getElementById('file-pages-display');
+  const reader  = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const typedArray = new Uint8Array(e.target.result);
+      const pdf        = await pdfjsLib.getDocument({ data: typedArray }).promise;
+      pagesEl.textContent = `${pdf.numPages} page${pdf.numPages !== 1 ? 's' : ''}`;
+      pdfPageCount = pdf.numPages;
+    } catch {
+      pagesEl.textContent = '';
+    }
+  };
+  reader.readAsArrayBuffer(f);
 
   // Start with one default range if list is empty
   if (ranges.length === 0) addRange();
