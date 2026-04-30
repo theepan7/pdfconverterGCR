@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3948770444337260" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E4B22CRPV6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-E4B22CRPV6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rotate PDF Pages Online Free – Rotate One or All Pages | Mini PDF Tools</title>
+  <meta name="description" content="Rotate PDF pages online for free. Rotate individual pages or all pages at once by 90°, 180°, or 270°. No signup, no watermark, instant download.">
+  <meta name="keywords" content="rotate PDF, rotate PDF pages, turn PDF, rotate PDF online, rotate single page PDF, rotate all pages PDF, free PDF rotate">
+  <meta name="author" content="Mini PDF Tools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://minipdftools.com/rotate-pdf.html">
+  <meta property="og:title" content="Rotate PDF Pages Online Free | Mini PDF Tools">
+  <meta property="og:description" content="Rotate individual or all PDF pages by 90°, 180°, or 270°. Free, fast, no signup required.">
+  <meta property="og:image" content="https://minipdftools.com/preview-image.jpg">
+  <meta property="og:url" content="https://minipdftools.com/rotate-pdf.html">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Rotate PDF Online – Mini PDF Tools",
+    "url": "https://minipdftools.com/rotate-pdf.html",
+    "description": "Free online tool to rotate individual or all PDF pages by 90, 180, or 270 degrees.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
+    .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
+    .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
+    .dropdown { position:relative; }
+    .dropdown-menu { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#fff; border-radius:0.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.18); min-width:210px; z-index:100; overflow:hidden; }
+    .dropdown:hover .dropdown-menu { display:block; }
+    .dropdown-item { display:flex; align-items:center; gap:0.6rem; padding:0.75rem 1.1rem; color:#374151; font-size:0.9rem; font-weight:500; transition:background 0.15s; text-decoration:none; }
+    .dropdown-item:hover { background:#f3f4f6; }
+    .site-header { background: linear-gradient(135deg, #475569, #4338ca); }
+    .site-footer { background:linear-gradient(135deg,#1e293b,#312e81); color:rgba(255,255,255,0.75); }
+    .footer-link { color:rgba(255,255,255,0.65); transition:color 0.2s; font-size:0.875rem; text-decoration:none; }
+    .footer-link:hover { color:#fff; }
+    .footer-divider { border-color:rgba(255,255,255,0.12); }
+    .social-icon { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.8); transition:background 0.2s,color 0.2s; font-size:0.9rem; text-decoration:none; }
+    .social-icon:hover { background:rgba(255,255,255,0.22); color:#fff; }
+    #mobile-menu { display:none; }
+    #mobile-menu.open { display:block; }
+    .mobile-tool-links { display:none; }
+    .mobile-tool-links.open { display:block; }
+
+    /* Drop zone */
+    .drop-zone {
+      border: 2px dashed #c7d2fe;
+      border-radius: 1rem;
+      background: #f8f9ff;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      background: #eef0ff;
+      border-color: #4338ca;
+    }
+    .drop-zone.dragover { transform: scale(1.01); }
+
+    /* Page grid */
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    @media (min-width: 640px) {
+      .page-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+    }
+
+    /* Page card */
+    .page-card {
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+      position: relative;
+      user-select: none;
+    }
+    .page-card:hover {
+      border-color: #a5b4fc;
+      box-shadow: 0 4px 16px rgba(67,56,202,0.12);
+    }
+    .page-card.selected {
+      border-color: #4338ca;
+      box-shadow: 0 0 0 3px rgba(67,56,202,0.15);
+    }
+
+    .page-thumb-wrap {
+      position: relative;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 180px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .page-thumb-wrap canvas {
+      max-width: 100%;
+      max-height: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .page-number {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(30,41,59,0.8);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      z-index: 2;
+    }
+
+    .rotation-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: linear-gradient(135deg, #4338ca, #6366f1);
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      z-index: 2;
+      display: none;
+    }
+    .rotation-badge.visible { display: block; }
+
+    .page-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.5rem;
+      background: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .rotate-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: all 0.15s;
+    }
+    .rotate-btn:hover {
+      background: #eef0ff;
+      border-color: #4338ca;
+      color: #4338ca;
+    }
+
+    .select-checkbox {
+      position: absolute;
+      bottom: 50px;
+      right: 8px;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      transition: all 0.15s;
+    }
+    .select-checkbox:hover { border-color: #4338ca; }
+    .select-checkbox.checked {
+      background: linear-gradient(135deg, #4338ca, #6366f1);
+      border-color: #4338ca;
+    }
+    .select-checkbox i { color: #fff; font-size: 0.6rem; display: none; }
+    .select-checkbox.checked i { display: block; }
+
+    /* Bulk controls bar */
+    .bulk-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: linear-gradient(135deg, #eef2ff, #f0fdf4);
+      border: 1px solid #c7d2fe;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .bulk-bar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.9rem;
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.5rem;
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .bulk-bar-btn:hover { background: #eef0ff; border-color: #4338ca; color: #4338ca; }
+    .bulk-bar-btn.active { background: #4338ca; color: #fff; border-color: #4338ca; }
+
+    .angle-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.7rem;
+      background: #fff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #475569;
+      transition: all 0.15s;
+    }
+    .angle-chip:hover { border-color: #4338ca; color: #4338ca; }
+    .angle-chip.selected { background: #4338ca; color: #fff; border-color: #4338ca; }
+
+    /* Apply button */
+    .btn-apply {
+      background: linear-gradient(135deg, #4338ca, #6366f1);
+      color: white;
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 0.85rem 2.5rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(67,56,202,0.35);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    .btn-apply:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(67,56,202,0.4); }
+    .btn-apply:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+    /* Loading spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; display: inline-block; }
+
+    /* Slide-in */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .page-card { animation: fadeIn 0.2s ease; }
+
+    /* Loading overlay on thumbnails */
+    .thumb-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 180px;
+      color: #94a3b8;
+      font-size: 0.8rem;
+    }
+
+    /* File info bar */
+    .file-info-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .file-info-bar .file-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .file-info-bar .file-meta {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+    .change-file-btn {
+      font-size: 0.78rem;
+      color: #4338ca;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      text-decoration: underline;
+      transition: color 0.15s;
+    }
+    .change-file-btn:hover { color: #3730a3; }
+
+    /* Reset link */
+    .reset-rotations-btn {
+      font-size: 0.78rem;
+      color: #ef4444;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .reset-rotations-btn:hover { color: #dc2626; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="navbar w-full shadow-lg sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white" style="text-decoration:none">
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-file-pdf text-white text-sm"></i>
+        </div>
+        <span class="font-bold text-lg tracking-tight">Mini PDF Tools</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="/" class="nav-link"><i class="fas fa-home mr-1 text-xs"></i> Home</a>
+        <div class="dropdown">
+          <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
+            <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a href="/compress-pdf.html" class="dropdown-item"><i class="fas fa-compress-alt text-blue-500"></i> Compress PDF</a>
+            <a href="/merge-pdf.html"    class="dropdown-item"><i class="fas fa-object-group text-green-500"></i> Merge PDFs</a>
+            <a href="/split-pdf.html"    class="dropdown-item"><i class="fas fa-cut text-red-500"></i> Split PDF</a>
+            <a href="/rotate-pdf.html"   class="dropdown-item"><i class="fas fa-sync-alt text-orange-500"></i> Rotate PDF</a>
+            <a href="/image-to-pdf.html" class="dropdown-item"><i class="fas fa-image text-purple-500"></i> Image to PDF</a>
+          </div>
+        </div>
+        <a href="/#about"   class="nav-link">About</a>
+        <a href="/#contact" class="nav-link">Contact</a>
+      </div>
+      <button id="hamburger" class="md:hidden text-white p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars text-lg"></i>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden px-4 pb-4" style="background:#312e81">
+      <a href="/" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-home mr-2"></i>Home</a>
+      <button onclick="toggleMobileTools()" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
+        <span><i class="fas fa-tools mr-2"></i>Tools</span>
+        <i class="fas fa-chevron-down text-xs" id="tools-chevron"></i>
+      </button>
+      <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+        <a href="/compress-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
+        <a href="/merge-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
+        <a href="/split-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
+        <a href="/rotate-pdf.html"   class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
+        <a href="/image-to-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
+      </div>
+      <a href="/#about"   class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-info-circle mr-2"></i>About</a>
+      <a href="/#contact" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-envelope mr-2"></i>Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="site-header w-full py-8 px-8 text-white shadow-lg">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-3xl font-extrabold mb-2">Rotate PDF Pages Online – Free</h1>
+      <p class="text-lg font-light opacity-80">Upload a PDF, rotate individual pages or all at once by 90°, 180°, or 270°, then download.</p>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="w-full max-w-5xl mx-auto px-4 pt-4 text-sm text-gray-500">
+    <a href="/" class="hover:text-indigo-600">Home</a> &rsaquo;
+    <span class="text-gray-700 font-medium">Rotate PDF</span>
+  </div>
+
+  <!-- TOOL -->
+  <main class="flex-1 w-full flex flex-col items-center py-8 px-4">
+    <div class="w-full max-w-5xl">
+
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8">
+
+        <!-- Drop zone (visible when no file loaded) -->
+        <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input').click()">
+          <i class="fas fa-sync-alt text-orange-400 text-5xl mb-4 block"></i>
+          <p class="text-gray-700 font-semibold text-lg mb-1">Drop a PDF here or click to browse</p>
+          <p class="text-gray-400 text-sm">Max file size: 32 MB</p>
+        </div>
+
+        <!-- Hidden file input -->
+        <input type="file" id="file-input" accept=".pdf" style="display:none" />
+
+        <!-- Page manager (hidden until file loaded) -->
+        <div id="page-manager" style="display:none">
+
+          <!-- File info bar -->
+          <div class="file-info-bar">
+            <div class="file-name">
+              <i class="fas fa-file-pdf text-red-400"></i>
+              <span id="loaded-file-name">document.pdf</span>
+              <span id="loaded-file-meta" class="file-meta">— 12 pages, 2.4 MB</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="reset-rotations-btn" onclick="resetAllRotations()">
+                <i class="fas fa-undo mr-1"></i>Reset all
+              </button>
+              <button class="change-file-btn" onclick="changeFile()">
+                <i class="fas fa-exchange-alt mr-1"></i>Change file
+              </button>
+            </div>
+          </div>
+
+          <!-- Bulk controls -->
+          <div class="bulk-bar">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider mr-1">Bulk:</span>
+              <button class="bulk-bar-btn" onclick="selectAll()" title="Select all pages">
+                <i class="far fa-check-square"></i> Select All
+              </button>
+              <button class="bulk-bar-btn" onclick="deselectAll()" title="Deselect all">
+                <i class="far fa-square"></i> Deselect
+              </button>
+              <div class="w-px h-5 bg-gray-200 mx-1 hidden sm:block"></div>
+              <span class="text-xs text-gray-400 mr-1">Rotate selected:</span>
+              <button class="angle-chip" onclick="rotateSelected(90)" title="Rotate selected 90° clockwise">
+                <i class="fas fa-redo text-xs"></i> 90°
+              </button>
+              <button class="angle-chip" onclick="rotateSelected(180)" title="Rotate selected 180°">
+                <i class="fas fa-sync-alt text-xs"></i> 180°
+              </button>
+              <button class="angle-chip" onclick="rotateSelected(270)" title="Rotate selected 270° (90° counter-clockwise)">
+                <i class="fas fa-undo text-xs"></i> 270°
+              </button>
+            </div>
+            <span id="selection-count" class="text-xs text-gray-400 ml-auto">0 selected</span>
+          </div>
+
+          <!-- Thumbnail loading -->
+          <div id="thumb-loading" class="hidden text-center py-8">
+            <svg class="spinner w-8 h-8 text-indigo-400 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+            </svg>
+            <p class="text-gray-500 text-sm">Rendering page thumbnails…</p>
+          </div>
+
+          <!-- Page grid -->
+          <ul id="page-grid" class="page-grid"></ul>
+
+          <!-- Error / loading -->
+          <div id="rotate-error" class="hidden mt-4 text-red-500 font-semibold text-sm"></div>
+          <div id="rotate-loading" class="hidden mt-4 flex items-center justify-center gap-2 text-indigo-700 font-semibold text-sm">
+            <svg class="spinner w-4 h-4 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+            </svg>
+            Applying rotations… please wait
+          </div>
+
+          <!-- Apply button -->
+          <div class="flex justify-center mt-7">
+            <button id="apply-btn" class="btn-apply" onclick="doRotate()">
+              <i class="fas fa-sync-alt mr-2"></i>Rotate &amp; Download
+            </button>
+          </div>
+
+        </div><!-- /page-manager -->
+      </div><!-- /card -->
+
+      <!-- Steps hint -->
+      <div class="mt-5 flex flex-col sm:flex-row gap-3 text-sm text-gray-500 justify-center text-center">
+        <span><span class="font-bold text-indigo-400">1.</span> Upload a PDF</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-indigo-400">2.</span> Click pages to rotate, or use bulk controls</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-indigo-400">3.</span> Click Rotate &amp; Download</span>
+      </div>
+
+      <!-- SEO content -->
+      <section class="mt-12 px-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-3">How to Rotate PDF Pages Online</h2>
+        <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
+          <li>Drop your PDF onto the upload area, or click to browse and select a file.</li>
+          <li>Each page is displayed as a thumbnail. Click the rotate buttons beneath any page to rotate it 90° left or right.</li>
+          <li>Use <strong>Select All</strong> and the bulk rotation chips to rotate many pages at once.</li>
+          <li>Click <strong>Rotate &amp; Download</strong> — your modified PDF downloads immediately.</li>
+        </ol>
+        <h2 class="text-xl font-bold text-gray-800 mb-3">When to Rotate PDF Pages</h2>
+        <p class="text-gray-600 mb-4">Scanned documents often have pages in the wrong orientation. Use this tool to fix landscape pages that should be portrait, correct upside-down scans, or rotate a single page in a multi-page report — all without installing any software.</p>
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a href="/compress-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-compress-alt mr-1"></i>Compress PDF</a>
+          <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
+          <a href="/split-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-cut mr-1"></i>Split PDF</a>
+          <a href="/image-to-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-image mr-1"></i>Image to PDF</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer w-full mt-auto">
+    <div class="max-w-6xl mx-auto px-6 py-10">
+      <div class="flex flex-col md:flex-row justify-between gap-8 mb-8">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
+            <span class="text-white font-bold text-lg">Mini PDF Tools</span>
+          </div>
+          <p class="text-sm max-w-xs" style="color:rgba(255,255,255,0.6)">Free, fast, and secure PDF tools. No signup required. Your files are never stored on our servers.</p>
+          <div class="flex gap-2 mt-1">
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Tools</p>
+          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
+            <li><a href="/compress-pdf.html" class="footer-link"><i class="fas fa-compress-alt mr-2 text-xs"></i>Compress PDF</a></li>
+            <li><a href="/merge-pdf.html"    class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
+            <li><a href="/split-pdf.html"    class="footer-link"><i class="fas fa-cut mr-2 text-xs"></i>Split PDF</a></li>
+            <li><a href="/rotate-pdf.html"   class="footer-link"><i class="fas fa-sync-alt mr-2 text-xs"></i>Rotate PDF</a></li>
+            <li><a href="/image-to-pdf.html" class="footer-link"><i class="fas fa-image mr-2 text-xs"></i>Image to PDF</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Contact</p>
+          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
+            <li><a href="mailto:support@minipdftools.com" class="footer-link"><i class="fas fa-envelope mr-2 text-xs"></i>support@minipdftools.com</a></li>
+            <li><a href="#" class="footer-link"><i class="fas fa-shield-alt mr-2 text-xs"></i>Privacy Policy</a></li>
+            <li><a href="#" class="footer-link"><i class="fas fa-file-contract mr-2 text-xs"></i>Terms of Use</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider mb-6" />
+      <div class="flex flex-col md:flex-row justify-between items-center gap-2 text-xs" style="color:rgba(255,255,255,0.45)">
+        <p>Your document privacy is our top priority. Files are never stored on our servers.</p>
+        <p>&copy; 2025 Mini PDF Tools. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   ROTATE PDF — per-page or bulk rotation with preview
+   ═══════════════════════════════════════════════════════ */
+
+const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
+const MAX_BYTES = 32 * 1024 * 1024; // 32 MB
+
+// Set pdf.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ── State ─────────────────────────────────────────────
+let currentFile   = null;    // The File object
+let pdfDoc        = null;    // pdf.js document
+let pageStates    = [];      // [{ rotation: 0, selected: false, canvas: null }]
+
+// ── DOM ───────────────────────────────────────────────
+const dropZone      = document.getElementById('drop-zone');
+const pageManager   = document.getElementById('page-manager');
+const pageGrid      = document.getElementById('page-grid');
+const thumbLoading  = document.getElementById('thumb-loading');
+const rotateErr     = document.getElementById('rotate-error');
+const rotateLoad    = document.getElementById('rotate-loading');
+const applyBtn      = document.getElementById('apply-btn');
+const fileInput     = document.getElementById('file-input');
+const fileNameEl    = document.getElementById('loaded-file-name');
+const fileMetaEl    = document.getElementById('loaded-file-meta');
+const selCountEl    = document.getElementById('selection-count');
+
+// ── File input handler ────────────────────────────────
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length > 0) loadFile(fileInput.files[0]);
+});
+
+// ── Drop zone ─────────────────────────────────────────
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+  const files = Array.from(e.dataTransfer.files).filter(
+    f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
+  );
+  if (files.length > 0) loadFile(files[0]);
+  else showError('Only PDF files are supported.');
+});
+
+// ── Load file ─────────────────────────────────────────
+async function loadFile(file) {
+  if (file.size > MAX_BYTES) {
+    showError('File exceeds 32 MB limit.');
+    return;
+  }
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    showError('Only PDF files are supported.');
+    return;
+  }
+
+  hideError();
+  currentFile = file;
+
+  // Show manager, hide drop zone
+  dropZone.style.display    = 'none';
+  pageManager.style.display = '';
+  pageGrid.innerHTML        = '';
+  thumbLoading.classList.remove('hidden');
+
+  // Update file info
+  fileNameEl.textContent = file.name;
+
+  try {
+    const arrayBuf = await file.arrayBuffer();
+    pdfDoc = await pdfjsLib.getDocument({ data: arrayBuf }).promise;
+
+    const numPages = pdfDoc.numPages;
+    fileMetaEl.textContent = `— ${numPages} page${numPages !== 1 ? 's' : ''}, ${formatBytes(file.size)}`;
+
+    // Init page states
+    pageStates = [];
+    for (let i = 0; i < numPages; i++) {
+      pageStates.push({ rotation: 0, selected: false, canvas: null });
+    }
+
+    thumbLoading.classList.add('hidden');
+
+    // Render all thumbnails
+    await renderAllThumbnails();
+    updateSelectionCount();
+
+  } catch (err) {
+    thumbLoading.classList.add('hidden');
+    showError('Failed to read PDF: ' + err.message);
+  }
+}
+
+// ── Render all thumbnails ─────────────────────────────
+async function renderAllThumbnails() {
+  pageGrid.innerHTML = '';
+
+  for (let i = 0; i < pageStates.length; i++) {
+    const card = buildPageCard(i);
+    pageGrid.appendChild(card);
+  }
+
+  // Render canvases in parallel (limit concurrency)
+  const batchSize = 4;
+  for (let i = 0; i < pageStates.length; i += batchSize) {
+    const batch = [];
+    for (let j = i; j < Math.min(i + batchSize, pageStates.length); j++) {
+      batch.push(renderThumbnail(j));
+    }
+    await Promise.all(batch);
+  }
+}
+
+// ── Build a page card ─────────────────────────────────
+function buildPageCard(idx) {
+  const li = document.createElement('li');
+  li.className = 'page-card';
+  li.dataset.index = idx;
+  if (pageStates[idx].selected) li.classList.add('selected');
+
+  const rot = pageStates[idx].rotation;
+
+  li.innerHTML = `
+    <div class="page-thumb-wrap" onclick="toggleSelect(${idx})">
+      <span class="page-number">Page ${idx + 1}</span>
+      <span class="rotation-badge ${rot !== 0 ? 'visible' : ''}" id="rot-badge-${idx}">${rot}°</span>
+      <div id="thumb-container-${idx}" class="thumb-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+      </div>
+    </div>
+    <div class="select-checkbox ${pageStates[idx].selected ? 'checked' : ''}" onclick="toggleSelect(${idx})" id="sel-cb-${idx}">
+      <i class="fas fa-check"></i>
+    </div>
+    <div class="page-controls">
+      <button class="rotate-btn" onclick="rotatePage(${idx}, -90)" title="Rotate 90° counter-clockwise">
+        <i class="fas fa-undo"></i>
+      </button>
+      <span class="text-xs font-semibold text-gray-500" id="rot-label-${idx}">${rot}°</span>
+      <button class="rotate-btn" onclick="rotatePage(${idx}, 90)" title="Rotate 90° clockwise">
+        <i class="fas fa-redo"></i>
+      </button>
+    </div>
+  `;
+
+  return li;
+}
+
+// ── Render a single thumbnail ─────────────────────────
+async function renderThumbnail(idx) {
+  try {
+    const page = await pdfDoc.getPage(idx + 1);
+    const scale = 1;
+    const viewport = page.getViewport({ scale });
+
+    // Calculate scale to fit nicely
+    const maxW = 160;
+    const maxH = 170;
+    const fitScale = Math.min(maxW / viewport.width, maxH / viewport.height, 1.5);
+    const fitViewport = page.getViewport({ scale: fitScale });
+
+    const canvas = document.createElement('canvas');
+    canvas.width  = fitViewport.width;
+    canvas.height = fitViewport.height;
+    const ctx = canvas.getContext('2d');
+
+    await page.render({ canvasContext: ctx, viewport: fitViewport }).promise;
+
+    // Apply CSS rotation
+    canvas.style.transform = `rotate(${pageStates[idx].rotation}deg)`;
+
+    pageStates[idx].canvas = canvas;
+
+    const container = document.getElementById(`thumb-container-${idx}`);
+    if (container) {
+      container.innerHTML = '';
+      container.classList.remove('thumb-loading');
+      container.appendChild(canvas);
+    }
+  } catch (err) {
+    const container = document.getElementById(`thumb-container-${idx}`);
+    if (container) {
+      container.innerHTML = '<span class="text-xs text-red-400">Error</span>';
+    }
+  }
+}
+
+// ── Rotate a single page ─────────────────────────────
+function rotatePage(idx, delta) {
+  pageStates[idx].rotation = (pageStates[idx].rotation + delta + 360) % 360;
+  const rot = pageStates[idx].rotation;
+
+  // Update canvas transform
+  if (pageStates[idx].canvas) {
+    pageStates[idx].canvas.style.transform = `rotate(${rot}deg)`;
+  }
+
+  // Update label & badge
+  const label = document.getElementById(`rot-label-${idx}`);
+  if (label) label.textContent = rot + '°';
+
+  const badge = document.getElementById(`rot-badge-${idx}`);
+  if (badge) {
+    badge.textContent = rot + '°';
+    badge.classList.toggle('visible', rot !== 0);
+  }
+}
+
+// ── Selection ─────────────────────────────────────────
+function toggleSelect(idx) {
+  pageStates[idx].selected = !pageStates[idx].selected;
+  const card = pageGrid.querySelector(`[data-index="${idx}"]`);
+  const cb   = document.getElementById(`sel-cb-${idx}`);
+  if (card) card.classList.toggle('selected', pageStates[idx].selected);
+  if (cb)   cb.classList.toggle('checked',   pageStates[idx].selected);
+  updateSelectionCount();
+}
+
+function selectAll() {
+  pageStates.forEach((p, i) => {
+    p.selected = true;
+    const card = pageGrid.querySelector(`[data-index="${i}"]`);
+    const cb   = document.getElementById(`sel-cb-${i}`);
+    if (card) card.classList.add('selected');
+    if (cb)   cb.classList.add('checked');
+  });
+  updateSelectionCount();
+}
+
+function deselectAll() {
+  pageStates.forEach((p, i) => {
+    p.selected = false;
+    const card = pageGrid.querySelector(`[data-index="${i}"]`);
+    const cb   = document.getElementById(`sel-cb-${i}`);
+    if (card) card.classList.remove('selected');
+    if (cb)   cb.classList.remove('checked');
+  });
+  updateSelectionCount();
+}
+
+function updateSelectionCount() {
+  const count = pageStates.filter(p => p.selected).length;
+  selCountEl.textContent = `${count} selected`;
+}
+
+// ── Rotate selected pages ─────────────────────────────
+function rotateSelected(angle) {
+  const selected = pageStates.filter(p => p.selected);
+  if (selected.length === 0) {
+    showError('Select at least one page first.');
+    setTimeout(hideError, 2500);
+    return;
+  }
+  hideError();
+  pageStates.forEach((p, i) => {
+    if (p.selected) {
+      rotatePage(i, angle);
+    }
+  });
+}
+
+// ── Reset all rotations ──────────────────────────────
+function resetAllRotations() {
+  pageStates.forEach((p, i) => {
+    p.rotation = 0;
+    if (p.canvas) p.canvas.style.transform = 'rotate(0deg)';
+    const label = document.getElementById(`rot-label-${i}`);
+    if (label) label.textContent = '0°';
+    const badge = document.getElementById(`rot-badge-${i}`);
+    if (badge) { badge.textContent = '0°'; badge.classList.remove('visible'); }
+  });
+}
+
+// ── Change file ───────────────────────────────────────
+function changeFile() {
+  currentFile = null;
+  pdfDoc      = null;
+  pageStates  = [];
+  pageGrid.innerHTML = '';
+  pageManager.style.display = 'none';
+  dropZone.style.display    = '';
+  hideError();
+  fileInput.value = '';
+}
+
+// ── Apply rotation via API ────────────────────────────
+async function doRotate() {
+  if (!currentFile || pageStates.length === 0) {
+    showError('Please upload a PDF first.');
+    return;
+  }
+
+  // Check if any rotation is applied
+  const hasRotation = pageStates.some(p => p.rotation !== 0);
+  if (!hasRotation) {
+    showError('No rotations applied. Rotate at least one page first.');
+    setTimeout(hideError, 3000);
+    return;
+  }
+
+  rotateLoad.classList.remove('hidden');
+  applyBtn.disabled = true;
+  hideError();
+
+  try {
+    const fd = new FormData();
+    fd.append('file', currentFile);
+
+    // Build rotations JSON: { "1": 90, "3": 180, ... } (1-based page numbers)
+    const rotations = {};
+    pageStates.forEach((p, i) => {
+      if (p.rotation !== 0) {
+        rotations[String(i + 1)] = p.rotation;
+      }
+    });
+    fd.append('rotations', JSON.stringify(rotations));
+
+    const res = await fetch(`${API}/rotate`, { method: 'POST', body: fd });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(errText || `Server returned error ${res.status}`);
+    }
+
+    const blob = await res.blob();
+    const baseName = currentFile.name.replace(/\.pdf$/i, '');
+    downloadBlob(blob, `${baseName}_rotated.pdf`);
+  } catch (err) {
+    showError('Rotation failed: ' + err.message);
+  } finally {
+    rotateLoad.classList.add('hidden');
+    applyBtn.disabled = false;
+  }
+}
+
+// ── Utilities ─────────────────────────────────────────
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function formatBytes(b) {
+  if (b < 1024)          return b + ' B';
+  if (b < 1024 * 1024)   return (b / 1024).toFixed(1) + ' KB';
+  return (b / (1024 * 1024)).toFixed(2) + ' MB';
+}
+
+function showError(msg) { rotateErr.textContent = msg; rotateErr.classList.remove('hidden'); }
+function hideError()    { rotateErr.classList.add('hidden'); }
+
+// ── Navbar helpers ────────────────────────────────────
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function toggleMobileTools() {
+  document.getElementById('mobile-tool-links').classList.toggle('open');
+  const c = document.getElementById('tools-chevron');
+  c.classList.toggle('fa-chevron-down');
+  c.classList.toggle('fa-chevron-up');
+}
+document.addEventListener('click', e => {
+  const menu      = document.getElementById('mobile-menu');
+  const hamburger = document.getElementById('hamburger');
+  if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>
