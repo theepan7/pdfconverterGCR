@@ -38,6 +38,7 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -438,7 +439,6 @@
    MERGE PDF — file manager with add-more & drag-to-sort
    ═══════════════════════════════════════════════════════ */
 
-const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
 const MAX_BYTES = 32 * 1024 * 1024; // 32 MB
 
 // ── State ─────────────────────────────────────────────
@@ -634,7 +634,7 @@ function clearAll() {
   hideError();
 }
 
-// ── Merge & upload ────────────────────────────────────
+// ── Merge (browser-side via pdf-lib) ─────────────────
 async function doMerge() {
   if (fileList.length < 1) { showError('Please add at least one PDF.'); return; }
 
@@ -647,15 +647,20 @@ async function doMerge() {
   hideError();
 
   try {
-    const fd = new FormData();
-    // Files appended in current display order
-    fileList.forEach(item => fd.append('files', item.file));
+    const mergedPdf = await PDFLib.PDFDocument.create();
 
-    const res = await fetch(`${API}/merge`, { method: 'POST', body: fd });
-    if (!res.ok) throw new Error(`Server returned error ${res.status}`);
-    downloadBlob(await res.blob(), 'merged.pdf');
+    for (const item of fileList) {
+      const fileBytes = await item.file.arrayBuffer();
+      const pdf = await PDFLib.PDFDocument.load(fileBytes);
+      const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+      pages.forEach(page => mergedPdf.addPage(page));
+    }
+
+    const mergedBytes = await mergedPdf.save();
+    const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+    downloadBlob(blob, 'merged.pdf');
   } catch (err) {
-    showError(err.message);
+    showError('Failed to merge PDFs: ' + err.message);
   } finally {
     mergeLoad.classList.add('hidden');
     mergeBtn.disabled = false;
