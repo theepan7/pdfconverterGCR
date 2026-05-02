@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3948770444337260" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E4B22CRPV6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-E4B22CRPV6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delete PDF Pages Online Free – Remove Pages from PDF | Mini PDF Tools</title>
+  <meta name="description" content="Delete specific pages from a PDF online for free. Enter page numbers or ranges, remove unwanted pages instantly. No signup, no watermark, 100% secure.">
+  <meta name="keywords" content="delete PDF pages, remove PDF pages, delete pages from PDF, PDF page remover, remove pages PDF online free">
+  <meta name="author" content="Mini PDF Tools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://minipdftools.com/delete-pdf-pages.html">
+  <meta property="og:title" content="Delete PDF Pages Online Free | Mini PDF Tools">
+  <meta property="og:description" content="Remove specific pages from a PDF instantly. Enter page numbers or ranges — no signup needed.">
+  <meta property="og:image" content="https://minipdftools.com/preview-image.jpg">
+  <meta property="og:url" content="https://minipdftools.com/delete-pdf-pages.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Delete PDF Pages Online Free | Mini PDF Tools">
+  <meta name="twitter:description" content="Remove specific pages from a PDF instantly. Enter page numbers or ranges — no signup needed.">
+  <meta name="twitter:image" content="https://minipdftools.com/preview-image.jpg">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Delete PDF Pages Online – Mini PDF Tools",
+    "url": "https://minipdftools.com/delete-pdf-pages.html",
+    "description": "Free online tool to delete specific pages or page ranges from a PDF.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
+    .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
+    .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
+    .dropdown { position:relative; }
+    .dropdown-menu { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#fff; border-radius:0.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.18); min-width:210px; z-index:100; overflow:hidden; }
+    .dropdown:hover .dropdown-menu { display:block; }
+    .dropdown-item { display:flex; align-items:center; gap:0.6rem; padding:0.75rem 1.1rem; color:#374151; font-size:0.9rem; font-weight:500; transition:background 0.15s; text-decoration:none; }
+    .dropdown-item:hover { background:#f3f4f6; }
+    .site-header { background: linear-gradient(135deg, #475569, #4338ca); }
+    .site-footer { background:linear-gradient(135deg,#1e293b,#312e81); color:rgba(255,255,255,0.75); }
+    .footer-link { color:rgba(255,255,255,0.65); transition:color 0.2s; font-size:0.875rem; text-decoration:none; }
+    .footer-link:hover { color:#fff; }
+    .footer-divider { border-color:rgba(255,255,255,0.12); }
+    .social-icon { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.8); transition:background 0.2s,color 0.2s; font-size:0.9rem; text-decoration:none; }
+    .social-icon:hover { background:rgba(255,255,255,0.22); color:#fff; }
+    #mobile-menu { display:none; }
+    #mobile-menu.open { display:block; }
+    .mobile-tool-links { display:none; }
+    .mobile-tool-links.open { display:block; }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2px dashed #fde047;
+      border-radius: 1rem;
+      background: #fefce8;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      background: #fef9c3;
+      border-color: #ca8a04;
+      transform: scale(1.005);
+    }
+
+    /* ── File info bar ── */
+    .file-info-bar {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: #fefce8; border: 1px solid #fde047;
+      border-radius: 0.75rem; padding: 0.85rem 1rem;
+    }
+    .file-icon-badge {
+      width: 38px; height: 38px; border-radius: 0.5rem;
+      background: linear-gradient(135deg, #ca8a04, #facc15);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .file-info-name  { flex: 1; font-size: 0.9rem; font-weight: 600; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .file-info-meta  { font-size: 0.78rem; color: #94a3b8; flex-shrink: 0; }
+    .file-info-pages { font-size: 0.78rem; color: #ca8a04; font-weight: 600; flex-shrink: 0; }
+    .btn-change { background: none; border: 1px solid #fde047; color: #ca8a04; font-size: 0.75rem; font-weight: 600; padding: 0.3rem 0.7rem; border-radius: 0.4rem; cursor: pointer; transition: all 0.15s; flex-shrink: 0; }
+    .btn-change:hover { background: #ca8a04; color: #fff; border-color: #ca8a04; }
+
+    /* ── Options panel ── */
+    .options-panel {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 0.75rem; padding: 1rem 1.25rem;
+    }
+    .option-label { font-size: 0.78rem; font-weight: 600; color: #475569; margin-bottom: 0.4rem; display: block; }
+
+    /* ── Page tag builder ── */
+    .tags-wrap {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 0.4rem; min-height: 42px;
+      border: 1px solid #e2e8f0; border-radius: 0.5rem;
+      background: #fff; padding: 0.4rem 0.6rem;
+      cursor: text; transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .tags-wrap:focus-within { border-color: #ca8a04; box-shadow: 0 0 0 2px rgba(202,138,4,0.14); }
+
+    .page-tag {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: #fef9c3; border: 1px solid #fde047;
+      color: #92400e; font-size: 0.75rem; font-weight: 600;
+      border-radius: 999px; padding: 0.2rem 0.55rem;
+      white-space: nowrap;
+    }
+    .page-tag button {
+      background: none; border: none; cursor: pointer;
+      color: #b45309; font-size: 0.65rem; padding: 0;
+      line-height: 1; transition: color 0.15s;
+    }
+    .page-tag button:hover { color: #dc2626; }
+
+    .tag-input {
+      flex: 1; min-width: 100px; border: none; outline: none;
+      font-size: 0.85rem; color: #1e293b; background: transparent;
+      padding: 0.15rem 0;
+    }
+
+    /* Preview bar */
+    .preview-bar {
+      font-size: 0.78rem; color: #64748b;
+      padding: 0.4rem 0.1rem 0;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .preview-keep  { color: #16a34a; font-weight: 600; }
+    .preview-delete { color: #dc2626; font-weight: 600; }
+
+    /* Quick range shortcut */
+    .quick-btn {
+      font-size: 0.72rem; font-weight: 500; padding: 0.25rem 0.6rem;
+      border: 1px solid #e2e8f0; border-radius: 0.4rem;
+      background: #fff; color: #64748b; cursor: pointer; transition: all 0.15s;
+    }
+    .quick-btn:hover { border-color: #ca8a04; color: #ca8a04; background: #fefce8; }
+
+    /* ── Delete button ── */
+    .btn-delete {
+      background: linear-gradient(135deg, #ca8a04, #facc15);
+      color: #1c1917; font-weight: 700; font-size: 1.05rem;
+      padding: 0.85rem 2.5rem; border-radius: 999px; border: none;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(202,138,4,0.3);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    .btn-delete:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(202,138,4,0.38); }
+    .btn-delete:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+    /* ── Warning banner ── */
+    .warn-banner {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      background: #fef2f2; border: 1px solid #fca5a5;
+      border-radius: 0.65rem; padding: 0.7rem 1rem;
+      font-size: 0.82rem; color: #991b1b; line-height: 1.5;
+    }
+    .warn-banner i { color: #dc2626; margin-top: 2px; flex-shrink: 0; }
+
+    /* ── Progress ── */
+    .progress-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; padding: 0.3rem 0; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-pending { background: #e2e8f0; }
+    .dot-done    { background: #22c55e; }
+    .dot-error   { background: #ef4444; }
+
+    /* ── Spinner ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; display: inline-block; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="navbar w-full shadow-lg sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white" style="text-decoration:none">
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-file-pdf text-white text-sm"></i>
+        </div>
+        <span class="font-bold text-lg tracking-tight">Mini PDF Tools</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="/" class="nav-link"><i class="fas fa-home mr-1 text-xs"></i> Home</a>
+        <div class="dropdown">
+          <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
+            <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a href="/compress-pdf.html"     class="dropdown-item"><i class="fas fa-compress-alt text-blue-500"></i> Compress PDF</a>
+            <a href="/merge-pdf.html"        class="dropdown-item"><i class="fas fa-object-group text-green-500"></i> Merge PDFs</a>
+            <a href="/split-pdf.html"        class="dropdown-item"><i class="fas fa-cut text-red-500"></i> Split PDF</a>
+            <a href="/image-to-pdf.html"     class="dropdown-item"><i class="fas fa-image text-purple-500"></i> Image to PDF</a>
+            <a href="/pdf-to-jpg.html"       class="dropdown-item"><i class="fas fa-file-image text-indigo-500"></i> PDF to JPG</a>
+            <a href="/rotate-pdf.html"       class="dropdown-item"><i class="fas fa-sync-alt text-orange-500"></i> Rotate PDF</a>
+            <a href="/delete-pdf-pages.html" class="dropdown-item"><i class="fas fa-trash-alt text-yellow-600"></i> Delete Pages</a>
+          </div>
+        </div>
+        <a href="/#about"   class="nav-link">About</a>
+        <a href="/#contact" class="nav-link">Contact</a>
+      </div>
+      <button id="hamburger" class="md:hidden text-white p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars text-lg"></i>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden px-4 pb-4" style="background:#312e81">
+      <a href="/" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-home mr-2"></i>Home</a>
+      <button onclick="toggleMobileTools()" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
+        <span><i class="fas fa-tools mr-2"></i>Tools</span>
+        <i class="fas fa-chevron-down text-xs" id="tools-chevron"></i>
+      </button>
+      <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+        <a href="/compress-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
+        <a href="/merge-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
+        <a href="/split-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
+        <a href="/image-to-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
+        <a href="/pdf-to-jpg.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
+        <a href="/rotate-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
+        <a href="/delete-pdf-pages.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-trash-alt mr-2"></i>Delete Pages</a>
+      </div>
+      <a href="/#about"   class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-info-circle mr-2"></i>About</a>
+      <a href="/#contact" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-envelope mr-2"></i>Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="site-header w-full py-8 px-8 text-white shadow-lg">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-3xl font-extrabold mb-2">Delete PDF Pages – Free Online</h1>
+      <p class="text-lg font-light opacity-80">Remove unwanted pages from a PDF by number or range. Keep only what you need.</p>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="w-full max-w-4xl mx-auto px-4 pt-4 text-sm text-gray-500">
+    <a href="/" class="hover:text-yellow-600">Home</a> &rsaquo;
+    <span class="text-gray-700 font-medium">Delete PDF Pages</span>
+  </div>
+
+  <!-- TOOL -->
+  <main class="flex-1 w-full flex flex-col items-center py-8 px-4">
+    <div class="w-full max-w-xl">
+
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+
+        <!-- Drop zone -->
+        <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input').click()">
+          <i class="fas fa-trash-alt text-yellow-500 text-5xl mb-4 block"></i>
+          <p class="text-gray-700 font-semibold text-lg mb-1">Drop your PDF here or click to browse</p>
+          <p class="text-gray-400 text-sm">One PDF file — max 32 MB</p>
+        </div>
+
+        <input type="file" id="file-input" accept=".pdf" style="display:none" />
+
+        <!-- Options area -->
+        <div id="options-area" style="display:none">
+
+          <!-- File info bar -->
+          <div class="file-info-bar mb-5">
+            <div class="file-icon-badge">
+              <i class="fas fa-file-pdf text-white text-base"></i>
+            </div>
+            <span class="file-info-name"  id="file-name-display"></span>
+            <span class="file-info-meta"  id="file-size-display"></span>
+            <span class="file-info-pages" id="file-pages-display">…</span>
+            <button class="btn-change" onclick="changeFile()">
+              <i class="fas fa-sync-alt mr-1"></i>Change
+            </button>
+          </div>
+
+          <!-- Options panel -->
+          <div class="options-panel mb-5 flex flex-col gap-4">
+
+            <!-- Page input -->
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="option-label mb-0"><i class="fas fa-trash-alt mr-1 text-yellow-500"></i>Pages to delete</span>
+                <!-- Quick shortcuts -->
+                <div class="flex gap-1" id="quick-btns" style="display:none!important">
+                  <button class="quick-btn" onclick="addQuickRange('first')">First page</button>
+                  <button class="quick-btn" onclick="addQuickRange('last')">Last page</button>
+                </div>
+              </div>
+
+              <!-- Tag-based input -->
+              <div class="tags-wrap" id="tags-wrap" onclick="document.getElementById('tag-input').focus()">
+                <input type="text" id="tag-input" class="tag-input"
+                       placeholder="Type page number or range, press Enter — e.g. 3 or 5-8"
+                       autocomplete="off" />
+              </div>
+              <p class="text-xs text-gray-400 mt-1">
+                Press <strong>Enter</strong> or <strong>,</strong> to add each page or range.
+                <span id="pages-hint" class="ml-1 text-yellow-600 font-medium"></span>
+              </p>
+            </div>
+
+            <!-- Preview bar -->
+            <div id="preview-bar" class="preview-bar" style="display:none">
+              <span>
+                Deleting <span class="preview-delete" id="del-count">0</span> page(s)
+              </span>
+              <span>
+                Keeping <span class="preview-keep" id="keep-count">0</span> page(s)
+              </span>
+            </div>
+
+            <!-- All-pages warning -->
+            <div id="all-warn" class="warn-banner" style="display:none">
+              <i class="fas fa-exclamation-circle"></i>
+              <span>You are about to delete <strong>all pages</strong>. At least one page must remain.</span>
+            </div>
+
+          </div>
+
+          <!-- Error -->
+          <div id="delete-error" class="hidden mb-3 text-red-500 font-semibold text-sm"></div>
+
+          <!-- Progress log -->
+          <div id="delete-progress" class="hidden mb-3 bg-gray-50 border border-gray-200 rounded-xl p-4">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Processing</p>
+            <div id="progress-list"></div>
+          </div>
+
+          <!-- Loading -->
+          <div id="delete-loading" class="hidden mb-3 flex items-center gap-2 text-yellow-700 font-semibold text-sm">
+            <svg class="spinner w-4 h-4 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+            </svg>
+            <span>Removing pages… please wait</span>
+          </div>
+
+          <!-- Delete button -->
+          <div class="flex justify-center mt-2">
+            <button id="delete-btn" class="btn-delete" onclick="doDelete()">
+              <i class="fas fa-trash-alt mr-2"></i>Delete Pages
+            </button>
+          </div>
+
+        </div><!-- /options-area -->
+      </div><!-- /card -->
+
+      <!-- Steps hint -->
+      <div class="mt-5 flex flex-col sm:flex-row gap-3 text-sm text-gray-500 justify-center text-center">
+        <span><span class="font-bold text-yellow-500">1.</span> Upload your PDF</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-yellow-500">2.</span> Enter pages to delete</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-yellow-500">3.</span> Download cleaned PDF</span>
+      </div>
+
+      <!-- SEO content -->
+      <section class="mt-12 px-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-3">How to Delete Pages from a PDF</h2>
+        <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
+          <li>Upload your PDF by clicking the drop zone or dragging a file onto it.</li>
+          <li>Type the page numbers or ranges you want to remove and press <strong>Enter</strong> or <strong>,</strong> to add each one (e.g. <code>3</code>, <code>5-8</code>, <code>12</code>).</li>
+          <li>Check the preview — it shows how many pages will be deleted and how many kept.</li>
+          <li>Click <strong>Delete Pages</strong> — your cleaned PDF downloads automatically.</li>
+        </ol>
+        <h2 class="text-xl font-bold text-gray-800 mb-3">When to Delete PDF Pages</h2>
+        <p class="text-gray-600 mb-4">Removing pages is useful when you want to strip a cover page before sharing, remove blank or duplicate pages from a scan, or trim a long report down to only the relevant sections.</p>
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a href="/split-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-cut mr-1"></i>Split PDF</a>
+          <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
+          <a href="/rotate-pdf.html"   class="text-indigo-600 hover:underline text-sm"><i class="fas fa-sync-alt mr-1"></i>Rotate PDF</a>
+          <a href="/compress-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-compress-alt mr-1"></i>Compress PDF</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer w-full mt-auto">
+    <div class="max-w-6xl mx-auto px-6 py-10">
+      <div class="flex flex-col md:flex-row justify-between gap-8 mb-8">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
+            <span class="text-white font-bold text-lg">Mini PDF Tools</span>
+          </div>
+          <p class="text-sm max-w-xs" style="color:rgba(255,255,255,0.6)">Free, fast, and secure PDF tools. No signup required. Your files are never stored on our servers.</p>
+          <div class="flex gap-2 mt-1">
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Tools</p>
+          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
+            <li><a href="/compress-pdf.html"     class="footer-link"><i class="fas fa-compress-alt mr-2 text-xs"></i>Compress PDF</a></li>
+            <li><a href="/merge-pdf.html"        class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
+            <li><a href="/split-pdf.html"        class="footer-link"><i class="fas fa-cut mr-2 text-xs"></i>Split PDF</a></li>
+            <li><a href="/image-to-pdf.html"     class="footer-link"><i class="fas fa-image mr-2 text-xs"></i>Image to PDF</a></li>
+            <li><a href="/pdf-to-jpg.html"       class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
+            <li><a href="/rotate-pdf.html"       class="footer-link"><i class="fas fa-sync-alt mr-2 text-xs"></i>Rotate PDF</a></li>
+            <li><a href="/delete-pdf-pages.html" class="footer-link"><i class="fas fa-trash-alt mr-2 text-xs"></i>Delete Pages</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Contact</p>
+          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
+            <li><a href="mailto:support@minipdftools.com" class="footer-link"><i class="fas fa-envelope mr-2 text-xs"></i>support@minipdftools.com</a></li>
+            <li><a href="#" class="footer-link"><i class="fas fa-shield-alt mr-2 text-xs"></i>Privacy Policy</a></li>
+            <li><a href="#" class="footer-link"><i class="fas fa-file-contract mr-2 text-xs"></i>Terms of Use</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider mb-6" />
+      <div class="flex flex-col md:flex-row justify-between items-center gap-2 text-xs" style="color:rgba(255,255,255,0.45)">
+        <p>Your document privacy is our top priority. Files are never stored on our servers.</p>
+        <p>&copy; 2025 Mini PDF Tools. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DELETE PDF PAGES — tag-based page picker,
+   PDF.js page count, live preview, progress log
+   ═══════════════════════════════════════════════════════ */
+
+const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
+const MAX_BYTES = 32 * 1024 * 1024;
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ── State ─────────────────────────────────────────────
+let pdfFile      = null;
+let pdfPageCount = 0;
+let pageTags     = [];   // [{ raw, indices }]  — each tag is one entry/range
+let tagIdCtr     = 0;
+
+// ── DOM ───────────────────────────────────────────────
+const dropZone       = document.getElementById('drop-zone');
+const optionsArea    = document.getElementById('options-area');
+const fileInput      = document.getElementById('file-input');
+const fileNameEl     = document.getElementById('file-name-display');
+const fileSizeEl     = document.getElementById('file-size-display');
+const filePagesEl    = document.getElementById('file-pages-display');
+const tagsWrap       = document.getElementById('tags-wrap');
+const tagInput       = document.getElementById('tag-input');
+const pagesHint      = document.getElementById('pages-hint');
+const previewBar     = document.getElementById('preview-bar');
+const delCountEl     = document.getElementById('del-count');
+const keepCountEl    = document.getElementById('keep-count');
+const allWarn        = document.getElementById('all-warn');
+const deleteErr      = document.getElementById('delete-error');
+const deleteLoad     = document.getElementById('delete-loading');
+const deleteProgress = document.getElementById('delete-progress');
+const progressList   = document.getElementById('progress-list');
+const deleteBtn      = document.getElementById('delete-btn');
+const quickBtns      = document.getElementById('quick-btns');
+
+// ── File input ────────────────────────────────────────
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) loadFile(fileInput.files[0]);
+});
+function changeFile() {
+  pdfFile = null; pdfPageCount = 0; pageTags = [];
+  filePagesEl.textContent = '…';
+  pagesHint.textContent   = '';
+  renderTags();
+  fileInput.value = '';
+  fileInput.click();
+}
+
+// ── Drop zone ─────────────────────────────────────────
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if (f) loadFile(f);
+});
+
+// ── Load file ─────────────────────────────────────────
+function loadFile(f) {
+  if (!f.name.toLowerCase().endsWith('.pdf') && f.type !== 'application/pdf') {
+    showError('Please select a PDF file.'); return;
+  }
+  if (f.size > MAX_BYTES) { showError('File exceeds the 32 MB limit.'); return; }
+
+  pdfFile = f; pageTags = [];
+  hideError();
+  deleteProgress.classList.add('hidden');
+
+  fileNameEl.textContent  = f.name;
+  fileSizeEl.textContent  = formatBytes(f.size);
+  filePagesEl.textContent = '…';
+
+  dropZone.style.display    = 'none';
+  optionsArea.style.display = '';
+
+  renderTags();
+
+  // Count pages via PDF.js
+  f.arrayBuffer().then(buf => {
+    pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise.then(pdf => {
+      pdfPageCount = pdf.numPages;
+      filePagesEl.textContent = `${pdfPageCount} page${pdfPageCount !== 1 ? 's' : ''}`;
+      pagesHint.textContent   = `(1 – ${pdfPageCount})`;
+      quickBtns.style.removeProperty('display');
+      updatePreview();
+    }).catch(() => { filePagesEl.textContent = ''; });
+  });
+}
+
+// ── Tag input key handling ────────────────────────────
+tagInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    commitInput();
+  } else if (e.key === 'Backspace' && tagInput.value === '' && pageTags.length > 0) {
+    // Remove last tag on backspace when input is empty
+    pageTags.pop();
+    renderTags();
+    updatePreview();
+  }
+});
+
+tagInput.addEventListener('blur', () => {
+  if (tagInput.value.trim()) commitInput();
+});
+
+function commitInput() {
+  const raw = tagInput.value.trim().replace(/,$/, '').trim();
+  if (!raw) return;
+
+  const result = parseRange(raw);
+  if (result.error) {
+    tagInput.style.outline = '2px solid #ef4444';
+    setTimeout(() => tagInput.style.outline = '', 1200);
+    showError(result.error);
+    return;
+  }
+
+  // Avoid exact duplicate tags
+  if (!pageTags.some(t => t.raw === raw)) {
+    pageTags.push({ id: ++tagIdCtr, raw, indices: result.indices });
+  }
+
+  tagInput.value = '';
+  hideError();
+  renderTags();
+  updatePreview();
+}
+
+// ── Parse a single range string ───────────────────────
+function parseRange(raw) {
+  const trimmed = raw.trim();
+  // Range: "3-8"
+  if (/^\d+-\d+$/.test(trimmed)) {
+    const [s, e] = trimmed.split('-').map(Number);
+    if (pdfPageCount && (s < 1 || e > pdfPageCount)) return { error: `Range ${s}–${e} is out of bounds (1–${pdfPageCount}).` };
+    if (s > e) return { error: `Start (${s}) must be ≤ end (${e}).` };
+    return { indices: Array.from({ length: e - s + 1 }, (_, i) => s - 1 + i) };
+  }
+  // Single page: "5"
+  if (/^\d+$/.test(trimmed)) {
+    const n = Number(trimmed);
+    if (pdfPageCount && (n < 1 || n > pdfPageCount)) return { error: `Page ${n} is out of bounds (1–${pdfPageCount}).` };
+    return { indices: [n - 1] };
+  }
+  return { error: `"${trimmed}" is not a valid page number or range.` };
+}
+
+// ── Render tags ───────────────────────────────────────
+function renderTags() {
+  // Remove all existing tags (keep the input)
+  tagsWrap.querySelectorAll('.page-tag').forEach(t => t.remove());
+
+  pageTags.forEach(tag => {
+    const span = document.createElement('span');
+    span.className  = 'page-tag';
+    span.dataset.id = tag.id;
+    span.innerHTML  = `
+      ${esc(tag.raw)}
+      <button onclick="removeTag(${tag.id})" title="Remove">
+        <i class="fas fa-times"></i>
+      </button>`;
+    tagsWrap.insertBefore(span, tagInput);
+  });
+
+  tagInput.placeholder = pageTags.length === 0
+    ? 'Type page number or range, press Enter — e.g. 3 or 5-8'
+    : 'Add another…';
+}
+
+function removeTag(id) {
+  pageTags = pageTags.filter(t => t.id !== id);
+  renderTags();
+  updatePreview();
+}
+
+// ── Quick shortcuts ───────────────────────────────────
+function addQuickRange(type) {
+  if (!pdfPageCount) return;
+  const raw = type === 'first' ? '1' : String(pdfPageCount);
+  const result = parseRange(raw);
+  if (!result.error && !pageTags.some(t => t.raw === raw)) {
+    pageTags.push({ id: ++tagIdCtr, raw, indices: result.indices });
+    renderTags(); updatePreview();
+  }
+}
+
+// ── Live preview ──────────────────────────────────────
+function updatePreview() {
+  if (!pdfPageCount) { previewBar.style.display = 'none'; allWarn.style.display = 'none'; return; }
+
+  const deleteSet = new Set(pageTags.flatMap(t => t.indices));
+  const delCount  = deleteSet.size;
+  const keepCount = pdfPageCount - delCount;
+
+  if (delCount === 0) {
+    previewBar.style.display = 'none';
+    allWarn.style.display    = 'none';
+    return;
+  }
+
+  previewBar.style.display = 'flex';
+  delCountEl.textContent   = delCount;
+  keepCountEl.textContent  = keepCount;
+
+  allWarn.style.display = keepCount <= 0 ? 'flex' : 'none';
+  deleteBtn.disabled    = keepCount <= 0;
+}
+
+// ── Delete ────────────────────────────────────────────
+async function doDelete() {
+  if (!pdfFile)          { showError('Please upload a PDF first.'); return; }
+  if (!pageTags.length)  { showError('Please add at least one page to delete.'); return; }
+
+  const deleteSet = new Set(pageTags.flatMap(t => t.indices));
+  if (pdfPageCount && deleteSet.size >= pdfPageCount) {
+    showError('Cannot delete all pages — at least one page must remain.'); return;
+  }
+
+  // Build pages param for the API ("1,3,5-8" style, 1-based)
+  const pagesParam = pageTags.map(t => t.raw).join(',');
+
+  // Progress UI
+  progressList.innerHTML = '';
+  const progDiv = document.createElement('div');
+  progDiv.className = 'progress-item';
+  progDiv.innerHTML = `
+    <span class="dot dot-pending" id="dot-main"></span>
+    <span id="prog-text-main" class="text-gray-600">
+      Removing ${deleteSet.size} page${deleteSet.size !== 1 ? 's' : ''} from ${esc(pdfFile.name)}…
+    </span>`;
+  progressList.appendChild(progDiv);
+
+  deleteProgress.classList.remove('hidden');
+  deleteLoad.classList.remove('hidden');
+  deleteBtn.disabled = true;
+  hideError();
+
+  const dot      = document.getElementById('dot-main');
+  const progText = document.getElementById('prog-text-main');
+  dot.style.background = '#f59e0b';
+  dot.style.animation  = 'spin 0.8s linear infinite';
+
+  try {
+    const fd = new FormData();
+    fd.append('file',  pdfFile);
+    fd.append('pages', pagesParam);
+
+    const res = await fetch(`${API}/delete`, { method: 'POST', body: fd });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || `Server error ${res.status}`);
+    }
+
+    const blob    = await res.blob();
+    const outName = `deleted_${pdfFile.name}`;
+    downloadBlob(blob, outName);
+
+    const keptPages = pdfPageCount - deleteSet.size;
+    dot.style.animation = 'none';
+    dot.className       = 'dot dot-done';
+    progText.innerHTML  = `
+      <span class="text-green-600 font-medium">
+        ✓ Done — ${deleteSet.size} page${deleteSet.size !== 1 ? 's' : ''} removed,
+        ${keptPages} kept · PDF downloaded (${formatBytes(blob.size)})
+      </span>`;
+
+  } catch (err) {
+    dot.style.animation = 'none';
+    dot.className       = 'dot dot-error';
+    progText.innerHTML  = `<span class="text-red-500">✗ Failed — ${esc(err.message)}</span>`;
+    showError(err.message);
+  } finally {
+    deleteLoad.classList.add('hidden');
+    deleteBtn.disabled = false;
+    updatePreview();
+  }
+}
+
+// ── Utilities ─────────────────────────────────────────
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+function formatBytes(b) {
+  if (b < 1024)        return b + ' B';
+  if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+  return (b / (1024 * 1024)).toFixed(2) + ' MB';
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function showError(msg) { deleteErr.textContent = msg; deleteErr.classList.remove('hidden'); }
+function hideError()    { deleteErr.classList.add('hidden'); }
+
+// ── Navbar ────────────────────────────────────────────
+function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+function toggleMobileTools() {
+  document.getElementById('mobile-tool-links').classList.toggle('open');
+  const c = document.getElementById('tools-chevron');
+  c.classList.toggle('fa-chevron-down'); c.classList.toggle('fa-chevron-up');
+}
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobile-menu');
+  const hamburger = document.getElementById('hamburger');
+  if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>
