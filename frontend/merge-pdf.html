@@ -41,6 +41,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <!-- pdf-lib for client-side PDF merging -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" crossorigin="anonymous"></script>
+
   <style>
     body { font-family: 'Inter', sans-serif; }
         .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
@@ -468,10 +471,9 @@
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   MERGE PDF — file manager with add-more & drag-to-sort
+   MERGE PDF — client-side merging with pdf-lib
    ═══════════════════════════════════════════════════════ */
 
-const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
 const MAX_BYTES = 32 * 1024 * 1024; // 32 MB
 
 // ── State ─────────────────────────────────────────────
@@ -667,7 +669,17 @@ function clearAll() {
   hideError();
 }
 
-// ── Merge & upload ────────────────────────────────────
+// ── Read a File as ArrayBuffer ────────────────────────
+function readFileAsArrayBuffer(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload  = e => resolve(e.target.result);
+    reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// ── Merge & download (client-side with pdf-lib) ───────
 async function doMerge() {
   if (fileList.length < 1) { showError('Please add at least one PDF.'); return; }
 
@@ -675,20 +687,42 @@ async function doMerge() {
   fileList.forEach(x => { total += x.file.size; });
   if (total > MAX_BYTES) { showError('Total exceeds 32 MB — please remove some files.'); return; }
 
+  // Ensure pdf-lib is loaded
+  if (typeof PDFLib === 'undefined') {
+    showError('PDF library not loaded yet — please wait a moment and try again.');
+    return;
+  }
+
   mergeLoad.classList.remove('hidden');
   mergeBtn.disabled = true;
   hideError();
 
   try {
-    const fd = new FormData();
-    // Files appended in current display order
-    fileList.forEach(item => fd.append('files', item.file));
+    const { PDFDocument } = PDFLib;
 
-    const res = await fetch(`${API}/merge`, { method: 'POST', body: fd });
-    if (!res.ok) throw new Error(`Server returned error ${res.status}`);
-    downloadBlob(await res.blob(), 'merged.pdf');
+    // Create a new blank PDF to merge everything into
+    const mergedPdf = await PDFDocument.create();
+
+    for (const item of fileList) {
+      const arrayBuffer = await readFileAsArrayBuffer(item.file);
+      let sourcePdf;
+      try {
+        sourcePdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+      } catch (e) {
+        throw new Error(`"${item.file.name}" could not be read — it may be password-protected or corrupted.`);
+      }
+
+      const pageCount  = sourcePdf.getPageCount();
+      const pageIdxs   = Array.from({ length: pageCount }, (_, i) => i);
+      const copiedPages = await mergedPdf.copyPages(sourcePdf, pageIdxs);
+      copiedPages.forEach(page => mergedPdf.addPage(page));
+    }
+
+    const mergedBytes = await mergedPdf.save();
+    downloadBlob(new Blob([mergedBytes], { type: 'application/pdf' }), 'merged.pdf');
+
   } catch (err) {
-    showError(err.message);
+    showError(err.message || 'An unexpected error occurred during merging.');
   } finally {
     mergeLoad.classList.add('hidden');
     mergeBtn.disabled = false;
