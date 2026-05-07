@@ -68,17 +68,17 @@
 
     /* Drop zone */
     .drop-zone {
-      border: 2px dashed #c7d2fe;
+      border: 2px dashed #6ee7b7;
       border-radius: 1rem;
-      background: #f8f9ff;
+      background: #f0fdf4;
       transition: all 0.2s;
       cursor: pointer;
     }
     .drop-zone:hover, .drop-zone.dragover {
-      background: #eef0ff;
-      border-color: #4338ca;
+      background: #dcfce7;
+      border-color: #16a34a;
+      transform: scale(1.005);
     }
-    .drop-zone.dragover { transform: scale(1.01); }
 
     /* File list */
     #file-list { list-style: none; padding: 0; margin: 0; }
@@ -328,7 +328,7 @@
         <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input-main').click()">
           <i class="fas fa-file-import text-green-400 text-5xl mb-4 block"></i>
           <p class="text-gray-700 font-semibold text-lg mb-1">Drop PDFs here or click to browse</p>
-          <p class="text-gray-400 text-sm">Add files  — max 32 MB total</p>
+          <p class="text-gray-400 text-sm">PDF files — max 32 MB total</p>
         </div>
 
         <!-- Hidden file inputs (separate so each opens its own picker) -->

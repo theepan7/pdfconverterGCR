@@ -69,17 +69,17 @@
 
     /* Drop zone */
     .drop-zone {
-      border: 2px dashed #c7d2fe;
+      border: 2px dashed #fdba74;
       border-radius: 1rem;
-      background: #f8f9ff;
+      background: #fff7ed;
       transition: all 0.2s;
       cursor: pointer;
     }
     .drop-zone:hover, .drop-zone.dragover {
-      background: #eef0ff;
-      border-color: #4338ca;
+      background: #fed7aa;
+      border-color: #ea580c;
+      transform: scale(1.005);
     }
-    .drop-zone.dragover { transform: scale(1.01); }
 
     /* Page grid */
     .page-grid {
@@ -434,7 +434,7 @@
         <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input').click()">
           <i class="fas fa-sync-alt text-orange-400 text-5xl mb-4 block"></i>
           <p class="text-gray-700 font-semibold text-lg mb-1">Drop a PDF here or click to browse</p>
-          <p class="text-gray-400 text-sm">Max file size: 32 MB</p>
+          <p class="text-gray-400 text-sm">One PDF file — max 32 MB</p>
         </div>
 
         <!-- Hidden file input -->
