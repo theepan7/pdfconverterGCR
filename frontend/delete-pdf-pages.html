@@ -44,6 +44,8 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- pdf-lib for client-side PDF manipulation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -206,7 +208,7 @@
           <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
             <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
           </button>
-                    <div class="dropdown-menu" style="min-width:240px">
+          <div class="dropdown-menu" style="min-width:240px">
             <div class="dropdown-section">
               <div class="dropdown-section-label">Organise</div>
               <a href="/merge-pdf.html"         class="dropdown-item"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
@@ -240,7 +242,7 @@
         <span><i class="fas fa-tools mr-2"></i>Tools</span>
         <i class="fas fa-chevron-down text-xs" id="tools-chevron"></i>
       </button>
-            <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+      <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
         <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold">Organise</p>
         <a href="/merge-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
         <a href="/split-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
@@ -309,7 +311,6 @@
             <div>
               <div class="flex items-center justify-between mb-2">
                 <span class="option-label mb-0"><i class="fas fa-trash-alt mr-1 text-yellow-500"></i>Pages to delete</span>
-                <!-- Quick shortcuts -->
                 <div class="flex gap-1" id="quick-btns" style="display:none!important">
                   <button class="quick-btn" onclick="addQuickRange('first')">First page</button>
                   <button class="quick-btn" onclick="addQuickRange('last')">Last page</button>
@@ -420,7 +421,7 @@
             <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
-                <div>
+        <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Organise</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
             <li><a href="/merge-pdf.html"         class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
@@ -429,7 +430,6 @@
             <li><a href="/delete-pdf-pages.html"   class="footer-link"><i class="fas fa-trash-alt mr-2 text-xs"></i>Delete Pages</a></li>
           </ul>
         </div>
-
         <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Optimise &amp; Convert</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
@@ -438,7 +438,6 @@
             <li><a href="/pdf-to-jpg.html"         class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
           </ul>
         </div>
-
         <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Contact</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
@@ -458,11 +457,9 @@
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   DELETE PDF PAGES — tag-based page picker,
-   PDF.js page count, live preview, progress log
+   DELETE PDF PAGES — client-side using pdf-lib
    ═══════════════════════════════════════════════════════ */
 
-const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
 const MAX_BYTES = 32 * 1024 * 1024;
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -471,7 +468,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 // ── State ─────────────────────────────────────────────
 let pdfFile      = null;
 let pdfPageCount = 0;
-let pageTags     = [];   // [{ raw, indices }]  — each tag is one entry/range
+let pageTags     = [];
 let tagIdCtr     = 0;
 
 // ── DOM ───────────────────────────────────────────────
@@ -555,7 +552,6 @@ tagInput.addEventListener('keydown', e => {
     e.preventDefault();
     commitInput();
   } else if (e.key === 'Backspace' && tagInput.value === '' && pageTags.length > 0) {
-    // Remove last tag on backspace when input is empty
     pageTags.pop();
     renderTags();
     updatePreview();
@@ -578,7 +574,6 @@ function commitInput() {
     return;
   }
 
-  // Avoid exact duplicate tags
   if (!pageTags.some(t => t.raw === raw)) {
     pageTags.push({ id: ++tagIdCtr, raw, indices: result.indices });
   }
@@ -592,14 +587,12 @@ function commitInput() {
 // ── Parse a single range string ───────────────────────
 function parseRange(raw) {
   const trimmed = raw.trim();
-  // Range: "3-8"
   if (/^\d+-\d+$/.test(trimmed)) {
     const [s, e] = trimmed.split('-').map(Number);
     if (pdfPageCount && (s < 1 || e > pdfPageCount)) return { error: `Range ${s}–${e} is out of bounds (1–${pdfPageCount}).` };
     if (s > e) return { error: `Start (${s}) must be ≤ end (${e}).` };
     return { indices: Array.from({ length: e - s + 1 }, (_, i) => s - 1 + i) };
   }
-  // Single page: "5"
   if (/^\d+$/.test(trimmed)) {
     const n = Number(trimmed);
     if (pdfPageCount && (n < 1 || n > pdfPageCount)) return { error: `Page ${n} is out of bounds (1–${pdfPageCount}).` };
@@ -610,7 +603,6 @@ function parseRange(raw) {
 
 // ── Render tags ───────────────────────────────────────
 function renderTags() {
-  // Remove all existing tags (keep the input)
   tagsWrap.querySelectorAll('.page-tag').forEach(t => t.remove());
 
   pageTags.forEach(tag => {
@@ -669,7 +661,7 @@ function updatePreview() {
   deleteBtn.disabled    = keepCount <= 0;
 }
 
-// ── Delete ────────────────────────────────────────────
+// ── Delete pages (client-side with pdf-lib) ───────────
 async function doDelete() {
   if (!pdfFile)          { showError('Please upload a PDF first.'); return; }
   if (!pageTags.length)  { showError('Please add at least one page to delete.'); return; }
@@ -679,15 +671,16 @@ async function doDelete() {
     showError('Cannot delete all pages — at least one page must remain.'); return;
   }
 
-  // Build pages param for the API ("1,3,5-8" style, 1-based)
-  const pagesParam = pageTags.map(t => t.raw).join(',');
+  if (typeof PDFLib === 'undefined') {
+    showError('PDF library not loaded yet — please wait a moment and try again.'); return;
+  }
 
   // Progress UI
   progressList.innerHTML = '';
   const progDiv = document.createElement('div');
   progDiv.className = 'progress-item';
   progDiv.innerHTML = `
-    <span class="dot dot-pending" id="dot-main"></span>
+    <span class="dot" id="dot-main" style="background:#f59e0b"></span>
     <span id="prog-text-main" class="text-gray-600">
       Removing ${deleteSet.size} page${deleteSet.size !== 1 ? 's' : ''} from ${esc(pdfFile.name)}…
     </span>`;
@@ -698,39 +691,40 @@ async function doDelete() {
   deleteBtn.disabled = true;
   hideError();
 
-  const dot      = document.getElementById('dot-main');
-  const progText = document.getElementById('prog-text-main');
-  dot.style.background = '#f59e0b';
-  dot.style.animation  = 'spin 0.8s linear infinite';
-
   try {
-    const fd = new FormData();
-    fd.append('file',  pdfFile);
-    fd.append('pages', pagesParam);
+    const { PDFDocument } = PDFLib;
+    const arrayBuffer = await pdfFile.arrayBuffer();
+    const srcPdf      = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
 
-    const res = await fetch(`${API}/delete`, { method: 'POST', body: fd });
-    if (!res.ok) {
-      const body = await res.json().catch(() => ({}));
-      throw new Error(body.error || `Server error ${res.status}`);
+    // Build the new PDF with only the pages we want to keep
+    const newPdf  = await PDFDocument.create();
+    const keepIdxs = [];
+    for (let i = 0; i < srcPdf.getPageCount(); i++) {
+      if (!deleteSet.has(i)) keepIdxs.push(i);
     }
 
-    const blob    = await res.blob();
-    const outName = `deleted_${pdfFile.name}`;
-    downloadBlob(blob, outName);
+    const copiedPages = await newPdf.copyPages(srcPdf, keepIdxs);
+    copiedPages.forEach(page => newPdf.addPage(page));
 
-    const keptPages = pdfPageCount - deleteSet.size;
-    dot.style.animation = 'none';
-    dot.className       = 'dot dot-done';
-    progText.innerHTML  = `
+    const pdfBytes = await newPdf.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    downloadBlob(blob, `deleted_${pdfFile.name}`);
+
+    const keptPages = keepIdxs.length;
+    const dot = document.getElementById('dot-main');
+    const progText = document.getElementById('prog-text-main');
+    dot.className = 'dot dot-done';
+    progText.innerHTML = `
       <span class="text-green-600 font-medium">
         ✓ Done — ${deleteSet.size} page${deleteSet.size !== 1 ? 's' : ''} removed,
         ${keptPages} kept · PDF downloaded (${formatBytes(blob.size)})
       </span>`;
 
   } catch (err) {
-    dot.style.animation = 'none';
-    dot.className       = 'dot dot-error';
-    progText.innerHTML  = `<span class="text-red-500">✗ Failed — ${esc(err.message)}</span>`;
+    const dot = document.getElementById('dot-main');
+    const progText = document.getElementById('prog-text-main');
+    if (dot) dot.className = 'dot dot-error';
+    if (progText) progText.innerHTML = `<span class="text-red-500">✗ Failed — ${esc(err.message)}</span>`;
     showError(err.message);
   } finally {
     deleteLoad.classList.add('hidden');

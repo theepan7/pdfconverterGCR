@@ -39,12 +39,14 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- pdf-lib for client-side PDF manipulation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
     body { font-family: 'Inter', sans-serif; }
-        .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
+    .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
     .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
     .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
     .dropdown { position:relative; }
@@ -162,17 +164,6 @@
     .range-sep { color: #94a3b8; font-size: 0.8rem; font-weight: 600; flex-shrink: 0; }
     .range-label-text { font-size: 0.78rem; color: #94a3b8; flex-shrink: 0; }
 
-    .range-label-name {
-      flex: 1;
-      font-size: 0.82rem;
-      color: #475569;
-      font-weight: 500;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      min-width: 0;
-    }
-
     /* Move buttons */
     .move-btn {
       background: none; border: 1px solid #e2e8f0; color: #64748b;
@@ -236,7 +227,7 @@
       width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
     }
     .dot-pending  { background: #e2e8f0; }
-    .dot-running  { background: #f59e0b; animation: spin 0.8s linear infinite; }
+    .dot-running  { background: #f59e0b; }
     .dot-done     { background: #22c55e; }
     .dot-error    { background: #ef4444; }
   </style>
@@ -258,7 +249,7 @@
           <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
             <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
           </button>
-                    <div class="dropdown-menu" style="min-width:240px">
+          <div class="dropdown-menu" style="min-width:240px">
             <div class="dropdown-section">
               <div class="dropdown-section-label">Organise</div>
               <a href="/merge-pdf.html"         class="dropdown-item"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
@@ -292,7 +283,7 @@
         <span><i class="fas fa-tools mr-2"></i>Tools</span>
         <i class="fas fa-chevron-down text-xs" id="tools-chevron"></i>
       </button>
-            <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+      <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
         <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold">Organise</p>
         <a href="/merge-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
         <a href="/split-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
@@ -329,7 +320,7 @@
 
       <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
 
-        <!-- Step 1: Drop zone -->
+        <!-- Drop zone -->
         <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input').click()">
           <i class="fas fa-file-export text-red-400 text-5xl mb-4 block"></i>
           <p class="text-gray-700 font-semibold text-lg mb-1">Drop your PDF here or click to browse</p>
@@ -338,7 +329,7 @@
 
         <input type="file" id="file-input" accept=".pdf" style="display:none" />
 
-        <!-- Step 2: Range manager (hidden until file loaded) -->
+        <!-- Range manager -->
         <div id="range-area" style="display:none">
 
           <!-- File info bar -->
@@ -453,7 +444,7 @@
             <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
-                <div>
+        <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Organise</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
             <li><a href="/merge-pdf.html"         class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
@@ -462,7 +453,6 @@
             <li><a href="/delete-pdf-pages.html"   class="footer-link"><i class="fas fa-trash-alt mr-2 text-xs"></i>Delete Pages</a></li>
           </ul>
         </div>
-
         <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Optimise &amp; Convert</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
@@ -471,7 +461,6 @@
             <li><a href="/pdf-to-jpg.html"         class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
           </ul>
         </div>
-
         <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Contact</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
@@ -491,19 +480,21 @@
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   SPLIT PDF  —  single file, multiple page ranges
-   each range downloads as its own file
+   SPLIT PDF — client-side using pdf-lib
+   Each page range is extracted into its own PDF and
+   downloaded directly in the browser — no server needed.
    ═══════════════════════════════════════════════════════ */
 
-const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
 const MAX_BYTES = 32 * 1024 * 1024;
 
 // ── State ─────────────────────────────────────────────
-let pdfFile     = null;   // the single uploaded File
-let pdfPageCount = 0;     // total pages detected via PDF.js
-let ranges      = [];     // [{ id, start, end }]
-let idCtr     = 0;
-let dragSrcId = null;
+let pdfFile      = null;
+let pdfPageCount = 0;
+let ranges       = [];
+let idCtr        = 0;
+let dragSrcId    = null;
+// Cache the loaded pdf-lib doc so we don't re-parse on every split
+let cachedPdfLibDoc = null;
 
 // ── DOM ───────────────────────────────────────────────
 const dropZone      = document.getElementById('drop-zone');
@@ -525,64 +516,52 @@ fileInput.addEventListener('change', () => {
 });
 
 function changeFile() {
-  pdfPageCount = 0;
+  pdfPageCount = 0; cachedPdfLibDoc = null;
   document.getElementById('file-pages-display').textContent = '';
   fileInput.value = '';
   fileInput.click();
 }
 
 // ── Drop zone ─────────────────────────────────────────
-dropZone.addEventListener('dragover', e => {
-  e.preventDefault();
-  dropZone.classList.add('dragover');
-});
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
 dropZone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropZone.classList.remove('dragover');
+  e.preventDefault(); dropZone.classList.remove('dragover');
   const f = e.dataTransfer.files[0];
   if (f) loadFile(f);
 });
 
 // ── Load file ─────────────────────────────────────────
-function loadFile(f) {
+async function loadFile(f) {
   if (!f.name.toLowerCase().endsWith('.pdf') && f.type !== 'application/pdf') {
     showError('Please select a PDF file.'); return;
   }
-  if (f.size > MAX_BYTES) {
-    showError('File exceeds the 32 MB limit.'); return;
-  }
+  if (f.size > MAX_BYTES) { showError('File exceeds the 32 MB limit.'); return; }
 
-  pdfFile = f;
+  pdfFile = f; cachedPdfLibDoc = null;
   hideError();
 
-  // Show file info bar immediately with size
   document.getElementById('file-name-display').textContent  = f.name;
   document.getElementById('file-size-display').textContent  = formatBytes(f.size);
   document.getElementById('file-pages-display').textContent = '…';
 
-  // Switch views
   dropZone.style.display  = 'none';
   rangeArea.style.display = '';
 
-  // Count pages using PDF.js (reads locally — never leaves the browser)
+  // Count pages using PDF.js (fast, worker-based)
   const pagesEl = document.getElementById('file-pages-display');
-  const reader  = new FileReader();
-  reader.onload = async function(e) {
-    try {
-      pdfjsLib.GlobalWorkerOptions.workerSrc =
-        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      const typedArray = new Uint8Array(e.target.result);
-      const pdf        = await pdfjsLib.getDocument({ data: typedArray }).promise;
-      pagesEl.textContent = `${pdf.numPages} page${pdf.numPages !== 1 ? 's' : ''}`;
-      pdfPageCount = pdf.numPages;
-    } catch {
-      pagesEl.textContent = '';
-    }
-  };
-  reader.readAsArrayBuffer(f);
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  // Start with one default range if list is empty
+  try {
+    const buf = await f.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
+    pdfPageCount = pdf.numPages;
+    pagesEl.textContent = `${pdfPageCount} page${pdfPageCount !== 1 ? 's' : ''}`;
+  } catch {
+    pagesEl.textContent = '';
+  }
+
   if (ranges.length === 0) addRange();
   else renderRanges();
 }
@@ -591,14 +570,12 @@ function loadFile(f) {
 function addRange(startVal, endVal) {
   ranges.push({ id: ++idCtr, start: startVal || '', end: endVal || '' });
   renderRanges();
-  // Auto-focus the start input of the new row
   setTimeout(() => {
     const el = document.getElementById(`start-${idCtr}`);
     if (el) el.focus();
   }, 50);
 }
 
-// ── Clear all ranges ──────────────────────────────────
 function clearRanges() {
   ranges = [];
   renderRanges();
@@ -609,27 +586,21 @@ function clearRanges() {
 // ── Render ranges ─────────────────────────────────────
 function renderRanges() {
   rangeListEl.innerHTML = '';
-
-  ranges.forEach((r, idx) => {
-    rangeListEl.appendChild(buildRangeRow(r, idx));
-  });
+  ranges.forEach((r, idx) => rangeListEl.appendChild(buildRangeRow(r, idx)));
 
   const count = ranges.length;
   rangeCountLbl.textContent = `${count} range${count !== 1 ? 's' : ''}`;
 
-  // Summary of total pages across all valid ranges
   let totalPages = 0;
   ranges.forEach(r => {
-    const s = parseInt(r.start, 10);
-    const e = parseInt(r.end,   10);
+    const s = parseInt(r.start, 10), e = parseInt(r.end, 10);
     if (!isNaN(s) && !isNaN(e) && e >= s) totalPages += (e - s + 1);
   });
   rangePagesLbl.textContent = totalPages > 0 ? `${totalPages} pages total` : '';
-
   splitBtn.disabled = count === 0;
 }
 
-// ── Build a single range row ──────────────────────────
+// ── Build a range row ─────────────────────────────────
 function buildRangeRow(r, idx) {
   const li = document.createElement('li');
   li.className  = 'range-item';
@@ -641,77 +612,55 @@ function buildRangeRow(r, idx) {
     <span class="range-badge">${idx + 1}</span>
     <span class="range-label-text">Pages</span>
     <input type="number" class="range-input" id="start-${r.id}"
-           min="1" placeholder="Start" value="${esc(String(r.start))}"
-           title="Start page" />
+           min="1" placeholder="Start" value="${esc(String(r.start))}" title="Start page" />
     <span class="range-sep">–</span>
     <input type="number" class="range-input" id="end-${r.id}"
-           min="1" placeholder="End" value="${esc(String(r.end))}"
-           title="End page" />
+           min="1" placeholder="End" value="${esc(String(r.end))}" title="End page" />
     <div class="flex gap-1 flex-shrink-0">
-      <button class="move-btn" title="Move up"
-              onclick="moveRange(${r.id}, -1)"
-              ${idx === 0 ? 'disabled' : ''}>
+      <button class="move-btn" title="Move up" onclick="moveRange(${r.id}, -1)" ${idx === 0 ? 'disabled' : ''}>
         <i class="fas fa-chevron-up"></i>
       </button>
-      <button class="move-btn" title="Move down"
-              onclick="moveRange(${r.id}, 1)"
-              ${idx === ranges.length - 1 ? 'disabled' : ''}>
+      <button class="move-btn" title="Move down" onclick="moveRange(${r.id}, 1)" ${idx === ranges.length - 1 ? 'disabled' : ''}>
         <i class="fas fa-chevron-down"></i>
       </button>
     </div>
-    <button class="range-remove" title="Remove range"
-            onclick="removeRange(${r.id})">
+    <button class="range-remove" title="Remove range" onclick="removeRange(${r.id})">
       <i class="fas fa-times"></i>
     </button>
   `;
 
-  // Save values on input
   li.querySelector(`#start-${r.id}`).addEventListener('input', e => {
-    r.start = e.target.value;
-    validateRow(r);
-    updateTotals();
+    r.start = e.target.value; validateRow(r); updateTotals();
   });
   li.querySelector(`#end-${r.id}`).addEventListener('input', e => {
-    r.end = e.target.value;
-    validateRow(r);
-    updateTotals();
+    r.end = e.target.value; validateRow(r); updateTotals();
   });
-
-  // Allow Tab from Start to go to End, then Tab from End to add new row
   li.querySelector(`#end-${r.id}`).addEventListener('keydown', e => {
     if (e.key === 'Tab' && !e.shiftKey && idx === ranges.length - 1) {
-      e.preventDefault();
-      addRange();
+      e.preventDefault(); addRange();
     }
   });
 
-  // ── Drag events ───────────────────────────────────
+  // Drag events
   li.addEventListener('dragstart', e => {
-    dragSrcId = r.id;
-    li.classList.add('dragging');
+    dragSrcId = r.id; li.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', String(r.id));
   });
   li.addEventListener('dragend', () => {
     dragSrcId = null;
-    document.querySelectorAll('.range-item').forEach(el =>
-      el.classList.remove('dragging', 'drag-over')
-    );
+    document.querySelectorAll('.range-item').forEach(el => el.classList.remove('dragging', 'drag-over'));
   });
   li.addEventListener('dragover', e => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    e.preventDefault(); e.dataTransfer.dropEffect = 'move';
     if (dragSrcId !== null && dragSrcId !== r.id) {
       document.querySelectorAll('.range-item').forEach(el => el.classList.remove('drag-over'));
       li.classList.add('drag-over');
     }
   });
-  li.addEventListener('dragleave', e => {
-    if (!li.contains(e.relatedTarget)) li.classList.remove('drag-over');
-  });
+  li.addEventListener('dragleave', e => { if (!li.contains(e.relatedTarget)) li.classList.remove('drag-over'); });
   li.addEventListener('drop', e => {
-    e.preventDefault();
-    li.classList.remove('drag-over');
+    e.preventDefault(); li.classList.remove('drag-over');
     const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
     if (src && src !== r.id) reorderById(src, r.id);
   });
@@ -719,13 +668,11 @@ function buildRangeRow(r, idx) {
   return li;
 }
 
-// ── Validate a single row inline ──────────────────────
 function validateRow(r) {
   const sEl = document.getElementById(`start-${r.id}`);
   const eEl = document.getElementById(`end-${r.id}`);
   if (!sEl || !eEl) return;
-  const s = parseInt(sEl.value, 10);
-  const e = parseInt(eEl.value, 10);
+  const s = parseInt(sEl.value, 10), e = parseInt(eEl.value, 10);
   sEl.classList.toggle('invalid', sEl.value !== '' && (isNaN(s) || s < 1));
   eEl.classList.toggle('invalid', eEl.value !== '' && sEl.value !== '' && !isNaN(s) && !isNaN(e) && e < s);
 }
@@ -733,14 +680,12 @@ function validateRow(r) {
 function updateTotals() {
   let totalPages = 0;
   ranges.forEach(r => {
-    const s = parseInt(r.start, 10);
-    const e = parseInt(r.end, 10);
+    const s = parseInt(r.start, 10), e = parseInt(r.end, 10);
     if (!isNaN(s) && !isNaN(e) && e >= s) totalPages += (e - s + 1);
   });
   rangePagesLbl.textContent = totalPages > 0 ? `${totalPages} pages total` : '';
 }
 
-// ── Reorder helpers ───────────────────────────────────
 function reorderById(srcId, targetId) {
   const si = ranges.findIndex(x => x.id === srcId);
   const ti = ranges.findIndex(x => x.id === targetId);
@@ -763,12 +708,16 @@ function removeRange(id) {
   renderRanges();
 }
 
-// ── Split & download ──────────────────────────────────
+// ── Split & download (client-side with pdf-lib) ───────
 async function doSplit() {
   if (!pdfFile) { showError('No file loaded.'); return; }
   if (!ranges.length) { showError('Please add at least one page range.'); return; }
 
-  // Collect current DOM values
+  if (typeof PDFLib === 'undefined') {
+    showError('PDF library not loaded yet — please wait a moment and try again.'); return;
+  }
+
+  // Sync current DOM values into state
   ranges.forEach(r => {
     const sEl = document.getElementById(`start-${r.id}`);
     const eEl = document.getElementById(`end-${r.id}`);
@@ -778,42 +727,47 @@ async function doSplit() {
 
   // Validate all ranges
   for (const r of ranges) {
-    const s = parseInt(r.start, 10);
-    const e = parseInt(r.end,   10);
-    if (isNaN(s) || s < 1) {
-      showError(`Range ${ranges.indexOf(r) + 1}: Start page must be a valid number ≥ 1.`);
-      return;
-    }
-    if (isNaN(e) || e < 1) {
-      showError(`Range ${ranges.indexOf(r) + 1}: End page must be a valid number ≥ 1.`);
-      return;
-    }
-    if (e < s) {
-      showError(`Range ${ranges.indexOf(r) + 1}: End page (${e}) must be ≥ Start page (${s}).`);
-      return;
+    const idx = ranges.indexOf(r) + 1;
+    const s = parseInt(r.start, 10), e = parseInt(r.end, 10);
+    if (isNaN(s) || s < 1) { showError(`Range ${idx}: Start page must be ≥ 1.`); return; }
+    if (isNaN(e) || e < 1) { showError(`Range ${idx}: End page must be ≥ 1.`); return; }
+    if (e < s)             { showError(`Range ${idx}: End page (${e}) must be ≥ Start page (${s}).`); return; }
+    if (pdfPageCount && e > pdfPageCount) {
+      showError(`Range ${idx}: End page (${e}) exceeds the PDF's ${pdfPageCount} pages.`); return;
     }
   }
 
   // Build progress UI
   progressList.innerHTML = '';
-  const progressItems = ranges.map((r, idx) => {
+  ranges.forEach((r, i) => {
     const div = document.createElement('div');
     div.className = 'progress-item';
     div.id = `prog-${r.id}`;
     div.innerHTML = `
       <span class="dot dot-pending" id="dot-${r.id}"></span>
-      <span class="text-gray-600" id="prog-text-${r.id}">
-        Range ${idx + 1}: pages ${r.start}–${r.end}
-      </span>
-    `;
+      <span class="text-gray-600" id="prog-text-${r.id}">Range ${i + 1}: pages ${r.start}–${r.end}</span>`;
     progressList.appendChild(div);
-    return div;
   });
 
   splitProgress.classList.remove('hidden');
   splitLoad.classList.remove('hidden');
   splitBtn.disabled = true;
   hideError();
+
+  const { PDFDocument } = PDFLib;
+
+  // Load the source PDF once and cache it
+  if (!cachedPdfLibDoc) {
+    try {
+      const arrayBuffer = await pdfFile.arrayBuffer();
+      cachedPdfLibDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    } catch (err) {
+      showError('Could not read PDF: ' + err.message);
+      splitLoad.classList.add('hidden');
+      splitBtn.disabled = false;
+      return;
+    }
+  }
 
   let errorCount = 0;
 
@@ -822,31 +776,36 @@ async function doSplit() {
     const dot      = document.getElementById(`dot-${r.id}`);
     const progText = document.getElementById(`prog-text-${r.id}`);
 
-    loadingText.textContent = `Splitting range ${i + 1} of ${ranges.length}…`;
-    dot.className = 'dot dot-running';
+    loadingText.textContent = `Processing range ${i + 1} of ${ranges.length}…`;
+    if (dot) { dot.className = 'dot dot-running'; }
 
     try {
-      const fd = new FormData();
-      fd.append('file',  pdfFile);
-      fd.append('start', r.start);
-      fd.append('end',   r.end);
+      const s = parseInt(r.start, 10);
+      const e = parseInt(r.end,   10);
 
-      const res = await fetch(`${API}/split`, { method: 'POST', body: fd });
-      if (!res.ok) throw new Error(`Server error ${res.status}`);
+      // Build a new PDF for this range
+      const newPdf    = await PDFDocument.create();
+      const pageIdxs  = Array.from({ length: e - s + 1 }, (_, k) => s - 1 + k);
+      const copied    = await newPdf.copyPages(cachedPdfLibDoc, pageIdxs);
+      copied.forEach(page => newPdf.addPage(page));
 
-      const blob = await res.blob();
-      const name = ranges.length === 1
-        ? `split_p${r.start}-p${r.end}_${pdfFile.name}`
-        : `split_${i + 1}_p${r.start}-p${r.end}_${pdfFile.name}`;
+      const pdfBytes = await newPdf.save();
+      const blob     = new Blob([pdfBytes], { type: 'application/pdf' });
+      const baseName = pdfFile.name.replace(/\.pdf$/i, '');
+      const fileName = ranges.length === 1
+        ? `split_p${s}-p${e}_${baseName}.pdf`
+        : `split_${i + 1}_p${s}-p${e}_${baseName}.pdf`;
 
-      downloadBlob(blob, name);
+      downloadBlob(blob, fileName);
 
-      dot.className = 'dot dot-done';
-      progText.innerHTML = `<span class="text-green-600 font-medium">✓ Range ${i + 1}: pages ${r.start}–${r.end} — downloaded</span>`;
+      if (dot)      dot.className = 'dot dot-done';
+      if (progText) progText.innerHTML =
+        `<span class="text-green-600 font-medium">✓ Range ${i + 1}: pages ${s}–${e} — downloaded (${formatBytes(blob.size)})</span>`;
 
     } catch (err) {
-      dot.className = 'dot dot-error';
-      progText.innerHTML = `<span class="text-red-500">✗ Range ${i + 1}: pages ${r.start}–${r.end} — ${esc(err.message)}</span>`;
+      if (dot)      dot.className = 'dot dot-error';
+      if (progText) progText.innerHTML =
+        `<span class="text-red-500">✗ Range ${i + 1}: pages ${r.start}–${r.end} — ${esc(err.message)}</span>`;
       errorCount++;
     }
   }
@@ -855,11 +814,8 @@ async function doSplit() {
   splitBtn.disabled = false;
   loadingText.textContent = 'Splitting… please wait';
 
-  if (errorCount === 0) {
-    hideError();
-  } else {
-    showError(`${errorCount} range(s) failed. Check the progress log above.`);
-  }
+  if (errorCount > 0) showError(`${errorCount} range(s) failed. See the log above.`);
+  else hideError();
 }
 
 // ── Utilities ─────────────────────────────────────────
@@ -872,8 +828,8 @@ function downloadBlob(blob, filename) {
 }
 
 function formatBytes(b) {
-  if (b < 1024)          return b + ' B';
-  if (b < 1024 * 1024)   return (b / 1024).toFixed(1) + ' KB';
+  if (b < 1024)        return b + ' B';
+  if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
   return (b / (1024 * 1024)).toFixed(2) + ' MB';
 }
 
@@ -884,18 +840,14 @@ function esc(s) {
 function showError(msg) { splitErr.textContent = msg; splitErr.classList.remove('hidden'); }
 function hideError()    { splitErr.classList.add('hidden'); }
 
-// ── Navbar helpers ────────────────────────────────────
-function toggleMobileMenu() {
-  document.getElementById('mobile-menu').classList.toggle('open');
-}
+function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
 function toggleMobileTools() {
   document.getElementById('mobile-tool-links').classList.toggle('open');
   const c = document.getElementById('tools-chevron');
-  c.classList.toggle('fa-chevron-down');
-  c.classList.toggle('fa-chevron-up');
+  c.classList.toggle('fa-chevron-down'); c.classList.toggle('fa-chevron-up');
 }
 document.addEventListener('click', e => {
-  const menu      = document.getElementById('mobile-menu');
+  const menu = document.getElementById('mobile-menu');
   const hamburger = document.getElementById('hamburger');
   if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
     menu.classList.remove('open');
