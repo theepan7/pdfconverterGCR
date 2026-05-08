@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3948770444337260" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E4B22CRPV6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-E4B22CRPV6');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Annotate PDF Online Free – Add Highlights, Comments & Underlines | Mini PDF Tools</title>
+  <meta name="description" content="Annotate PDF files online for free. Add highlights, sticky note comments, underlines, and strikethroughs to any page. No signup, no watermark, 100% in your browser.">
+  <meta name="keywords" content="annotate PDF, highlight PDF, add comments to PDF, PDF sticky note, underline PDF, strikethrough PDF, PDF annotation online free">
+  <meta name="author" content="Mini PDF Tools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://minipdftools.com/annotate-pdf.html">
+  <meta property="og:title" content="Annotate PDF Online Free | Mini PDF Tools">
+  <meta property="og:description" content="Add highlights, comments, underlines, and strikethroughs to any PDF page. Free, instant, no signup.">
+  <meta property="og:url" content="https://minipdftools.com/annotate-pdf.html">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Annotate PDF Online – Mini PDF Tools",
+    "url": "https://minipdftools.com/annotate-pdf.html",
+    "description": "Free online tool to add highlights, comments, underlines and strikethroughs to PDF files.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
+    .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
+    .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
+    .dropdown { position:relative; }
+    .dropdown-menu { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#fff; border-radius:0.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.18); min-width:240px; z-index:100; overflow:hidden; }
+    .dropdown:hover .dropdown-menu { display:block; }
+    .dropdown-section { padding:0.5rem 0; }
+    .dropdown-section-label { font-size:0.68rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.08em; padding:0.4rem 1.1rem 0.2rem; }
+    .dropdown-item { display:flex; align-items:center; gap:0.6rem; padding:0.6rem 1.1rem; color:#374151; font-size:0.875rem; font-weight:500; transition:background 0.15s; text-decoration:none; }
+    .dropdown-item:hover { background:#f8fafc; }
+    .dropdown-divider { border-top:1px solid #f1f5f9; margin:0.25rem 0; }
+    .site-header { background: linear-gradient(135deg, #1e293b 0%, #312e81 60%, #4338ca 100%); }
+    .site-footer { background:linear-gradient(135deg,#1e293b,#312e81); color:rgba(255,255,255,0.75); }
+    .footer-link { color:rgba(255,255,255,0.65); transition:color 0.2s; font-size:0.875rem; text-decoration:none; }
+    .footer-link:hover { color:#fff; }
+    .footer-divider { border-color:rgba(255,255,255,0.12); }
+    .social-icon { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.8); transition:background 0.2s,color 0.2s; font-size:0.9rem; text-decoration:none; }
+    .social-icon:hover { background:rgba(255,255,255,0.22); color:#fff; }
+    #mobile-menu { display:none; }
+    #mobile-menu.open { display:block; }
+    .mobile-tool-links { display:none; }
+    .mobile-tool-links.open { display:block; }
+
+    /* Drop zone */
+    .drop-zone {
+      border: 2px dashed #6ee7b7;
+      border-radius: 1rem;
+      background: #f0fdf4;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      background: #dcfce7;
+      border-color: #059669;
+      transform: scale(1.005);
+    }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 0.85rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.5rem;
+      background: #fff;
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tool-btn:hover { border-color: #94a3b8; background: #f1f5f9; }
+    .tool-btn.active { border-color: currentColor; }
+
+    .tool-btn.highlight { color: #92400e; }
+    .tool-btn.highlight.active { background: #fef9c3; border-color: #f59e0b; }
+    .tool-btn.underline { color: #1d4ed8; }
+    .tool-btn.underline.active { background: #eff6ff; border-color: #3b82f6; }
+    .tool-btn.strikethrough { color: #9f1239; }
+    .tool-btn.strikethrough.active { background: #fff1f2; border-color: #f43f5e; }
+    .tool-btn.comment { color: #065f46; }
+    .tool-btn.comment.active { background: #f0fdf4; border-color: #10b981; }
+
+    .tool-divider { width: 1px; height: 24px; background: #e2e8f0; margin: 0 0.2rem; flex-shrink: 0; }
+
+    /* Color picker row */
+    .color-swatch {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer; transition: transform 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.active { border-color: #1e293b; transform: scale(1.15); }
+
+    /* Page viewer */
+    #page-viewer {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .page-wrapper {
+      position: relative;
+      display: inline-block;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+    .page-wrapper canvas { display: block; }
+
+    /* Selection overlay drawn by user */
+    .selection-rect {
+      position: absolute;
+      border: 2px dashed #f59e0b;
+      background: rgba(253,224,71,0.2);
+      pointer-events: none;
+    }
+
+    /* Rendered annotation overlays */
+    .ann-overlay {
+      position: absolute;
+      pointer-events: none;
+    }
+    .ann-highlight { background: rgba(253,224,71,0.45); }
+    .ann-underline {
+      background: transparent;
+      border-bottom: 2.5px solid #3b82f6;
+    }
+    .ann-strikethrough {
+      background: transparent;
+      border-bottom: 2.5px solid #f43f5e;
+      transform-origin: left center;
+    }
+    /* Strikethrough drawn at vertical center */
+    .ann-strikethrough-line {
+      position: absolute;
+      height: 2.5px;
+      background: #f43f5e;
+    }
+    .ann-comment-dot {
+      position: absolute;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #10b981;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 0.6rem;
+      cursor: pointer;
+      pointer-events: all;
+      box-shadow: 0 2px 8px rgba(16,185,129,0.4);
+      z-index: 10;
+    }
+
+    /* Page nav */
+    .page-nav {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.85rem; color: #64748b;
+    }
+    .page-nav-btn {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1px solid #e2e8f0; background: #fff;
+      color: #475569; cursor: pointer; font-size: 0.8rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .page-nav-btn:hover:not(:disabled) { background: #f1f5f9; border-color: #94a3b8; }
+    .page-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Annotation sidebar list */
+    .ann-list-item {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #e2e8f0; border-radius: 0.6rem;
+      background: #fff; margin-bottom: 0.4rem;
+      font-size: 0.8rem;
+    }
+    .ann-type-badge {
+      font-size: 0.65rem; font-weight: 700; border-radius: 4px;
+      padding: 2px 6px; white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+    }
+    .badge-highlight    { background:#fef9c3; color:#92400e; }
+    .badge-underline    { background:#eff6ff; color:#1d4ed8; }
+    .badge-strikethrough{ background:#fff1f2; color:#9f1239; }
+    .badge-comment      { background:#f0fdf4; color:#065f46; }
+
+    .ann-remove-btn {
+      margin-left: auto; background: none; border: none;
+      color: #cbd5e1; cursor: pointer; font-size: 0.75rem;
+      padding: 2px 4px; border-radius: 3px; flex-shrink: 0;
+      transition: color 0.15s;
+    }
+    .ann-remove-btn:hover { color: #ef4444; }
+
+    /* Comment modal */
+    #comment-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+    #comment-modal.hidden { display: none; }
+    .modal-box {
+      background: #fff; border-radius: 1rem; padding: 1.5rem;
+      width: 90%; max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    /* Buttons */
+    .btn-save {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white; font-weight: 700; font-size: 1.05rem;
+      padding: 0.85rem 2.5rem; border-radius: 999px; border: none;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(5,150,105,0.32);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    .btn-save:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(5,150,105,0.38); }
+    .btn-save:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; display: inline-block; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .ann-list-item { animation: fadeIn 0.15s ease; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="navbar w-full shadow-lg sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 text-white" style="text-decoration:none">
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+          <i class="fas fa-file-pdf text-white text-sm"></i>
+        </div>
+        <span class="font-bold text-lg tracking-tight">Mini PDF Tools</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="/" class="nav-link"><i class="fas fa-home mr-1 text-xs"></i> Home</a>
+        <div class="dropdown">
+          <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
+            <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
+          </button>
+          <div class="dropdown-menu" style="min-width:240px">
+            <div class="dropdown-section">
+              <div class="dropdown-section-label">Organise</div>
+              <a href="/merge-pdf.html"         class="dropdown-item"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
+              <a href="/split-pdf.html"          class="dropdown-item"><i class="fas fa-cut text-red-500 w-4"></i> Split PDF</a>
+              <a href="/rotate-pdf.html"         class="dropdown-item"><i class="fas fa-sync-alt text-orange-500 w-4"></i> Rotate PDF</a>
+              <a href="/delete-pdf-pages.html"   class="dropdown-item"><i class="fas fa-trash-alt text-yellow-600 w-4"></i> Delete Pages</a>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-section">
+              <div class="dropdown-section-label">Optimise</div>
+              <a href="/compress-pdf.html"       class="dropdown-item"><i class="fas fa-compress-alt text-blue-500 w-4"></i> Compress PDF</a>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-section">
+              <div class="dropdown-section-label">Convert &amp; Annotate</div>
+              <a href="/image-to-pdf.html"       class="dropdown-item"><i class="fas fa-image text-purple-500 w-4"></i> Image to PDF</a>
+              <a href="/pdf-to-jpg.html"         class="dropdown-item"><i class="fas fa-file-image text-indigo-500 w-4"></i> PDF to JPG</a>
+              <a href="/annotate-pdf.html"       class="dropdown-item"><i class="fas fa-highlighter text-green-500 w-4"></i> Annotate PDF</a>
+            </div>
+          </div>
+        </div>
+        <a href="/#about"   class="nav-link">About</a>
+        <a href="/#contact" class="nav-link">Contact</a>
+      </div>
+      <button id="hamburger" class="md:hidden text-white p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars text-lg"></i>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden px-4 pb-4" style="background:#312e81">
+      <a href="/" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-home mr-2"></i>Home</a>
+      <button onclick="toggleMobileTools()" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
+        <span><i class="fas fa-tools mr-2"></i>Tools</span>
+        <i class="fas fa-chevron-down text-xs" id="tools-chevron"></i>
+      </button>
+      <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+        <a href="/merge-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
+        <a href="/split-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
+        <a href="/rotate-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
+        <a href="/delete-pdf-pages.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-trash-alt mr-2"></i>Delete Pages</a>
+        <a href="/compress-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
+        <a href="/image-to-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
+        <a href="/pdf-to-jpg.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
+        <a href="/annotate-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-highlighter mr-2"></i>Annotate PDF</a>
+      </div>
+      <a href="/#about"   class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-info-circle mr-2"></i>About</a>
+      <a href="/#contact" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-envelope mr-2"></i>Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="site-header w-full py-8 px-6 text-white">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-3xl font-extrabold mb-2">Annotate PDF – Free Online</h1>
+      <p class="text-lg font-light opacity-80">Add highlights, comments, underlines and strikethroughs to any PDF — all in your browser.</p>
+    </div>
+  </header>
+
+  <div class="w-full max-w-4xl mx-auto px-4 pt-4 text-sm text-gray-500">
+    <a href="/" class="hover:text-green-600">Home</a> &rsaquo;
+    <span class="text-gray-700 font-medium">Annotate PDF</span>
+  </div>
+
+  <!-- TOOL -->
+  <main class="flex-1 w-full flex flex-col items-center py-8 px-4">
+    <div class="w-full max-w-4xl">
+
+      <!-- Drop zone -->
+      <div id="drop-zone-wrap" class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 mb-6">
+        <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input').click()">
+          <i class="fas fa-highlighter text-emerald-400 text-5xl mb-4 block"></i>
+          <p class="text-gray-700 font-semibold text-lg mb-1">Drop your PDF here or click to browse</p>
+          <p class="text-gray-400 text-sm">One PDF file — max 32 MB — processed entirely in your browser</p>
+        </div>
+        <input type="file" id="file-input" accept=".pdf" style="display:none" />
+      </div>
+
+      <!-- Editor (hidden until file loaded) -->
+      <div id="editor-area" style="display:none">
+        <div class="flex flex-col lg:flex-row gap-4">
+
+          <!-- LEFT: page viewer -->
+          <div class="flex-1 min-w-0">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-4">
+
+              <!-- File bar -->
+              <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
+                <div class="flex items-center gap-2 min-w-0">
+                  <i class="fas fa-file-pdf text-red-400 flex-shrink-0"></i>
+                  <span id="editor-file-name" class="font-semibold text-gray-800 text-sm truncate"></span>
+                  <span id="editor-file-meta" class="text-xs text-gray-400 flex-shrink-0"></span>
+                </div>
+                <button onclick="changeFile()" class="text-xs text-indigo-500 hover:text-indigo-700 border border-indigo-200 rounded px-2 py-1 flex-shrink-0 transition">
+                  <i class="fas fa-exchange-alt mr-1"></i>Change
+                </button>
+              </div>
+
+              <!-- Toolbar -->
+              <div class="toolbar">
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider mr-1">Tool:</span>
+
+                <button id="tool-highlight" class="tool-btn highlight active" onclick="setTool('highlight')" title="Highlight">
+                  <i class="fas fa-highlighter"></i> Highlight
+                </button>
+                <button id="tool-underline" class="tool-btn underline" onclick="setTool('underline')" title="Underline">
+                  <i class="fas fa-underline"></i> Underline
+                </button>
+                <button id="tool-strikethrough" class="tool-btn strikethrough" onclick="setTool('strikethrough')" title="Strikethrough">
+                  <i class="fas fa-strikethrough"></i> Strikethrough
+                </button>
+                <button id="tool-comment" class="tool-btn comment" onclick="setTool('comment')" title="Comment">
+                  <i class="fas fa-comment-dots"></i> Comment
+                </button>
+
+                <div class="tool-divider"></div>
+                <span class="text-xs text-gray-400">Color:</span>
+                <div id="color-swatches" class="flex gap-1 items-center"></div>
+              </div>
+
+              <!-- Page navigation -->
+              <div class="flex items-center justify-between mb-3">
+                <div class="page-nav">
+                  <button class="page-nav-btn" id="prev-btn" onclick="goToPage(currentPage - 1)" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                  <span>Page <strong id="page-display">1</strong> of <strong id="total-pages">1</strong></span>
+                  <button class="page-nav-btn" id="next-btn" onclick="goToPage(currentPage + 1)" disabled>
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </div>
+                <p class="text-xs text-gray-400 hidden sm:block">Click &amp; drag on the page to annotate</p>
+              </div>
+
+              <!-- Canvas area -->
+              <div id="page-viewer">
+                <div id="thumb-loading" class="py-16 text-center text-gray-400">
+                  <svg class="spinner w-8 h-8 mx-auto mb-2 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+                  </svg>
+                  Rendering page…
+                </div>
+                <div id="page-wrapper" class="page-wrapper" style="display:none">
+                  <canvas id="pdf-canvas"></canvas>
+                  <div id="ann-layer"></div>
+                  <!-- drag selection rect -->
+                  <div id="sel-rect" class="selection-rect" style="display:none"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- RIGHT: annotation list + save -->
+          <div class="w-full lg:w-72 flex-shrink-0 flex flex-col gap-4">
+
+            <!-- Annotations list -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-4">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="font-semibold text-gray-700 text-sm">
+                  Annotations <span id="ann-count" class="ml-1 text-xs bg-emerald-100 text-emerald-700 rounded-full px-2 py-0.5 font-bold">0</span>
+                </h3>
+                <button onclick="clearAllAnnotations()" class="text-xs text-red-400 hover:text-red-600 bg-transparent border-0 cursor-pointer transition">
+                  <i class="fas fa-trash-alt mr-1"></i>Clear all
+                </button>
+              </div>
+              <div id="ann-list">
+                <p id="ann-empty" class="text-xs text-gray-400 text-center py-4">No annotations yet.<br>Select a tool and drag on the page.</p>
+              </div>
+            </div>
+
+            <!-- Error -->
+            <div id="save-error" class="hidden text-red-500 font-semibold text-sm bg-red-50 border border-red-200 rounded-xl px-4 py-3"></div>
+
+            <!-- Loading -->
+            <div id="save-loading" class="hidden flex items-center gap-2 text-emerald-700 font-semibold text-sm bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">
+              <svg class="spinner w-4 h-4 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+              </svg>
+              Saving annotations…
+            </div>
+
+            <!-- Save button -->
+            <button id="save-btn" class="btn-save w-full" onclick="doSave()">
+              <i class="fas fa-download mr-2"></i>Save Annotated PDF
+            </button>
+
+            <p class="text-xs text-gray-400 text-center">All processing happens in your browser. Your file is never uploaded.</p>
+          </div>
+        </div>
+      </div><!-- /editor-area -->
+
+      <!-- Steps hint -->
+      <div class="mt-5 flex flex-col sm:flex-row gap-3 text-sm text-gray-500 justify-center text-center">
+        <span><span class="font-bold text-emerald-500">1.</span> Upload your PDF</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-emerald-500">2.</span> Pick a tool &amp; drag on the page</span>
+        <span class="hidden sm:block text-gray-300">•</span>
+        <span><span class="font-bold text-emerald-500">3.</span> Save annotated PDF</span>
+      </div>
+
+      <section class="mt-12 px-1">
+        <h2 class="text-xl font-bold text-gray-800 mb-3">How to Annotate a PDF Online</h2>
+        <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
+          <li>Upload your PDF by clicking the drop zone or dragging a file onto it.</li>
+          <li>Choose an annotation tool from the toolbar: Highlight, Underline, Strikethrough, or Comment.</li>
+          <li>Click and drag on the page to place your annotation. For comments, a text box will appear.</li>
+          <li>Navigate between pages using the arrow buttons and annotate as many pages as needed.</li>
+          <li>Click <strong>Save Annotated PDF</strong> — your file downloads instantly with all annotations baked in.</li>
+        </ol>
+        <h2 class="text-xl font-bold text-gray-800 mb-3">About PDF Annotation</h2>
+        <p class="text-gray-600 mb-4">Highlights, underlines, and strikethroughs are drawn directly onto each page as coloured shapes. Comments are embedded as sticky notes visible in any PDF reader. No data ever leaves your device.</p>
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a href="/merge-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-object-group mr-1"></i>Merge PDFs</a>
+          <a href="/split-pdf.html"    class="text-indigo-600 hover:underline text-sm"><i class="fas fa-cut mr-1"></i>Split PDF</a>
+          <a href="/compress-pdf.html" class="text-indigo-600 hover:underline text-sm"><i class="fas fa-compress-alt mr-1"></i>Compress PDF</a>
+          <a href="/rotate-pdf.html"   class="text-indigo-600 hover:underline text-sm"><i class="fas fa-sync-alt mr-1"></i>Rotate PDF</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer w-full mt-auto">
+    <div class="max-w-6xl mx-auto px-6 py-10">
+      <div class="flex flex-col md:flex-row justify-between gap-8 mb-8">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
+            <span class="text-white font-bold text-lg">Mini PDF Tools</span>
+          </div>
+          <p class="text-sm max-w-xs" style="color:rgba(255,255,255,0.6)">Free, fast, and secure PDF tools. No signup required. Your files are never stored on our servers.</p>
+          <div class="flex gap-2 mt-1">
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div>
+          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Tools</p>
+          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
+            <li><a href="/merge-pdf.html"       class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
+            <li><a href="/split-pdf.html"        class="footer-link"><i class="fas fa-cut mr-2 text-xs"></i>Split PDF</a></li>
+            <li><a href="/rotate-pdf.html"       class="footer-link"><i class="fas fa-sync-alt mr-2 text-xs"></i>Rotate PDF</a></li>
+            <li><a href="/delete-pdf-pages.html" class="footer-link"><i class="fas fa-trash-alt mr-2 text-xs"></i>Delete Pages</a></li>
+            <li><a href="/annotate-pdf.html"     class="footer-link"><i class="fas fa-highlighter mr-2 text-xs"></i>Annotate PDF</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Convert</p>
+          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
+            <li><a href="/compress-pdf.html" class="footer-link"><i class="fas fa-compress-alt mr-2 text-xs"></i>Compress PDF</a></li>
+            <li><a href="/image-to-pdf.html" class="footer-link"><i class="fas fa-image mr-2 text-xs"></i>Image to PDF</a></li>
+            <li><a href="/pdf-to-jpg.html"   class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Contact</p>
+          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
+            <li><a href="mailto:support@minipdftools.com" class="footer-link"><i class="fas fa-envelope mr-2 text-xs"></i>support@minipdftools.com</a></li>
+            <li><a href="#" class="footer-link"><i class="fas fa-shield-alt mr-2 text-xs"></i>Privacy Policy</a></li>
+            <li><a href="#" class="footer-link"><i class="fas fa-file-contract mr-2 text-xs"></i>Terms of Use</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider mb-6" />
+      <div class="flex flex-col md:flex-row justify-between items-center gap-2 text-xs" style="color:rgba(255,255,255,0.45)">
+        <p>Your document privacy is our top priority. Files are never stored on our servers.</p>
+        <p>&copy; 2025 Mini PDF Tools. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Comment modal -->
+  <div id="comment-modal" class="hidden">
+    <div class="modal-box">
+      <h3 class="font-bold text-gray-800 mb-3"><i class="fas fa-comment-dots text-emerald-500 mr-2"></i>Add Comment</h3>
+      <textarea id="comment-text" class="w-full border border-gray-200 rounded-lg p-3 text-sm resize-none focus:outline-none focus:border-emerald-400" rows="4" placeholder="Type your comment here…"></textarea>
+      <div class="flex gap-2 mt-3 justify-end">
+        <button onclick="cancelComment()" class="px-4 py-2 text-sm border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition">Cancel</button>
+        <button onclick="confirmComment()" class="px-4 py-2 text-sm bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition">Add Comment</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   ANNOTATE PDF — 100% client-side
+   PDF.js renders pages for display
+   pdf-lib writes annotations into the final PDF:
+     • Highlight  → filled yellow rectangle (semi-transparent)
+     • Underline  → thin blue line at bottom of selection
+     • Strikethrough → red line at midpoint of selection
+     • Comment    → text annotation (sticky note) embedded as
+                    a PDF text annotation with the author's note
+   ═══════════════════════════════════════════════════════ */
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const MAX_BYTES = 32 * 1024 * 1024;
+
+// ── Colour palettes per tool ──────────────────────────
+const TOOL_COLORS = {
+  highlight:     ['#fde047','#86efac','#93c5fd','#f9a8d4','#fca5a5'],
+  underline:     ['#3b82f6','#8b5cf6','#ec4899','#10b981','#f97316'],
+  strikethrough: ['#f43f5e','#6366f1','#0ea5e9','#84cc16','#f59e0b'],
+  comment:       ['#10b981','#f59e0b','#6366f1','#f43f5e','#0ea5e9'],
+};
+
+// ── State ─────────────────────────────────────────────
+let pdfFile       = null;
+let pdfJsDoc      = null;    // PDF.js doc
+let totalPages    = 0;
+let currentPage   = 1;
+let currentTool   = 'highlight';
+let currentColor  = '#fde047';
+let annotations   = [];      // [{ id, type, page, x, y, w, h, color, text? }]
+let annIdCtr      = 0;
+let renderScale   = 1.5;     // canvas render scale
+let pageViewport  = null;    // current page viewport
+
+// drag state
+let isDragging = false;
+let dragStart  = { x: 0, y: 0 };
+
+// comment pending placement
+let pendingCommentPos = null;
+
+// ── DOM ───────────────────────────────────────────────
+const dropZoneWrap  = document.getElementById('drop-zone-wrap');
+const dropZone      = document.getElementById('drop-zone');
+const fileInput     = document.getElementById('file-input');
+const editorArea    = document.getElementById('editor-area');
+const pdfCanvas     = document.getElementById('pdf-canvas');
+const annLayer      = document.getElementById('ann-layer');
+const selRect       = document.getElementById('sel-rect');
+const pageWrapper   = document.getElementById('page-wrapper');
+const thumbLoading  = document.getElementById('thumb-loading');
+const pageDisplay   = document.getElementById('page-display');
+const totalPagesEl  = document.getElementById('total-pages');
+const prevBtn       = document.getElementById('prev-btn');
+const nextBtn       = document.getElementById('next-btn');
+const annList       = document.getElementById('ann-list');
+const annEmpty      = document.getElementById('ann-empty');
+const annCountEl    = document.getElementById('ann-count');
+const saveError     = document.getElementById('save-error');
+const saveLoading   = document.getElementById('save-loading');
+const saveBtn       = document.getElementById('save-btn');
+const commentModal  = document.getElementById('comment-modal');
+const commentText   = document.getElementById('comment-text');
+
+// ── File input ────────────────────────────────────────
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  const f = e.dataTransfer.files[0]; if (f) loadFile(f);
+});
+
+async function loadFile(f) {
+  if (!f.name.toLowerCase().endsWith('.pdf') && f.type !== 'application/pdf') {
+    alert('Please select a PDF file.'); return;
+  }
+  if (f.size > MAX_BYTES) { alert('File exceeds 32 MB.'); return; }
+
+  pdfFile = f; annotations = []; currentPage = 1;
+  document.getElementById('editor-file-name').textContent = f.name;
+  document.getElementById('editor-file-meta').textContent = `— ${formatBytes(f.size)}`;
+
+  dropZoneWrap.style.display = 'none';
+  editorArea.style.display   = '';
+  thumbLoading.style.display = '';
+  pageWrapper.style.display  = 'none';
+
+  const buf = await f.arrayBuffer();
+  pdfJsDoc  = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
+  totalPages = pdfJsDoc.numPages;
+  totalPagesEl.textContent = totalPages;
+
+  renderPage(1);
+  renderAnnList();
+  buildColorSwatches();
+}
+
+function changeFile() {
+  pdfFile = null; pdfJsDoc = null; annotations = []; currentPage = 1;
+  dropZoneWrap.style.display = '';
+  editorArea.style.display   = 'none';
+  fileInput.value = '';
+}
+
+// ── Page rendering ────────────────────────────────────
+async function renderPage(num) {
+  thumbLoading.style.display = '';
+  pageWrapper.style.display  = 'none';
+
+  const page = await pdfJsDoc.getPage(num);
+  pageViewport = page.getViewport({ scale: renderScale });
+
+  pdfCanvas.width  = pageViewport.width;
+  pdfCanvas.height = pageViewport.height;
+
+  const ctx = pdfCanvas.getContext('2d');
+  await page.render({ canvasContext: ctx, viewport: pageViewport }).promise;
+
+  thumbLoading.style.display = 'none';
+  pageWrapper.style.display  = '';
+
+  currentPage = num;
+  pageDisplay.textContent = num;
+  prevBtn.disabled = num <= 1;
+  nextBtn.disabled = num >= totalPages;
+
+  renderAnnOverlays();
+}
+
+function goToPage(num) {
+  if (num < 1 || num > totalPages) return;
+  renderPage(num);
+}
+
+// ── Tool selection ────────────────────────────────────
+function setTool(tool) {
+  currentTool = tool;
+  ['highlight','underline','strikethrough','comment'].forEach(t => {
+    document.getElementById(`tool-${t}`).classList.toggle('active', t === tool);
+  });
+  currentColor = TOOL_COLORS[tool][0];
+  buildColorSwatches();
+}
+
+// ── Color swatches ────────────────────────────────────
+function buildColorSwatches() {
+  const wrap = document.getElementById('color-swatches');
+  wrap.innerHTML = '';
+  TOOL_COLORS[currentTool].forEach(color => {
+    const div = document.createElement('div');
+    div.className = 'color-swatch' + (color === currentColor ? ' active' : '');
+    div.style.background = color;
+    div.title = color;
+    div.onclick = () => { currentColor = color; buildColorSwatches(); };
+    wrap.appendChild(div);
+  });
+}
+
+// ── Mouse drag on page ────────────────────────────────
+pageWrapper.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  const rect = pageWrapper.getBoundingClientRect();
+  dragStart = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  isDragging = true;
+  selRect.style.display = 'block';
+  selRect.style.left = dragStart.x + 'px';
+  selRect.style.top  = dragStart.y + 'px';
+  selRect.style.width  = '0';
+  selRect.style.height = '0';
+});
+
+pageWrapper.addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  const rect = pageWrapper.getBoundingClientRect();
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+  const x = Math.min(cx, dragStart.x);
+  const y = Math.min(cy, dragStart.y);
+  const w = Math.abs(cx - dragStart.x);
+  const h = Math.abs(cy - dragStart.y);
+  selRect.style.left   = x + 'px';
+  selRect.style.top    = y + 'px';
+  selRect.style.width  = w + 'px';
+  selRect.style.height = h + 'px';
+});
+
+pageWrapper.addEventListener('mouseup', e => {
+  if (!isDragging) return;
+  isDragging = false;
+  selRect.style.display = 'none';
+
+  const rect = pageWrapper.getBoundingClientRect();
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+  const x = Math.min(cx, dragStart.x);
+  const y = Math.min(cy, dragStart.y);
+  const w = Math.abs(cx - dragStart.x);
+  const h = Math.abs(cy - dragStart.y);
+
+  // Minimum size to prevent accidental single-clicks
+  if (w < 10 || h < 8) return;
+
+  if (currentTool === 'comment') {
+    pendingCommentPos = { x, y, w, h };
+    commentText.value = '';
+    commentModal.classList.remove('hidden');
+    setTimeout(() => commentText.focus(), 50);
+  } else {
+    addAnnotation({ type: currentTool, page: currentPage, x, y, w, h, color: currentColor });
+  }
+});
+
+// Touch support for mobile
+pageWrapper.addEventListener('touchstart', e => {
+  const t = e.touches[0];
+  const rect = pageWrapper.getBoundingClientRect();
+  dragStart = { x: t.clientX - rect.left, y: t.clientY - rect.top };
+  isDragging = true;
+}, { passive: true });
+
+pageWrapper.addEventListener('touchmove', e => {
+  if (!isDragging) return;
+  const t = e.touches[0];
+  const rect = pageWrapper.getBoundingClientRect();
+  const cx = t.clientX - rect.left, cy = t.clientY - rect.top;
+  const x = Math.min(cx, dragStart.x), y = Math.min(cy, dragStart.y);
+  selRect.style.display = 'block';
+  selRect.style.left = x+'px'; selRect.style.top = y+'px';
+  selRect.style.width = Math.abs(cx-dragStart.x)+'px';
+  selRect.style.height = Math.abs(cy-dragStart.y)+'px';
+}, { passive: true });
+
+pageWrapper.addEventListener('touchend', e => {
+  if (!isDragging) return;
+  isDragging = false; selRect.style.display = 'none';
+  const t = e.changedTouches[0];
+  const rect = pageWrapper.getBoundingClientRect();
+  const cx = t.clientX - rect.left, cy = t.clientY - rect.top;
+  const x = Math.min(cx, dragStart.x), y = Math.min(cy, dragStart.y);
+  const w = Math.abs(cx-dragStart.x), h = Math.abs(cy-dragStart.y);
+  if (w < 10 || h < 8) return;
+  if (currentTool === 'comment') {
+    pendingCommentPos = { x, y, w, h };
+    commentText.value = '';
+    commentModal.classList.remove('hidden');
+  } else {
+    addAnnotation({ type: currentTool, page: currentPage, x, y, w, h, color: currentColor });
+  }
+});
+
+// ── Comment modal ─────────────────────────────────────
+function confirmComment() {
+  const text = commentText.value.trim();
+  if (!text) { commentText.focus(); return; }
+  commentModal.classList.add('hidden');
+  if (pendingCommentPos) {
+    addAnnotation({ type: 'comment', page: currentPage, ...pendingCommentPos, color: currentColor, text });
+    pendingCommentPos = null;
+  }
+}
+function cancelComment() {
+  commentModal.classList.add('hidden');
+  pendingCommentPos = null;
+}
+commentText.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.ctrlKey) confirmComment();
+  if (e.key === 'Escape') cancelComment();
+});
+
+// ── Annotations ───────────────────────────────────────
+function addAnnotation(ann) {
+  annotations.push({ id: ++annIdCtr, ...ann });
+  renderAnnOverlays();
+  renderAnnList();
+}
+
+function removeAnnotation(id) {
+  annotations = annotations.filter(a => a.id !== id);
+  renderAnnOverlays();
+  renderAnnList();
+}
+
+function clearAllAnnotations() {
+  if (!annotations.length) return;
+  if (!confirm('Remove all annotations?')) return;
+  annotations = [];
+  renderAnnOverlays();
+  renderAnnList();
+}
+
+// ── Render annotation overlays on canvas ─────────────
+function renderAnnOverlays() {
+  annLayer.innerHTML = '';
+  const pageAnns = annotations.filter(a => a.page === currentPage);
+
+  pageAnns.forEach(a => {
+    if (a.type === 'highlight') {
+      const div = document.createElement('div');
+      div.className = 'ann-overlay ann-highlight';
+      div.style.cssText = `left:${a.x}px;top:${a.y}px;width:${a.w}px;height:${a.h}px;background:${hexToRgba(a.color, 0.4)};`;
+      annLayer.appendChild(div);
+
+    } else if (a.type === 'underline') {
+      const div = document.createElement('div');
+      div.className = 'ann-overlay ann-underline';
+      div.style.cssText = `left:${a.x}px;top:${a.y + a.h - 3}px;width:${a.w}px;height:3px;background:${a.color};`;
+      annLayer.appendChild(div);
+
+    } else if (a.type === 'strikethrough') {
+      const div = document.createElement('div');
+      div.className = 'ann-overlay';
+      div.style.cssText = `left:${a.x}px;top:${a.y + a.h/2 - 1.5}px;width:${a.w}px;height:3px;background:${a.color};`;
+      annLayer.appendChild(div);
+
+    } else if (a.type === 'comment') {
+      // Draw a small highlight behind the selection
+      const bg = document.createElement('div');
+      bg.className = 'ann-overlay';
+      bg.style.cssText = `left:${a.x}px;top:${a.y}px;width:${a.w}px;height:${a.h}px;background:${hexToRgba(a.color, 0.18)};border:1.5px solid ${a.color};border-radius:3px;`;
+      annLayer.appendChild(bg);
+
+      // Pin dot
+      const dot = document.createElement('div');
+      dot.className = 'ann-comment-dot';
+      dot.style.cssText = `left:${a.x + a.w - 11}px;top:${a.y - 11}px;background:${a.color};`;
+      dot.title = a.text;
+      dot.innerHTML = '<i class="fas fa-comment" style="font-size:0.55rem"></i>';
+      dot.onclick = () => alert(`Comment:\n\n${a.text}`);
+      annLayer.appendChild(dot);
+    }
+  });
+}
+
+// ── Render sidebar list ───────────────────────────────
+function renderAnnList() {
+  // Remove existing items but keep the empty placeholder
+  annList.querySelectorAll('.ann-list-item').forEach(el => el.remove());
+
+  annCountEl.textContent = annotations.length;
+  annEmpty.style.display = annotations.length === 0 ? '' : 'none';
+
+  const typeLabel = { highlight:'Highlight', underline:'Underline', strikethrough:'Strikethrough', comment:'Comment' };
+  const typeBadge = { highlight:'badge-highlight', underline:'badge-underline', strikethrough:'badge-strikethrough', comment:'badge-comment' };
+
+  annotations.slice().reverse().forEach(a => {
+    const div = document.createElement('div');
+    div.className = 'ann-list-item';
+    div.innerHTML = `
+      <div class="ann-type-badge ${typeBadge[a.type]}">${typeLabel[a.type]}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-gray-600 text-xs">Page ${a.page}</div>
+        ${a.text ? `<div class="text-gray-800 font-medium mt-0.5 truncate" title="${esc(a.text)}">${esc(a.text)}</div>` : ''}
+      </div>
+      <span class="w-3 h-3 rounded-full flex-shrink-0 mt-1" style="background:${a.color}"></span>
+      <button class="ann-remove-btn" title="Remove" onclick="removeAnnotation(${a.id})">
+        <i class="fas fa-times"></i>
+      </button>`;
+
+    // Click to jump to that page
+    div.addEventListener('click', e => {
+      if (e.target.closest('.ann-remove-btn')) return;
+      if (a.page !== currentPage) renderPage(a.page);
+    });
+    annList.appendChild(div);
+  });
+}
+
+// ── Save annotated PDF (client-side with pdf-lib) ─────
+async function doSave() {
+  if (!pdfFile) return;
+  if (annotations.length === 0) {
+    showSaveError('No annotations to save. Add at least one annotation first.'); return;
+  }
+  if (typeof PDFLib === 'undefined') {
+    showSaveError('PDF library not loaded — please try again.'); return;
+  }
+
+  saveLoading.classList.remove('hidden');
+  saveBtn.disabled = true;
+  hideSaveError();
+
+  try {
+    const { PDFDocument, rgb, StandardFonts } = PDFLib;
+
+    const arrayBuffer = await pdfFile.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+    const pages  = pdfDoc.getPages();
+
+    for (const ann of annotations) {
+      const page     = pages[ann.page - 1];
+      if (!page) continue;
+
+      const { width: pageW, height: pageH } = page.getSize();
+
+      // Convert canvas coords → PDF coords
+      // PDF.js renders at renderScale, and canvas origin is top-left.
+      // PDF coordinate origin is bottom-left.
+      const scaleX = pageW / (pageViewport ? pageViewport.width  / renderScale * renderScale : pdfCanvas.width);
+      const scaleY = pageH / (pageViewport ? pageViewport.height / renderScale * renderScale : pdfCanvas.height);
+
+      // Simpler: use the ratio of page size to canvas size
+      const canvasW = pdfCanvas.width;
+      const canvasH = pdfCanvas.height;
+      const rx = pageW / canvasW;
+      const ry = pageH / canvasH;
+
+      // ann.x/y are canvas pixels, convert to PDF points
+      const pdfX  = ann.x * rx;
+      const pdfY  = pageH - (ann.y + ann.h) * ry;   // flip Y
+      const pdfW  = ann.w * rx;
+      const pdfH  = ann.h * ry;
+
+      const [r, g, b] = hexToRgbFloat(ann.color);
+      const fillColor = rgb(r, g, b);
+
+      if (ann.type === 'highlight') {
+        page.drawRectangle({
+          x: pdfX, y: pdfY, width: pdfW, height: pdfH,
+          color: fillColor, opacity: 0.38,
+        });
+
+      } else if (ann.type === 'underline') {
+        page.drawLine({
+          start: { x: pdfX,        y: pdfY },
+          end:   { x: pdfX + pdfW, y: pdfY },
+          thickness: 1.5, color: fillColor, opacity: 1,
+        });
+
+      } else if (ann.type === 'strikethrough') {
+        const midY = pdfY + pdfH / 2;
+        page.drawLine({
+          start: { x: pdfX,        y: midY },
+          end:   { x: pdfX + pdfW, y: midY },
+          thickness: 1.5, color: fillColor, opacity: 1,
+        });
+
+      } else if (ann.type === 'comment') {
+        // Draw a subtle background
+        page.drawRectangle({
+          x: pdfX, y: pdfY, width: pdfW, height: pdfH,
+          color: fillColor, opacity: 0.15,
+          borderColor: fillColor, borderWidth: 1, borderOpacity: 0.7,
+        });
+
+        // Draw a small marker square at top-right corner
+        const markerSize = 10;
+        page.drawRectangle({
+          x: pdfX + pdfW - markerSize, y: pdfY + pdfH - markerSize,
+          width: markerSize, height: markerSize,
+          color: fillColor, opacity: 0.9,
+        });
+
+        // Embed comment text near the annotation (small font)
+        try {
+          const font    = await pdfDoc.embedFont(StandardFonts.Helvetica);
+          const maxW    = pdfW - 4;
+          const fontSize = Math.max(7, Math.min(10, pdfH * 0.35));
+          const lines   = wrapText(ann.text, font, fontSize, maxW);
+          let textY = pdfY + pdfH - fontSize - 2;
+          for (const line of lines) {
+            if (textY < pdfY) break;
+            page.drawText(line, {
+              x: pdfX + 2, y: textY,
+              size: fontSize, font, color: rgb(0.1, 0.1, 0.1), opacity: 0.85,
+            });
+            textY -= fontSize + 1;
+          }
+        } catch (_) { /* font embed failed gracefully */ }
+      }
+    }
+
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const baseName = pdfFile.name.replace(/\.pdf$/i, '');
+    downloadBlob(blob, `${baseName}_annotated.pdf`);
+
+  } catch (err) {
+    showSaveError('Failed to save: ' + err.message);
+  } finally {
+    saveLoading.classList.add('hidden');
+    saveBtn.disabled = false;
+  }
+}
+
+// ── Text wrapping helper ──────────────────────────────
+function wrapText(text, font, size, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  for (const word of words) {
+    const test = line ? line + ' ' + word : word;
+    try {
+      const w = font.widthOfTextAtSize(test, size);
+      if (w > maxWidth && line) { lines.push(line); line = word; }
+      else { line = test; }
+    } catch { line = test; }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+// ── Colour helpers ────────────────────────────────────
+function hexToRgba(hex, alpha) {
+  const [r, g, b] = hexToRgbInt(hex);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+function hexToRgbFloat(hex) {
+  const [r, g, b] = hexToRgbInt(hex);
+  return [r / 255, g / 255, b / 255];
+}
+function hexToRgbInt(hex) {
+  hex = hex.replace('#', '');
+  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+  const n = parseInt(hex, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+// ── Utilities ─────────────────────────────────────────
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+function formatBytes(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
+  return (b/1024/1024).toFixed(2) + ' MB';
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function showSaveError(msg) { saveError.textContent = msg; saveError.classList.remove('hidden'); }
+function hideSaveError()    { saveError.classList.add('hidden'); }
+
+// ── Navbar ────────────────────────────────────────────
+function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+function toggleMobileTools() {
+  document.getElementById('mobile-tool-links').classList.toggle('open');
+  const c = document.getElementById('tools-chevron');
+  c.classList.toggle('fa-chevron-down'); c.classList.toggle('fa-chevron-up');
+}
+document.addEventListener('click', e => {
+  const menu = document.getElementById('mobile-menu');
+  const hamburger = document.getElementById('hamburger');
+  if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>
