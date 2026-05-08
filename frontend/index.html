@@ -11,20 +11,20 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mini PDF Tools – Free Online PDF Toolkit | Compress, Merge, Split, Rotate, Annotate & Convert</title>
-  <meta name="description" content="Mini PDF Tools – free online PDF toolkit. Compress, merge, split, rotate, annotate, delete pages, convert images to PDF, and export PDF to JPG. Fast, secure, 100% in your browser — no signup required.">
-  <meta name="keywords" content="PDF tools, compress PDF, merge PDF, split PDF, rotate PDF, annotate PDF, highlight PDF, delete PDF pages, image to PDF, PDF to JPG, convert PDF, free PDF toolkit, online PDF editor">
+  <title>Mini PDF Tools – Free Online PDF Toolkit | Compress, Merge, Split, Rotate & Convert</title>
+  <meta name="description" content="Mini PDF Tools – free online PDF toolkit. Compress, merge, split, rotate, delete pages, convert images to PDF, and export PDF to JPG. Fast, secure, no signup required.">
+  <meta name="keywords" content="PDF tools, compress PDF, merge PDF, split PDF, rotate PDF, delete PDF pages, image to PDF, PDF to JPG, convert PDF, free PDF toolkit, online PDF editor">
   <meta name="author" content="Mini PDF Tools">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://minipdftools.com/">
   <meta property="og:title" content="Mini PDF Tools – Free PDF Toolkit">
-  <meta property="og:description" content="Free PDF tools to compress, merge, split, rotate, annotate, delete pages and convert PDF files. 100% in your browser — no signup required.">
+  <meta property="og:description" content="Free PDF tools to compress, merge, split, rotate, delete pages and convert PDF files. Fast, secure, no signup required.">
   <meta property="og:image" content="https://minipdftools.com/preview-image.jpg">
   <meta property="og:url" content="https://minipdftools.com/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Mini PDF Tools – Free PDF Toolkit">
-  <meta name="twitter:description" content="Free PDF tools to compress, merge, split, rotate, annotate, delete pages and convert PDF files.">
+  <meta name="twitter:description" content="Free PDF tools to compress, merge, split, rotate, delete pages and convert PDF files.">
   <meta name="twitter:image" content="https://minipdftools.com/preview-image.jpg">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -35,7 +35,7 @@
     "@type": "WebSite",
     "name": "Mini PDF Tools",
     "url": "https://minipdftools.com/",
-    "description": "Free online PDF tools to compress, merge, split, rotate, annotate, delete pages and convert PDFs — all processed in your browser.",
+    "description": "Free online PDF tools to compress, merge, split, rotate, delete pages and convert PDFs.",
     "potentialAction": {
       "@type": "SearchAction",
       "target": "https://minipdftools.com/?q={search_term_string}",
@@ -45,18 +45,17 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f1f5f9; }
 
     /* ── Navbar ── */
     .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
     .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
     .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
     .dropdown { position:relative; }
-    .dropdown-menu { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#fff; border-radius:0.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.18); min-width:240px; z-index:100; overflow:hidden; }
+    .dropdown-menu { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#fff; border-radius:0.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.18); min-width:220px; z-index:100; overflow:hidden; }
     .dropdown:hover .dropdown-menu { display:block; }
     .dropdown-section { padding:0.5rem 0; }
     .dropdown-section-label { font-size:0.68rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.08em; padding:0.4rem 1.1rem 0.2rem; }
@@ -180,20 +179,11 @@
       from { opacity:0; transform:translateY(18px); }
       to   { opacity:1; transform:translateY(0); }
     }
-    .fade-up   { animation: fadeUp 0.5s ease both; }
+    .fade-up { animation: fadeUp 0.5s ease both; }
     .fade-up-1 { animation-delay:0.05s; }
     .fade-up-2 { animation-delay:0.1s; }
     .fade-up-3 { animation-delay:0.15s; }
     .fade-up-4 { animation-delay:0.2s; }
-
-    /* ── Browser badge ── */
-    .browser-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 999px; padding: 0.3rem 0.85rem;
-      font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.9);
-      letter-spacing: 0.01em;
-    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -215,7 +205,7 @@
           <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
             <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
           </button>
-          <div class="dropdown-menu" style="min-width:260px">
+          <div class="dropdown-menu" style="min-width:240px">
             <div class="dropdown-section">
               <div class="dropdown-section-label">Organise</div>
               <a href="/merge-pdf.html"         class="dropdown-item"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
@@ -260,17 +250,17 @@
       </button>
       <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
         <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold">Organise</p>
-        <a href="/merge-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
-        <a href="/split-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
-        <a href="/rotate-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
+        <a href="/merge-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
+        <a href="/split-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
+        <a href="/rotate-pdf.html"      class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
         <a href="/delete-pdf-pages.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-trash-alt mr-2"></i>Delete Pages</a>
         <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold mt-1">Optimise</p>
-        <a href="/compress-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
+        <a href="/compress-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
         <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold mt-1">Convert</p>
-        <a href="/image-to-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
-        <a href="/pdf-to-jpg.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
+        <a href="/image-to-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
+        <a href="/pdf-to-jpg.html"      class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
         <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold mt-1">Annotate</p>
-        <a href="/annotate-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-highlighter mr-2"></i>Annotate PDF</a>
+        <a href="/annotate-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-highlighter mr-2"></i>Annotate PDF</a>
       </div>
       <a href="#about"   class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-info-circle mr-2"></i>About</a>
       <a href="#contact" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-envelope mr-2"></i>Contact</a>
@@ -278,52 +268,44 @@
   </nav>
 
   <!-- ── HERO ── -->
-  <header class="hero w-full py-10 px-6 text-white">
+  <header class="hero w-full py-8 px-6 text-white">
     <div class="max-w-3xl mx-auto text-center">
-      <div class="flex justify-center mb-4 fade-up">
-        <span class="browser-badge">
-          <i class="fas fa-shield-alt text-emerald-400"></i>
-          100% In Your Browser — Files Never Leave Your Device
-        </span>
-      </div>
-      <h1 class="text-3xl sm:text-4xl font-extrabold mb-3 leading-tight fade-up fade-up-1">
-        Every PDF tool you need,<br class="hidden sm:block"/> completely free
+      <h1 class="text-3xl font-extrabold mb-2 leading-tight fade-up">
+        Every PDF tool you need, completely free
       </h1>
-      <p class="text-base font-light opacity-75 mb-6 fade-up fade-up-2">
-        Compress, merge, split, rotate, annotate, delete pages and convert PDFs —<br class="hidden sm:block"/>
-        fast, private, right in your browser. No uploads. No signup.
+      <p class="text-base font-light opacity-75 mb-5 fade-up fade-up-1">
+        Compress, merge, split, rotate, delete pages and convert PDFs — fast, secure, right in your browser.
       </p>
-      <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 fade-up fade-up-3">
+      <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 fade-up fade-up-2">
         <span class="flex items-center gap-1.5 text-xs font-medium" style="color:rgba(255,255,255,0.8)">
-          <i class="fas fa-lock text-green-400"></i> No file uploads
+          <i class="fas fa-lock text-green-400"></i> 100% Secure
         </span>
         <span class="hidden sm:block text-white opacity-20">|</span>
         <span class="flex items-center gap-1.5 text-xs font-medium" style="color:rgba(255,255,255,0.8)">
-          <i class="fas fa-bolt text-yellow-400"></i> Instant results
+          <i class="fas fa-bolt text-yellow-400"></i> Lightning Fast
         </span>
         <span class="hidden sm:block text-white opacity-20">|</span>
         <span class="flex items-center gap-1.5 text-xs font-medium" style="color:rgba(255,255,255,0.8)">
-          <i class="fas fa-gift text-purple-400"></i> Always free
+          <i class="fas fa-gift text-purple-400"></i> Always Free
         </span>
         <span class="hidden sm:block text-white opacity-20">|</span>
         <span class="flex items-center gap-1.5 text-xs font-medium" style="color:rgba(255,255,255,0.8)">
-          <i class="fas fa-mobile-alt text-blue-300"></i> Works anywhere
+          <i class="fas fa-mobile-alt text-blue-300"></i> Works Anywhere
         </span>
       </div>
     </div>
   </header>
 
+
+
   <!-- ── MAIN TOOLS ── -->
   <main id="tools" class="flex-1 w-full py-12 px-4">
     <div class="max-w-5xl mx-auto">
 
-      <!-- Section label -->
-      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest text-center mb-6">All Tools</p>
-
-      <!-- ── TOOL GRID ── -->
+      <!-- ── ALL TOOLS — ordered by search volume ── -->
       <div class="tool-grid mb-10">
 
-        <!-- 1. Compress PDF -->
+        <!-- 1. Compress PDF ~600K/mo -->
         <a href="/compress-pdf.html" class="tool-card card-blue">
           <div class="icon-wrap"><i class="fas fa-compress-alt"></i></div>
           <h3>Compress PDF</h3>
@@ -331,7 +313,7 @@
           <span class="card-btn btn-blue">Compress Now <i class="fas fa-arrow-right text-xs"></i></span>
         </a>
 
-        <!-- 2. Merge PDFs -->
+        <!-- 2. Merge PDFs ~500K/mo -->
         <a href="/merge-pdf.html" class="tool-card card-green">
           <div class="icon-wrap"><i class="fas fa-object-group"></i></div>
           <h3>Merge PDFs</h3>
@@ -339,15 +321,15 @@
           <span class="card-btn btn-green">Merge Now <i class="fas fa-arrow-right text-xs"></i></span>
         </a>
 
-        <!-- 3. PDF to JPG -->
+        <!-- 3. PDF to JPG ~500K/mo -->
         <a href="/pdf-to-jpg.html" class="tool-card card-indigo">
           <div class="icon-wrap"><i class="fas fa-file-image"></i></div>
           <h3>PDF to JPG</h3>
-          <p>Export every page of a PDF as a high-quality JPG image. Choose all pages or specific ones to download as a ZIP.</p>
+          <p>Export every page of a PDF as a high-quality JPG image. Choose all pages or specific ones to download.</p>
           <span class="card-btn btn-indigo">Convert Now <i class="fas fa-arrow-right text-xs"></i></span>
         </a>
 
-        <!-- 4. Split PDF -->
+        <!-- 4. Split PDF ~300K/mo -->
         <a href="/split-pdf.html" class="tool-card card-red">
           <div class="icon-wrap"><i class="fas fa-cut"></i></div>
           <h3>Split PDF</h3>
@@ -355,15 +337,15 @@
           <span class="card-btn btn-red">Split Now <i class="fas fa-arrow-right text-xs"></i></span>
         </a>
 
-        <!-- 5. Image to PDF -->
+        <!-- 5. Image to PDF ~250K/mo -->
         <a href="/image-to-pdf.html" class="tool-card card-purple">
           <div class="icon-wrap"><i class="fas fa-image"></i></div>
           <h3>Image to PDF</h3>
-          <p>Convert JPG and PNG images into a single PDF. Upload multiple images, drag to arrange the order, then convert.</p>
+          <p>Convert JPG and PNG images into a PDF. Upload multiple images, drag to arrange the page order, then convert.</p>
           <span class="card-btn btn-purple">Convert Now <i class="fas fa-arrow-right text-xs"></i></span>
         </a>
 
-        <!-- 6. Rotate PDF -->
+        <!-- 6. Rotate PDF ~200K/mo -->
         <a href="/rotate-pdf.html" class="tool-card card-orange">
           <div class="icon-wrap"><i class="fas fa-sync-alt"></i></div>
           <h3>Rotate PDF</h3>
@@ -371,15 +353,15 @@
           <span class="card-btn btn-orange">Rotate Now <i class="fas fa-arrow-right text-xs"></i></span>
         </a>
 
-        <!-- 7. Delete Pages -->
+        <!-- 7. Delete Pages ~150K/mo -->
         <a href="/delete-pdf-pages.html" class="tool-card card-yellow">
           <div class="icon-wrap"><i class="fas fa-trash-alt"></i></div>
           <h3>Delete Pages</h3>
-          <p>Remove unwanted pages from a PDF by page number or range. Keep only the pages you need.</p>
+          <p>Remove unwanted pages from a PDF by number or range. Keep only what you need.</p>
           <span class="card-btn btn-yellow">Delete Now <i class="fas fa-arrow-right text-xs"></i></span>
         </a>
 
-        <!-- 8. Annotate PDF — NEW -->
+        <!-- 8. Annotate PDF -->
         <a href="/annotate-pdf.html" class="tool-card card-emerald">
           <div class="icon-wrap"><i class="fas fa-highlighter"></i></div>
           <h3>Annotate PDF</h3>
@@ -391,59 +373,35 @@
 
       <!-- ── WHY SECTION ── -->
       <section id="about" class="mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-        <h2 class="text-xl font-bold text-gray-800 mb-2 text-center">Why Mini PDF Tools?</h2>
-        <p class="text-center text-sm text-gray-400 mb-7">All tools run entirely in your browser using modern web APIs — your files never leave your device.</p>
+        <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">Why Mini PDF Tools?</h2>
         <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div>
-            <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <i class="fas fa-user-secret text-emerald-500"></i>
+            <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <i class="fas fa-user-secret text-green-500"></i>
             </div>
-            <h3 class="font-semibold text-gray-800 text-sm mb-1">Zero uploads</h3>
-            <p class="text-gray-500 text-xs leading-relaxed">Your PDF is processed directly in the browser using pdf-lib and PDF.js. It never touches a server.</p>
+            <h3 class="font-semibold text-gray-800 text-sm mb-1">Private by design</h3>
+            <p class="text-gray-500 text-xs leading-relaxed">Your files are processed in memory and never written to disk on our servers.</p>
           </div>
           <div>
             <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-3">
               <i class="fas fa-bolt text-blue-500"></i>
             </div>
-            <h3 class="font-semibold text-gray-800 text-sm mb-1">Instant results</h3>
-            <p class="text-gray-500 text-xs leading-relaxed">No waiting for uploads or server queues. Processing starts the moment you click — results in seconds.</p>
+            <h3 class="font-semibold text-gray-800 text-sm mb-1">Fast cloud processing</h3>
+            <p class="text-gray-500 text-xs leading-relaxed">Powered by Google Cloud for consistent speed on any device or connection.</p>
           </div>
           <div>
             <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center mx-auto mb-3">
               <i class="fas fa-infinity text-purple-500"></i>
             </div>
             <h3 class="font-semibold text-gray-800 text-sm mb-1">No limits, no account</h3>
-            <p class="text-gray-500 text-xs leading-relaxed">Every tool is free with no daily limits, no watermarks, and no signup required. Ever.</p>
+            <p class="text-gray-500 text-xs leading-relaxed">Every tool is free with no daily limits, no watermarks, and no signup required.</p>
           </div>
           <div>
             <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center mx-auto mb-3">
               <i class="fas fa-globe text-orange-500"></i>
             </div>
             <h3 class="font-semibold text-gray-800 text-sm mb-1">Works in any browser</h3>
-            <p class="text-gray-500 text-xs leading-relaxed">No software to install. Works on Chrome, Safari, Firefox, Edge, and mobile browsers on any device.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── HOW IT WORKS ── -->
-      <section class="mt-6 bg-gradient-to-br from-slate-800 to-indigo-900 rounded-2xl shadow-sm p-8 text-white">
-        <h2 class="text-xl font-bold mb-2 text-center">How it works</h2>
-        <p class="text-center text-sm mb-7" style="color:rgba(255,255,255,0.6)">Three steps, every tool, zero friction.</p>
-        <div class="grid sm:grid-cols-3 gap-6 text-center">
-          <div>
-            <div class="w-10 h-10 bg-white bg-opacity-10 rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold">1</div>
-            <h3 class="font-semibold text-sm mb-1">Upload your file</h3>
-            <p class="text-xs leading-relaxed" style="color:rgba(255,255,255,0.6)">Drop your PDF or images onto the tool. Everything stays in your browser — nothing is sent to a server.</p>
-          </div>
-          <div>
-            <div class="w-10 h-10 bg-white bg-opacity-10 rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold">2</div>
-            <h3 class="font-semibold text-sm mb-1">Choose your options</h3>
-            <p class="text-xs leading-relaxed" style="color:rgba(255,255,255,0.6)">Set page ranges, reorder files, pick annotation tools, select quality — whatever the task needs.</p>
-          </div>
-          <div>
-            <div class="w-10 h-10 bg-white bg-opacity-10 rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold">3</div>
-            <h3 class="font-semibold text-sm mb-1">Download instantly</h3>
-            <p class="text-xs leading-relaxed" style="color:rgba(255,255,255,0.6)">Your result downloads automatically. No waiting, no email links, no account required.</p>
+            <p class="text-gray-500 text-xs leading-relaxed">No software to install. Works on Chrome, Safari, Firefox, Edge, and mobile browsers.</p>
           </div>
         </div>
       </section>
@@ -455,14 +413,12 @@
   <footer class="site-footer w-full mt-auto" id="contact">
     <div class="max-w-6xl mx-auto px-6 py-10">
       <div class="flex flex-col md:flex-row justify-between gap-8 mb-8">
-
-        <!-- Brand -->
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-2">
             <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
             <span class="text-white font-bold text-lg">Mini PDF Tools</span>
           </div>
-          <p class="text-sm max-w-xs" style="color:rgba(255,255,255,0.6)">Free PDF tools that run 100% in your browser. No signup required. Your files never leave your device.</p>
+          <p class="text-sm max-w-xs" style="color:rgba(255,255,255,0.6)">Free, fast, and secure PDF tools. No signup required. Your files are never stored on our servers.</p>
           <div class="flex gap-2 mt-1">
             <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
@@ -470,7 +426,6 @@
           </div>
         </div>
 
-        <!-- Organise -->
         <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Organise</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
@@ -481,18 +436,16 @@
           </ul>
         </div>
 
-        <!-- Convert & Annotate -->
         <div>
-          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Convert &amp; Annotate</p>
+          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Optimise &amp; Convert</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
-            <li><a href="/compress-pdf.html"   class="footer-link"><i class="fas fa-compress-alt mr-2 text-xs"></i>Compress PDF</a></li>
-            <li><a href="/image-to-pdf.html"   class="footer-link"><i class="fas fa-image mr-2 text-xs"></i>Image to PDF</a></li>
-            <li><a href="/pdf-to-jpg.html"     class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
-            <li><a href="/annotate-pdf.html"   class="footer-link"><i class="fas fa-highlighter mr-2 text-xs"></i>Annotate PDF</a></li>
+            <li><a href="/compress-pdf.html"       class="footer-link"><i class="fas fa-compress-alt mr-2 text-xs"></i>Compress PDF</a></li>
+            <li><a href="/image-to-pdf.html"       class="footer-link"><i class="fas fa-image mr-2 text-xs"></i>Image to PDF</a></li>
+            <li><a href="/pdf-to-jpg.html"         class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
+            <li><a href="/annotate-pdf.html"       class="footer-link"><i class="fas fa-highlighter mr-2 text-xs"></i>Annotate PDF</a></li>
           </ul>
         </div>
 
-        <!-- Contact -->
         <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Contact</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
@@ -501,11 +454,10 @@
             <li><a href="#" class="footer-link"><i class="fas fa-file-contract mr-2 text-xs"></i>Terms of Use</a></li>
           </ul>
         </div>
-
       </div>
       <hr class="footer-divider mb-6" />
       <div class="flex flex-col md:flex-row justify-between items-center gap-2 text-xs" style="color:rgba(255,255,255,0.45)">
-        <p><i class="fas fa-lock mr-1"></i> All PDF processing runs in your browser — your files are never uploaded to our servers.</p>
+        <p>Your document privacy is our top priority. Files are never stored on our servers.</p>
         <p>&copy; 2025 Mini PDF Tools. All rights reserved.</p>
       </div>
     </div>
