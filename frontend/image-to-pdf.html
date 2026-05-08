@@ -43,12 +43,14 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- pdf-lib for client-side image-to-PDF conversion -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
     body { font-family: 'Inter', sans-serif; }
-        .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
+    .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
     .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
     .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
     .dropdown { position:relative; }
@@ -71,7 +73,6 @@
     .mobile-tool-links { display:none; }
     .mobile-tool-links.open { display:block; }
 
-    /* ── Drop zone ── */
     .drop-zone {
       border: 2px dashed #d8b4fe;
       border-radius: 1rem;
@@ -85,7 +86,6 @@
       transform: scale(1.005);
     }
 
-    /* ── File list ── */
     #file-list { list-style: none; padding: 0; margin: 0; }
 
     .file-item {
@@ -99,120 +99,43 @@
       user-select: none;
     }
     .file-item:hover { border-color: #d8b4fe; box-shadow: 0 2px 12px rgba(147,51,234,0.08); }
-    .file-item.dragging {
-      opacity: 0.4; transform: scale(0.98);
-      box-shadow: 0 8px 24px rgba(147,51,234,0.15);
-      border-color: #9333ea; cursor: grabbing;
-    }
-    .file-item.drag-over {
-      border-color: #9333ea; background: #f3e8ff;
-      transform: translateY(-3px);
-      box-shadow: 0 4px 14px rgba(147,51,234,0.12);
-    }
+    .file-item.dragging { opacity: 0.4; transform: scale(0.98); box-shadow: 0 8px 24px rgba(147,51,234,0.15); border-color: #9333ea; cursor: grabbing; }
+    .file-item.drag-over { border-color: #9333ea; background: #f3e8ff; transform: translateY(-3px); box-shadow: 0 4px 14px rgba(147,51,234,0.12); }
 
     .item-top { display: flex; align-items: center; gap: 0.75rem; }
     .drag-handle { color: #94a3b8; font-size: 1rem; cursor: grab; flex-shrink: 0; padding: 0 2px; }
-    .drag-handle:active { cursor: grabbing; }
-
-    .file-index {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: linear-gradient(135deg, #9333ea, #c084fc);
-      color: #fff; font-size: 0.68rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-
-    /* ── Thumbnail ── */
-    .thumb-wrap {
-      width: 48px; height: 48px; border-radius: 0.4rem;
-      overflow: hidden; flex-shrink: 0;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .thumb-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
-      display: block;
-    }
+    .file-index { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #9333ea, #c084fc); color: #fff; font-size: 0.68rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .thumb-wrap { width: 48px; height: 48px; border-radius: 0.4rem; overflow: hidden; flex-shrink: 0; background: #f1f5f9; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; }
+    .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .thumb-placeholder { color: #c084fc; font-size: 1.3rem; }
-
     .file-info { flex: 1; min-width: 0; }
-    .file-name {
-      font-size: 0.85rem; color: #1e293b; font-weight: 600;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
+    .file-name { font-size: 0.85rem; color: #1e293b; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .file-dims { font-size: 0.72rem; color: #94a3b8; margin-top: 1px; }
-
-    .file-meta {
-      display: flex; align-items: center; gap: 0.5rem;
-      flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end;
-    }
-    .badge {
-      font-size: 0.72rem; color: #64748b; background: #f1f5f9;
-      border: 1px solid #e2e8f0; border-radius: 999px; padding: 0.15rem 0.55rem; white-space: nowrap;
-    }
+    .file-meta { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+    .badge { font-size: 0.72rem; color: #64748b; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 999px; padding: 0.15rem 0.55rem; white-space: nowrap; }
     .badge-type { color: #9333ea; border-color: #e9d5ff; background: #faf5ff; font-weight: 600; text-transform: uppercase; }
-
-    .move-btn {
-      background: none; border: 1px solid #e2e8f0; color: #64748b;
-      cursor: pointer; width: 24px; height: 24px; border-radius: 5px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem; transition: all 0.15s; flex-shrink: 0;
-    }
+    .move-btn { background: none; border: 1px solid #e2e8f0; color: #64748b; cursor: pointer; width: 24px; height: 24px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; transition: all 0.15s; flex-shrink: 0; }
     .move-btn:hover { background: #f1f5f9; border-color: #94a3b8; color: #1e293b; }
     .move-btn:disabled { opacity: 0.25; cursor: not-allowed; }
-
-    .file-remove {
-      background: none; border: none; color: #cbd5e1; cursor: pointer;
-      font-size: 0.85rem; padding: 4px 6px; border-radius: 4px;
-      transition: color 0.15s, background 0.15s; flex-shrink: 0;
-    }
+    .file-remove { background: none; border: none; color: #cbd5e1; cursor: pointer; font-size: 0.85rem; padding: 4px 6px; border-radius: 4px; transition: color 0.15s, background 0.15s; flex-shrink: 0; }
     .file-remove:hover { color: #ef4444; background: #fef2f2; }
 
-    /* Totals bar */
-    .totals-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.8rem; color: #64748b; padding: 0.5rem 0.1rem 0;
-    }
-
-    /* Add more button */
-    .add-more-btn {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.55rem 1.1rem;
-      background: #f1f5f9; border: 1.5px dashed #94a3b8; border-radius: 0.6rem;
-      color: #475569; font-size: 0.85rem; font-weight: 500; cursor: pointer;
-      transition: all 0.15s;
-    }
+    .totals-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #64748b; padding: 0.5rem 0.1rem 0; }
+    .add-more-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1.1rem; background: #f1f5f9; border: 1.5px dashed #94a3b8; border-radius: 0.6rem; color: #475569; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
     .add-more-btn:hover { background: #faf5ff; border-color: #9333ea; color: #9333ea; }
 
-    /* Convert button */
-    .btn-convert {
-      background: linear-gradient(135deg, #9333ea, #c084fc);
-      color: white; font-weight: 700; font-size: 1.05rem;
-      padding: 0.85rem 2.5rem; border-radius: 999px; border: none;
-      cursor: pointer; box-shadow: 0 4px 15px rgba(147,51,234,0.32);
-      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-    }
+    .btn-convert { background: linear-gradient(135deg, #9333ea, #c084fc); color: white; font-weight: 700; font-size: 1.05rem; padding: 0.85rem 2.5rem; border-radius: 999px; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(147,51,234,0.32); transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s; }
     .btn-convert:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(147,51,234,0.38); }
     .btn-convert:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
 
-    /* Progress */
-    .progress-item {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-size: 0.82rem; padding: 0.3rem 0;
-    }
+    .progress-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; padding: 0.3rem 0; }
     .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .dot-pending { background: #e2e8f0; }
     .dot-done    { background: #22c55e; }
     .dot-error   { background: #ef4444; }
 
-    /* Slide-in */
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     .file-item { animation: slideIn 0.16s ease; }
-
-    /* Spinner */
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { animation: spin 0.8s linear infinite; display: inline-block; }
   </style>
@@ -223,9 +146,7 @@
   <nav class="navbar w-full shadow-lg sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="/" class="flex items-center gap-2 text-white" style="text-decoration:none">
-        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-          <i class="fas fa-file-pdf text-white text-sm"></i>
-        </div>
+        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
         <span class="font-bold text-lg tracking-tight">Mini PDF Tools</span>
       </a>
       <div class="hidden md:flex items-center gap-1">
@@ -234,24 +155,24 @@
           <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
             <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
           </button>
-                    <div class="dropdown-menu" style="min-width:240px">
+          <div class="dropdown-menu" style="min-width:240px">
             <div class="dropdown-section">
               <div class="dropdown-section-label">Organise</div>
-              <a href="/merge-pdf.html"         class="dropdown-item"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
-              <a href="/split-pdf.html"          class="dropdown-item"><i class="fas fa-cut text-red-500 w-4"></i> Split PDF</a>
-              <a href="/rotate-pdf.html"         class="dropdown-item"><i class="fas fa-sync-alt text-orange-500 w-4"></i> Rotate PDF</a>
-              <a href="/delete-pdf-pages.html"   class="dropdown-item"><i class="fas fa-trash-alt text-yellow-600 w-4"></i> Delete Pages</a>
+              <a href="/merge-pdf.html"       class="dropdown-item"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
+              <a href="/split-pdf.html"        class="dropdown-item"><i class="fas fa-cut text-red-500 w-4"></i> Split PDF</a>
+              <a href="/rotate-pdf.html"       class="dropdown-item"><i class="fas fa-sync-alt text-orange-500 w-4"></i> Rotate PDF</a>
+              <a href="/delete-pdf-pages.html" class="dropdown-item"><i class="fas fa-trash-alt text-yellow-600 w-4"></i> Delete Pages</a>
             </div>
             <div class="dropdown-divider"></div>
             <div class="dropdown-section">
               <div class="dropdown-section-label">Optimise</div>
-              <a href="/compress-pdf.html"       class="dropdown-item"><i class="fas fa-compress-alt text-blue-500 w-4"></i> Compress PDF</a>
+              <a href="/compress-pdf.html"     class="dropdown-item"><i class="fas fa-compress-alt text-blue-500 w-4"></i> Compress PDF</a>
             </div>
             <div class="dropdown-divider"></div>
             <div class="dropdown-section">
               <div class="dropdown-section-label">Convert</div>
-              <a href="/image-to-pdf.html"       class="dropdown-item"><i class="fas fa-image text-purple-500 w-4"></i> Image to PDF</a>
-              <a href="/pdf-to-jpg.html"         class="dropdown-item"><i class="fas fa-file-image text-indigo-500 w-4"></i> PDF to JPG</a>
+              <a href="/image-to-pdf.html"     class="dropdown-item"><i class="fas fa-image text-purple-500 w-4"></i> Image to PDF</a>
+              <a href="/pdf-to-jpg.html"       class="dropdown-item"><i class="fas fa-file-image text-indigo-500 w-4"></i> PDF to JPG</a>
             </div>
           </div>
         </div>
@@ -268,7 +189,7 @@
         <span><i class="fas fa-tools mr-2"></i>Tools</span>
         <i class="fas fa-chevron-down text-xs" id="tools-chevron"></i>
       </button>
-            <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+      <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
         <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold">Organise</p>
         <a href="/merge-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
         <a href="/split-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
@@ -293,33 +214,25 @@
     </div>
   </header>
 
-  <!-- BREADCRUMB -->
   <div class="w-full max-w-4xl mx-auto px-4 pt-4 text-sm text-gray-500">
     <a href="/" class="hover:text-purple-600">Home</a> &rsaquo;
     <span class="text-gray-700 font-medium">Image to PDF</span>
   </div>
 
-  <!-- TOOL -->
   <main class="flex-1 w-full flex flex-col items-center py-8 px-4">
     <div class="w-full max-w-2xl">
-
       <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
 
-        <!-- Drop zone -->
         <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input-main').click()">
           <i class="fas fa-images text-purple-400 text-5xl mb-4 block"></i>
           <p class="text-gray-700 font-semibold text-lg mb-1">Drop images here or click to browse</p>
           <p class="text-gray-400 text-sm">JPG or PNG images — max 32 MB total</p>
         </div>
 
-        <!-- Hidden file inputs -->
         <input type="file" id="file-input-main"    accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple style="display:none" />
         <input type="file" id="file-input-addmore" accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple style="display:none" />
 
-        <!-- File manager -->
         <div id="file-list-area" style="display:none">
-
-          <!-- List header -->
           <div class="flex items-center justify-between mb-3">
             <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
               Images to convert &nbsp;<span class="normal-case font-normal text-gray-400">(drag to set page order)</span>
@@ -329,16 +242,13 @@
             </button>
           </div>
 
-          <!-- Sortable image list -->
           <ul id="file-list"></ul>
 
-          <!-- Totals -->
           <div class="totals-bar">
             <span id="file-count-label">0 images</span>
             <span id="file-size-label"></span>
           </div>
 
-          <!-- Add more -->
           <div class="flex items-center gap-3 mt-5 flex-wrap">
             <button class="add-more-btn" onclick="document.getElementById('file-input-addmore').click()">
               <i class="fas fa-plus-circle"></i> Add more images
@@ -346,35 +256,29 @@
             <span class="text-xs text-gray-400">browse a different folder</span>
           </div>
 
-          <!-- Error -->
           <div id="convert-error" class="hidden mt-3 text-red-500 font-semibold text-sm"></div>
 
-          <!-- Progress log -->
           <div id="convert-progress" class="hidden mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4">
             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Conversion progress</p>
             <div id="progress-list"></div>
           </div>
 
-          <!-- Loading -->
           <div id="convert-loading" class="hidden mt-3 flex items-center gap-2 text-purple-700 font-semibold text-sm">
             <svg class="spinner w-4 h-4 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
             </svg>
-            <span id="loading-text">Converting… please wait</span>
+            <span>Converting… please wait</span>
           </div>
 
-          <!-- Convert button -->
           <div class="flex justify-center mt-7">
             <button id="convert-btn" class="btn-convert" onclick="doConvert()">
               <i class="fas fa-file-pdf mr-2"></i>Convert to PDF
             </button>
           </div>
+        </div>
+      </div>
 
-        </div><!-- /file-list-area -->
-      </div><!-- /card -->
-
-      <!-- Steps hint -->
       <div class="mt-5 flex flex-col sm:flex-row gap-3 text-sm text-gray-500 justify-center text-center">
         <span><span class="font-bold text-purple-400">1.</span> Add images from any folders</span>
         <span class="hidden sm:block text-gray-300">•</span>
@@ -383,7 +287,6 @@
         <span><span class="font-bold text-purple-400">3.</span> Convert &amp; download PDF</span>
       </div>
 
-      <!-- SEO content -->
       <section class="mt-12 px-1">
         <h2 class="text-xl font-bold text-gray-800 mb-3">How to Convert Images to PDF</h2>
         <ol class="list-decimal list-inside text-gray-600 space-y-2 mb-6">
@@ -403,7 +306,6 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
   <footer class="site-footer w-full mt-auto">
     <div class="max-w-6xl mx-auto px-6 py-10">
       <div class="flex flex-col md:flex-row justify-between gap-8 mb-8">
@@ -419,7 +321,7 @@
             <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
-                <div>
+        <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Organise</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
             <li><a href="/merge-pdf.html"         class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
@@ -428,7 +330,6 @@
             <li><a href="/delete-pdf-pages.html"   class="footer-link"><i class="fas fa-trash-alt mr-2 text-xs"></i>Delete Pages</a></li>
           </ul>
         </div>
-
         <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Optimise &amp; Convert</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
@@ -437,7 +338,6 @@
             <li><a href="/pdf-to-jpg.html"         class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
           </ul>
         </div>
-
         <div>
           <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Contact</p>
           <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
@@ -457,47 +357,36 @@
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   IMAGE TO PDF  — multiple images, thumbnails,
-   drag-to-reorder, add-more, progress log
+   IMAGE TO PDF — client-side using pdf-lib
+   Each image is embedded on its own page, sized to fit.
    ═══════════════════════════════════════════════════════ */
 
-const API       = 'https://pdfcompress-1097766937022.europe-west1.run.app';
 const MAX_BYTES = 32 * 1024 * 1024;
 const ACCEPTED  = ['image/jpeg', 'image/png'];
 
-// ── State ─────────────────────────────────────────────
-let fileList  = [];   // [{ id, file, thumbUrl, dims }]
+let fileList  = [];
 let idCtr     = 0;
 let dragSrcId = null;
 
-// ── DOM ───────────────────────────────────────────────
-const dropZone       = document.getElementById('drop-zone');
-const fileListArea   = document.getElementById('file-list-area');
-const fileListEl     = document.getElementById('file-list');
-const convertErr     = document.getElementById('convert-error');
-const convertLoad    = document.getElementById('convert-loading');
+const dropZone        = document.getElementById('drop-zone');
+const fileListArea    = document.getElementById('file-list-area');
+const fileListEl      = document.getElementById('file-list');
+const convertErr      = document.getElementById('convert-error');
+const convertLoad     = document.getElementById('convert-loading');
 const convertProgress = document.getElementById('convert-progress');
-const progressList   = document.getElementById('progress-list');
-const convertBtn     = document.getElementById('convert-btn');
-const loadingText    = document.getElementById('loading-text');
-const fileCountLbl   = document.getElementById('file-count-label');
-const fileSizeLbl    = document.getElementById('file-size-label');
-const inputMain      = document.getElementById('file-input-main');
-const inputAddMore   = document.getElementById('file-input-addmore');
+const progressList    = document.getElementById('progress-list');
+const convertBtn      = document.getElementById('convert-btn');
+const fileCountLbl    = document.getElementById('file-count-label');
+const fileSizeLbl     = document.getElementById('file-size-label');
+const inputMain       = document.getElementById('file-input-main');
+const inputAddMore    = document.getElementById('file-input-addmore');
 
-// ── File inputs ───────────────────────────────────────
 inputMain.addEventListener('change',    () => addFiles(inputMain.files));
 inputAddMore.addEventListener('change', () => addFiles(inputAddMore.files));
 
-// ── Drop zone ─────────────────────────────────────────
-dropZone.addEventListener('dragover', e => {
-  e.preventDefault(); dropZone.classList.add('dragover');
-});
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-dropZone.addEventListener('drop', e => {
-  e.preventDefault(); dropZone.classList.remove('dragover');
-  addFiles(e.dataTransfer.files);
-});
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); addFiles(e.dataTransfer.files); });
 document.addEventListener('dragover', e => e.preventDefault());
 document.addEventListener('drop', e => {
   if (e.target.closest('#drop-zone') || e.target.closest('#file-list')) return;
@@ -505,39 +394,27 @@ document.addEventListener('drop', e => {
   if (fileList.length > 0) addFiles(e.dataTransfer.files);
 });
 
-// ── Add files ─────────────────────────────────────────
 function addFiles(incoming) {
-  const imgs = Array.from(incoming).filter(f =>
-    ACCEPTED.includes(f.type) ||
-    /\.(jpe?g|png)$/i.test(f.name)
-  );
+  const imgs = Array.from(incoming).filter(f => ACCEPTED.includes(f.type) || /\.(jpe?g|png)$/i.test(f.name));
   if (!imgs.length) { showError('Only JPG and PNG images are supported.'); return; }
-
   imgs.forEach(f => {
     if (!fileList.some(x => x.file.name === f.name && x.file.size === f.size)) {
       fileList.push({ id: ++idCtr, file: f, thumbUrl: null, dims: null });
     }
   });
-
   hideError();
   render();
-
-  // Generate thumbnails + read dimensions for new items
   fileList.filter(x => x.thumbUrl === null).forEach(item => loadThumb(item));
 }
 
-// ── Load thumbnail & image dimensions ────────────────
 function loadThumb(item) {
   const url = URL.createObjectURL(item.file);
   const img = new Image();
   img.onload = () => {
     item.thumbUrl = url;
     item.dims     = `${img.naturalWidth}×${img.naturalHeight}`;
-    // Update existing row thumb without full re-render
     const wrap = document.getElementById(`thumb-${item.id}`);
-    if (wrap) {
-      wrap.innerHTML = `<img src="${url}" alt="${esc(item.file.name)}" />`;
-    }
+    if (wrap) wrap.innerHTML = `<img src="${url}" alt="${esc(item.file.name)}" />`;
     const dimsEl = document.getElementById(`dims-${item.id}`);
     if (dimsEl) dimsEl.textContent = item.dims + ' px';
   };
@@ -545,28 +422,21 @@ function loadThumb(item) {
   img.src = url;
 }
 
-// ── Render ────────────────────────────────────────────
 function render() {
   fileListEl.innerHTML = '';
-
   if (fileList.length === 0) {
     fileListArea.style.display = 'none';
     dropZone.style.display     = '';
     convertProgress.classList.add('hidden');
     return;
   }
-
   dropZone.style.display     = 'none';
   fileListArea.style.display = '';
 
   let totalBytes = 0;
-  fileList.forEach((item, idx) => {
-    totalBytes += item.file.size;
-    fileListEl.appendChild(buildRow(item, idx));
-  });
+  fileList.forEach((item, idx) => { totalBytes += item.file.size; fileListEl.appendChild(buildRow(item, idx)); });
 
-  const count = fileList.length;
-  fileCountLbl.textContent = `${count} image${count !== 1 ? 's' : ''}`;
+  fileCountLbl.textContent = `${fileList.length} image${fileList.length !== 1 ? 's' : ''}`;
   fileSizeLbl.textContent  = formatBytes(totalBytes) + ' total';
 
   if (totalBytes > MAX_BYTES) {
@@ -577,162 +447,95 @@ function render() {
     convertBtn.disabled = false;
   }
 
-  convertBtn.innerHTML = count > 1
-    ? `<i class="fas fa-file-pdf mr-2"></i>Convert ${count} Images to PDF`
+  convertBtn.innerHTML = fileList.length > 1
+    ? `<i class="fas fa-file-pdf mr-2"></i>Convert ${fileList.length} Images to PDF`
     : `<i class="fas fa-file-pdf mr-2"></i>Convert to PDF`;
 }
 
-// ── Build a row ───────────────────────────────────────
 function buildRow(item, idx) {
   const li = document.createElement('li');
   li.className  = 'file-item';
   li.draggable  = true;
   li.dataset.id = item.id;
-
-  const ext  = item.file.name.split('.').pop().toUpperCase();
-  const dims = item.dims ? item.dims + ' px' : '…';
+  const ext = item.file.name.split('.').pop().toUpperCase();
 
   li.innerHTML = `
     <div class="item-top">
       <span class="drag-handle" title="Drag to reorder"><i class="fas fa-grip-vertical"></i></span>
       <span class="file-index">${idx + 1}</span>
       <div class="thumb-wrap" id="thumb-${item.id}">
-        ${item.thumbUrl
-          ? `<img src="${item.thumbUrl}" alt="${esc(item.file.name)}" />`
-          : `<span class="thumb-placeholder"><i class="fas fa-image"></i></span>`}
+        ${item.thumbUrl ? `<img src="${item.thumbUrl}" alt="${esc(item.file.name)}" />` : `<span class="thumb-placeholder"><i class="fas fa-image"></i></span>`}
       </div>
       <div class="file-info">
         <div class="file-name" title="${esc(item.file.name)}">${esc(item.file.name)}</div>
-        <div class="file-dims" id="dims-${item.id}">${dims}</div>
+        <div class="file-dims" id="dims-${item.id}">${item.dims ? item.dims + ' px' : '…'}</div>
       </div>
       <div class="file-meta">
         <span class="badge">${formatBytes(item.file.size)}</span>
         <span class="badge badge-type">${ext}</span>
         <div class="flex gap-1">
-          <button class="move-btn" title="Move up"
-                  onclick="moveItem(${item.id}, -1)"
-                  ${idx === 0 ? 'disabled' : ''}>
-            <i class="fas fa-chevron-up"></i>
-          </button>
-          <button class="move-btn" title="Move down"
-                  onclick="moveItem(${item.id}, 1)"
-                  ${idx === fileList.length - 1 ? 'disabled' : ''}>
-            <i class="fas fa-chevron-down"></i>
-          </button>
+          <button class="move-btn" onclick="moveItem(${item.id},-1)" ${idx===0?'disabled':''}><i class="fas fa-chevron-up"></i></button>
+          <button class="move-btn" onclick="moveItem(${item.id},1)" ${idx===fileList.length-1?'disabled':''}><i class="fas fa-chevron-down"></i></button>
         </div>
-        <button class="file-remove" title="Remove image" onclick="removeItem(${item.id})">
-          <i class="fas fa-times"></i>
-        </button>
+        <button class="file-remove" onclick="removeItem(${item.id})"><i class="fas fa-times"></i></button>
       </div>
-    </div>
-  `;
+    </div>`;
 
-  // ── Drag events ───────────────────────────────────
-  li.addEventListener('dragstart', e => {
-    dragSrcId = item.id;
-    li.classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', String(item.id));
-  });
-  li.addEventListener('dragend', () => {
-    dragSrcId = null;
-    document.querySelectorAll('.file-item').forEach(el =>
-      el.classList.remove('dragging', 'drag-over')
-    );
-  });
-  li.addEventListener('dragover', e => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    if (dragSrcId !== null && dragSrcId !== item.id) {
-      document.querySelectorAll('.file-item').forEach(el => el.classList.remove('drag-over'));
-      li.classList.add('drag-over');
-    }
-  });
-  li.addEventListener('dragleave', e => {
-    if (!li.contains(e.relatedTarget)) li.classList.remove('drag-over');
-  });
-  li.addEventListener('drop', e => {
-    e.preventDefault();
-    li.classList.remove('drag-over');
-    const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
-    if (src && src !== item.id) reorderById(src, item.id);
-  });
-
+  li.addEventListener('dragstart', e => { dragSrcId = item.id; li.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain', String(item.id)); });
+  li.addEventListener('dragend', () => { dragSrcId=null; document.querySelectorAll('.file-item').forEach(el=>el.classList.remove('dragging','drag-over')); });
+  li.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect='move'; if(dragSrcId!==null&&dragSrcId!==item.id){document.querySelectorAll('.file-item').forEach(el=>el.classList.remove('drag-over'));li.classList.add('drag-over');} });
+  li.addEventListener('dragleave', e => { if(!li.contains(e.relatedTarget)) li.classList.remove('drag-over'); });
+  li.addEventListener('drop', e => { e.preventDefault(); li.classList.remove('drag-over'); const src=parseInt(e.dataTransfer.getData('text/plain'),10); if(src&&src!==item.id) reorderById(src,item.id); });
   return li;
 }
 
-// ── Reorder helpers ───────────────────────────────────
 function reorderById(srcId, targetId) {
-  const si = fileList.findIndex(x => x.id === srcId);
-  const ti = fileList.findIndex(x => x.id === targetId);
-  if (si < 0 || ti < 0) return;
-  const [moved] = fileList.splice(si, 1);
-  fileList.splice(ti, 0, moved);
-  render();
-  // Re-attach any loaded thumb URLs (render rebuilds DOM)
-  fileList.forEach(item => {
-    if (item.thumbUrl) {
-      const wrap = document.getElementById(`thumb-${item.id}`);
-      if (wrap && !wrap.querySelector('img')) {
-        wrap.innerHTML = `<img src="${item.thumbUrl}" alt="${esc(item.file.name)}" />`;
-      }
-      const dimsEl = document.getElementById(`dims-${item.id}`);
-      if (dimsEl && item.dims) dimsEl.textContent = item.dims + ' px';
-    }
-  });
+  const si=fileList.findIndex(x=>x.id===srcId), ti=fileList.findIndex(x=>x.id===targetId);
+  if(si<0||ti<0) return;
+  const [moved]=fileList.splice(si,1); fileList.splice(ti,0,moved); render();
 }
-
 function moveItem(id, dir) {
-  const i = fileList.findIndex(x => x.id === id);
-  const j = i + dir;
-  if (j < 0 || j >= fileList.length) return;
-  [fileList[i], fileList[j]] = [fileList[j], fileList[i]];
-  render();
-  fileList.forEach(item => {
-    if (item.thumbUrl) {
-      const wrap = document.getElementById(`thumb-${item.id}`);
-      if (wrap && !wrap.querySelector('img')) {
-        wrap.innerHTML = `<img src="${item.thumbUrl}" alt="${esc(item.file.name)}" />`;
-      }
-      const dimsEl = document.getElementById(`dims-${item.id}`);
-      if (dimsEl && item.dims) dimsEl.textContent = item.dims + ' px';
-    }
+  const i=fileList.findIndex(x=>x.id===id), j=i+dir;
+  if(j<0||j>=fileList.length) return;
+  [fileList[i],fileList[j]]=[fileList[j],fileList[i]]; render();
+}
+function removeItem(id) {
+  const item=fileList.find(x=>x.id===id);
+  if(item&&item.thumbUrl) URL.revokeObjectURL(item.thumbUrl);
+  fileList=fileList.filter(x=>x.id!==id); render(); hideError();
+}
+function clearAll() {
+  fileList.forEach(x=>{if(x.thumbUrl)URL.revokeObjectURL(x.thumbUrl);}); fileList=[]; render(); hideError();
+}
+
+// ── Read file as ArrayBuffer ──────────────────────────
+function readAsArrayBuffer(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload  = e => resolve(e.target.result);
+    r.onerror = () => reject(new Error(`Failed to read ${file.name}`));
+    r.readAsArrayBuffer(file);
   });
 }
 
-function removeItem(id) {
-  const item = fileList.find(x => x.id === id);
-  if (item && item.thumbUrl) URL.revokeObjectURL(item.thumbUrl);
-  fileList = fileList.filter(x => x.id !== id);
-  render();
-  hideError();
-}
-
-function clearAll() {
-  fileList.forEach(x => { if (x.thumbUrl) URL.revokeObjectURL(x.thumbUrl); });
-  fileList = [];
-  render();
-  hideError();
-}
-
-// ── Convert & download ────────────────────────────────
+// ── Convert to PDF (client-side with pdf-lib) ─────────
 async function doConvert() {
   if (!fileList.length) { showError('Please add at least one image.'); return; }
+  let total = 0; fileList.forEach(x => { total += x.file.size; });
+  if (total > MAX_BYTES) { showError('Total exceeds 32 MB.'); return; }
 
-  let total = 0;
-  fileList.forEach(x => { total += x.file.size; });
-  if (total > MAX_BYTES) { showError('Total exceeds 32 MB — please remove some images.'); return; }
+  if (typeof PDFLib === 'undefined') {
+    showError('PDF library not loaded yet — please wait and try again.'); return;
+  }
 
-  // Build progress UI
   progressList.innerHTML = '';
   const progDiv = document.createElement('div');
   progDiv.className = 'progress-item';
   progDiv.innerHTML = `
-    <span class="dot dot-pending" id="dot-main"></span>
+    <span class="dot" id="dot-main" style="background:#f59e0b"></span>
     <span id="prog-text-main" class="text-gray-600">
-      Converting ${fileList.length} image${fileList.length !== 1 ? 's' : ''} to PDF…
-    </span>
-  `;
+      Converting ${fileList.length} image${fileList.length!==1?'s':''} to PDF…
+    </span>`;
   progressList.appendChild(progDiv);
 
   convertProgress.classList.remove('hidden');
@@ -740,36 +543,50 @@ async function doConvert() {
   convertBtn.disabled = true;
   hideError();
 
-  const dot      = document.getElementById('dot-main');
-  const progText = document.getElementById('prog-text-main');
-
-  // Animate dot
-  dot.style.background = '#f59e0b';
-  dot.style.animation  = 'spin 0.8s linear infinite';
-
   try {
-    const fd = new FormData();
-    // Append in current display order — server will combine in this order
-    fileList.forEach(item => fd.append('file', item.file));
+    const { PDFDocument } = PDFLib;
+    const pdf = await PDFDocument.create();
 
-    const res = await fetch(`${API}/image`, { method: 'POST', body: fd });
-    if (!res.ok) throw new Error(`Server error ${res.status}`);
+    for (const item of fileList) {
+      const arrayBuffer = await readAsArrayBuffer(item.file);
+      const mimeType    = item.file.type || (item.file.name.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
 
-    const blob = await res.blob();
+      let embeddedImage;
+      if (mimeType === 'image/png') {
+        embeddedImage = await pdf.embedPng(arrayBuffer);
+      } else {
+        embeddedImage = await pdf.embedJpg(arrayBuffer);
+      }
+
+      const { width, height } = embeddedImage;
+
+      // Page sized to the image (at 72 DPI — pdf points)
+      // Scale large images down to A4 max (595×842 pt) to keep file reasonable
+      const maxW = 595, maxH = 842;
+      const scale = Math.min(1, maxW / width, maxH / height);
+      const pageW = Math.round(width  * scale);
+      const pageH = Math.round(height * scale);
+
+      const page = pdf.addPage([pageW, pageH]);
+      page.drawImage(embeddedImage, { x: 0, y: 0, width: pageW, height: pageH });
+    }
+
+    const pdfBytes = await pdf.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     downloadBlob(blob, 'images_converted.pdf');
 
-    dot.style.animation  = 'none';
-    dot.className        = 'dot dot-done';
-    progText.innerHTML   = `
+    document.getElementById('dot-main').className = 'dot dot-done';
+    document.getElementById('prog-text-main').innerHTML = `
       <span class="text-green-600 font-medium">
-        ✓ ${fileList.length} image${fileList.length !== 1 ? 's' : ''} converted —
+        ✓ ${fileList.length} image${fileList.length!==1?'s':''} converted —
         PDF downloaded (${formatBytes(blob.size)})
       </span>`;
 
   } catch (err) {
-    dot.style.animation = 'none';
-    dot.className       = 'dot dot-error';
-    progText.innerHTML  = `<span class="text-red-500">✗ Conversion failed — ${esc(err.message)}</span>`;
+    const dot = document.getElementById('dot-main');
+    const progText = document.getElementById('prog-text-main');
+    if (dot) dot.className = 'dot dot-error';
+    if (progText) progText.innerHTML = `<span class="text-red-500">✗ Failed — ${esc(err.message)}</span>`;
     showError(err.message);
   } finally {
     convertLoad.classList.add('hidden');
@@ -777,44 +594,22 @@ async function doConvert() {
   }
 }
 
-// ── Utilities ─────────────────────────────────────────
 function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a   = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 }
-
-function formatBytes(b) {
-  if (b < 1024)          return b + ' B';
-  if (b < 1024 * 1024)   return (b / 1024).toFixed(1) + ' KB';
-  return (b / (1024 * 1024)).toFixed(2) + ' MB';
-}
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function showError(msg) { convertErr.textContent = msg; convertErr.classList.remove('hidden'); }
+function formatBytes(b) { if(b<1024) return b+' B'; if(b<1024*1024) return (b/1024).toFixed(1)+' KB'; return (b/(1024*1024)).toFixed(2)+' MB'; }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function showError(msg) { convertErr.textContent=msg; convertErr.classList.remove('hidden'); }
 function hideError()    { convertErr.classList.add('hidden'); }
-
-// ── Navbar helpers ────────────────────────────────────
-function toggleMobileMenu() {
-  document.getElementById('mobile-menu').classList.toggle('open');
-}
+function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
 function toggleMobileTools() {
   document.getElementById('mobile-tool-links').classList.toggle('open');
-  const c = document.getElementById('tools-chevron');
-  c.classList.toggle('fa-chevron-down');
-  c.classList.toggle('fa-chevron-up');
+  const c=document.getElementById('tools-chevron'); c.classList.toggle('fa-chevron-down'); c.classList.toggle('fa-chevron-up');
 }
 document.addEventListener('click', e => {
-  const menu      = document.getElementById('mobile-menu');
-  const hamburger = document.getElementById('hamburger');
-  if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
-    menu.classList.remove('open');
-  }
+  const menu=document.getElementById('mobile-menu'), hamburger=document.getElementById('hamburger');
+  if(menu&&hamburger&&!menu.contains(e.target)&&!hamburger.contains(e.target)) menu.classList.remove('open');
 });
 </script>
 </body>
