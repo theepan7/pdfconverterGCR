@@ -103,7 +103,6 @@ def compress():
             input_path = os.path.join(tmp_dir, f"{file_id}_input.pdf")
             output_path = os.path.join(tmp_dir, f"{file_id}_compressed.pdf")
 
-            # Save upload to tmp
             uploaded_file.save(input_path)
             input_size_kb = get_file_size_kb(input_path)
 
@@ -112,12 +111,14 @@ def compress():
                       filename=original_filename,
                       file_size_kb=input_size_kb)
 
-            # Run Ghostscript
             gs_cmd = [
                 "gs", "-sDEVICE=pdfwrite",
                 "-dCompatibilityLevel=1.4",
                 "-dPDFSETTINGS=/ebook",
                 "-dNOPAUSE", "-dQUIET", "-dBATCH",
+                "-dNumRenderingThreads=4",  # ← multi-core
+                "-dNOGC",                   # ← skip GC
+                "-dOptimize=true",          # ← optimize
                 f"-sOutputFile={output_path}", input_path
             ]
             result = subprocess.run(gs_cmd, capture_output=True, text=True)
@@ -132,17 +133,21 @@ def compress():
             output_size_kb = get_file_size_kb(output_path)
             duration_ms = round((time.monotonic() - start_time) * 1000)
 
+            # If output is larger, return original instead
+            if output_size_kb >= input_size_kb:
+                return send_file(
+                    input_path,
+                    mimetype="application/pdf",
+                    as_attachment=True,
+                    download_name=f"compressed_{original_filename}",
+                )
+
             log_event("compress", "success",
                       filename=original_filename,
                       input_size_kb=input_size_kb,
                       output_size_kb=output_size_kb,
                       saved_kb=round(input_size_kb - output_size_kb, 2),
                       duration_ms=duration_ms)
-
-            log_event("download", "success",
-                      operation="compress",
-                      filename=original_filename,
-                      output_size_kb=output_size_kb)
 
             return send_file(
                 output_path,
