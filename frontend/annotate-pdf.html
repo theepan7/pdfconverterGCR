@@ -175,7 +175,6 @@
       border-bottom: 2.5px solid #f43f5e;
       transform-origin: left center;
     }
-    /* Strikethrough drawn at vertical center */
     .ann-strikethrough-line {
       position: absolute;
       height: 2.5px;
@@ -348,8 +347,8 @@
   <main class="flex-1 w-full flex flex-col items-center py-8 px-4">
     <div class="w-full max-w-4xl">
 
-      <!-- Drop zone -->
-      <div id="drop-zone-wrap" class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 mb-6">
+      <!-- Drop zone — single card matching compress.html structure (p-8 card, p-10 drop zone) -->
+      <div id="drop-zone-card" class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 mb-6">
         <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input').click()">
           <i class="fas fa-highlighter text-emerald-400 text-5xl mb-4 block"></i>
           <p class="text-gray-700 font-semibold text-lg mb-1">Drop your PDF here or click to browse</p>
@@ -381,7 +380,6 @@
               <!-- Toolbar -->
               <div class="toolbar">
                 <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider mr-1">Tool:</span>
-
                 <button id="tool-highlight" class="tool-btn highlight active" onclick="setTool('highlight')" title="Highlight">
                   <i class="fas fa-highlighter"></i> Highlight
                 </button>
@@ -394,7 +392,6 @@
                 <button id="tool-comment" class="tool-btn comment" onclick="setTool('comment')" title="Comment">
                   <i class="fas fa-comment-dots"></i> Comment
                 </button>
-
                 <div class="tool-divider"></div>
                 <span class="text-xs text-gray-400">Color:</span>
                 <div id="color-swatches" class="flex gap-1 items-center"></div>
@@ -426,7 +423,6 @@
                 <div id="page-wrapper" class="page-wrapper" style="display:none">
                   <canvas id="pdf-canvas"></canvas>
                   <div id="ann-layer"></div>
-                  <!-- drag selection rect -->
                   <div id="sel-rect" class="selection-rect" style="display:none"></div>
                 </div>
               </div>
@@ -568,23 +564,11 @@
   </div>
 
 <script>
-/* ═══════════════════════════════════════════════════════
-   ANNOTATE PDF — 100% client-side
-   PDF.js renders pages for display
-   pdf-lib writes annotations into the final PDF:
-     • Highlight  → filled yellow rectangle (semi-transparent)
-     • Underline  → thin blue line at bottom of selection
-     • Strikethrough → red line at midpoint of selection
-     • Comment    → text annotation (sticky note) embedded as
-                    a PDF text annotation with the author's note
-   ═══════════════════════════════════════════════════════ */
-
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 const MAX_BYTES = 32 * 1024 * 1024;
 
-// ── Colour palettes per tool ──────────────────────────
 const TOOL_COLORS = {
   highlight:     ['#fde047','#86efac','#93c5fd','#f9a8d4','#fca5a5'],
   underline:     ['#3b82f6','#8b5cf6','#ec4899','#10b981','#f97316'],
@@ -592,27 +576,21 @@ const TOOL_COLORS = {
   comment:       ['#10b981','#f59e0b','#6366f1','#f43f5e','#0ea5e9'],
 };
 
-// ── State ─────────────────────────────────────────────
 let pdfFile       = null;
-let pdfJsDoc      = null;    // PDF.js doc
+let pdfJsDoc      = null;
 let totalPages    = 0;
 let currentPage   = 1;
 let currentTool   = 'highlight';
 let currentColor  = '#fde047';
-let annotations   = [];      // [{ id, type, page, x, y, w, h, color, text? }]
+let annotations   = [];
 let annIdCtr      = 0;
-let renderScale   = 1.5;     // canvas render scale
-let pageViewport  = null;    // current page viewport
-
-// drag state
-let isDragging = false;
-let dragStart  = { x: 0, y: 0 };
-
-// comment pending placement
+let renderScale   = 1.5;
+let pageViewport  = null;
+let isDragging    = false;
+let dragStart     = { x: 0, y: 0 };
 let pendingCommentPos = null;
 
-// ── DOM ───────────────────────────────────────────────
-const dropZoneWrap  = document.getElementById('drop-zone-wrap');
+const dropZoneCard  = document.getElementById('drop-zone-card');
 const dropZone      = document.getElementById('drop-zone');
 const fileInput     = document.getElementById('file-input');
 const editorArea    = document.getElementById('editor-area');
@@ -634,7 +612,6 @@ const saveBtn       = document.getElementById('save-btn');
 const commentModal  = document.getElementById('comment-modal');
 const commentText   = document.getElementById('comment-text');
 
-// ── File input ────────────────────────────────────────
 fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
@@ -653,7 +630,7 @@ async function loadFile(f) {
   document.getElementById('editor-file-name').textContent = f.name;
   document.getElementById('editor-file-meta').textContent = `— ${formatBytes(f.size)}`;
 
-  dropZoneWrap.style.display = 'none';
+  dropZoneCard.style.display = 'none';
   editorArea.style.display   = '';
   thumbLoading.style.display = '';
   pageWrapper.style.display  = 'none';
@@ -670,12 +647,11 @@ async function loadFile(f) {
 
 function changeFile() {
   pdfFile = null; pdfJsDoc = null; annotations = []; currentPage = 1;
-  dropZoneWrap.style.display = '';
+  dropZoneCard.style.display = '';
   editorArea.style.display   = 'none';
   fileInput.value = '';
 }
 
-// ── Page rendering ────────────────────────────────────
 async function renderPage(num) {
   thumbLoading.style.display = '';
   pageWrapper.style.display  = 'none';
@@ -705,7 +681,6 @@ function goToPage(num) {
   renderPage(num);
 }
 
-// ── Tool selection ────────────────────────────────────
 function setTool(tool) {
   currentTool = tool;
   ['highlight','underline','strikethrough','comment'].forEach(t => {
@@ -715,7 +690,6 @@ function setTool(tool) {
   buildColorSwatches();
 }
 
-// ── Color swatches ────────────────────────────────────
 function buildColorSwatches() {
   const wrap = document.getElementById('color-swatches');
   wrap.innerHTML = '';
@@ -729,7 +703,6 @@ function buildColorSwatches() {
   });
 }
 
-// ── Mouse drag on page ────────────────────────────────
 pageWrapper.addEventListener('mousedown', e => {
   if (e.button !== 0) return;
   const rect = pageWrapper.getBoundingClientRect();
@@ -745,34 +718,23 @@ pageWrapper.addEventListener('mousedown', e => {
 pageWrapper.addEventListener('mousemove', e => {
   if (!isDragging) return;
   const rect = pageWrapper.getBoundingClientRect();
-  const cx = e.clientX - rect.left;
-  const cy = e.clientY - rect.top;
-  const x = Math.min(cx, dragStart.x);
-  const y = Math.min(cy, dragStart.y);
-  const w = Math.abs(cx - dragStart.x);
-  const h = Math.abs(cy - dragStart.y);
+  const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+  const x = Math.min(cx, dragStart.x), y = Math.min(cy, dragStart.y);
   selRect.style.left   = x + 'px';
   selRect.style.top    = y + 'px';
-  selRect.style.width  = w + 'px';
-  selRect.style.height = h + 'px';
+  selRect.style.width  = Math.abs(cx - dragStart.x) + 'px';
+  selRect.style.height = Math.abs(cy - dragStart.y) + 'px';
 });
 
 pageWrapper.addEventListener('mouseup', e => {
   if (!isDragging) return;
   isDragging = false;
   selRect.style.display = 'none';
-
   const rect = pageWrapper.getBoundingClientRect();
-  const cx = e.clientX - rect.left;
-  const cy = e.clientY - rect.top;
-  const x = Math.min(cx, dragStart.x);
-  const y = Math.min(cy, dragStart.y);
-  const w = Math.abs(cx - dragStart.x);
-  const h = Math.abs(cy - dragStart.y);
-
-  // Minimum size to prevent accidental single-clicks
+  const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+  const x = Math.min(cx, dragStart.x), y = Math.min(cy, dragStart.y);
+  const w = Math.abs(cx - dragStart.x), h = Math.abs(cy - dragStart.y);
   if (w < 10 || h < 8) return;
-
   if (currentTool === 'comment') {
     pendingCommentPos = { x, y, w, h };
     commentText.value = '';
@@ -783,7 +745,6 @@ pageWrapper.addEventListener('mouseup', e => {
   }
 });
 
-// Touch support for mobile
 pageWrapper.addEventListener('touchstart', e => {
   const t = e.touches[0];
   const rect = pageWrapper.getBoundingClientRect();
@@ -821,7 +782,6 @@ pageWrapper.addEventListener('touchend', e => {
   }
 });
 
-// ── Comment modal ─────────────────────────────────────
 function confirmComment() {
   const text = commentText.value.trim();
   if (!text) { commentText.focus(); return; }
@@ -840,7 +800,6 @@ commentText.addEventListener('keydown', e => {
   if (e.key === 'Escape') cancelComment();
 });
 
-// ── Annotations ───────────────────────────────────────
 function addAnnotation(ann) {
   annotations.push({ id: ++annIdCtr, ...ann });
   renderAnnOverlays();
@@ -861,38 +820,29 @@ function clearAllAnnotations() {
   renderAnnList();
 }
 
-// ── Render annotation overlays on canvas ─────────────
 function renderAnnOverlays() {
   annLayer.innerHTML = '';
-  const pageAnns = annotations.filter(a => a.page === currentPage);
-
-  pageAnns.forEach(a => {
+  annotations.filter(a => a.page === currentPage).forEach(a => {
     if (a.type === 'highlight') {
       const div = document.createElement('div');
       div.className = 'ann-overlay ann-highlight';
       div.style.cssText = `left:${a.x}px;top:${a.y}px;width:${a.w}px;height:${a.h}px;background:${hexToRgba(a.color, 0.4)};`;
       annLayer.appendChild(div);
-
     } else if (a.type === 'underline') {
       const div = document.createElement('div');
-      div.className = 'ann-overlay ann-underline';
+      div.className = 'ann-overlay';
       div.style.cssText = `left:${a.x}px;top:${a.y + a.h - 3}px;width:${a.w}px;height:3px;background:${a.color};`;
       annLayer.appendChild(div);
-
     } else if (a.type === 'strikethrough') {
       const div = document.createElement('div');
       div.className = 'ann-overlay';
       div.style.cssText = `left:${a.x}px;top:${a.y + a.h/2 - 1.5}px;width:${a.w}px;height:3px;background:${a.color};`;
       annLayer.appendChild(div);
-
     } else if (a.type === 'comment') {
-      // Draw a small highlight behind the selection
       const bg = document.createElement('div');
       bg.className = 'ann-overlay';
       bg.style.cssText = `left:${a.x}px;top:${a.y}px;width:${a.w}px;height:${a.h}px;background:${hexToRgba(a.color, 0.18)};border:1.5px solid ${a.color};border-radius:3px;`;
       annLayer.appendChild(bg);
-
-      // Pin dot
       const dot = document.createElement('div');
       dot.className = 'ann-comment-dot';
       dot.style.cssText = `left:${a.x + a.w - 11}px;top:${a.y - 11}px;background:${a.color};`;
@@ -904,11 +854,8 @@ function renderAnnOverlays() {
   });
 }
 
-// ── Render sidebar list ───────────────────────────────
 function renderAnnList() {
-  // Remove existing items but keep the empty placeholder
   annList.querySelectorAll('.ann-list-item').forEach(el => el.remove());
-
   annCountEl.textContent = annotations.length;
   annEmpty.style.display = annotations.length === 0 ? '' : 'none';
 
@@ -928,8 +875,6 @@ function renderAnnList() {
       <button class="ann-remove-btn" title="Remove" onclick="removeAnnotation(${a.id})">
         <i class="fas fa-times"></i>
       </button>`;
-
-    // Click to jump to that page
     div.addEventListener('click', e => {
       if (e.target.closest('.ann-remove-btn')) return;
       if (a.page !== currentPage) renderPage(a.page);
@@ -938,15 +883,10 @@ function renderAnnList() {
   });
 }
 
-// ── Save annotated PDF (client-side with pdf-lib) ─────
 async function doSave() {
   if (!pdfFile) return;
-  if (annotations.length === 0) {
-    showSaveError('No annotations to save. Add at least one annotation first.'); return;
-  }
-  if (typeof PDFLib === 'undefined') {
-    showSaveError('PDF library not loaded — please try again.'); return;
-  }
+  if (annotations.length === 0) { showSaveError('No annotations to save. Add at least one annotation first.'); return; }
+  if (typeof PDFLib === 'undefined') { showSaveError('PDF library not loaded — please try again.'); return; }
 
   saveLoading.classList.remove('hidden');
   saveBtn.disabled = true;
@@ -954,99 +894,51 @@ async function doSave() {
 
   try {
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
-
     const arrayBuffer = await pdfFile.arrayBuffer();
     const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
     const pages  = pdfDoc.getPages();
 
     for (const ann of annotations) {
-      const page     = pages[ann.page - 1];
+      const page = pages[ann.page - 1];
       if (!page) continue;
-
       const { width: pageW, height: pageH } = page.getSize();
-
-      // Convert canvas coords → PDF coords
-      // PDF.js renders at renderScale, and canvas origin is top-left.
-      // PDF coordinate origin is bottom-left.
-      const scaleX = pageW / (pageViewport ? pageViewport.width  / renderScale * renderScale : pdfCanvas.width);
-      const scaleY = pageH / (pageViewport ? pageViewport.height / renderScale * renderScale : pdfCanvas.height);
-
-      // Simpler: use the ratio of page size to canvas size
-      const canvasW = pdfCanvas.width;
-      const canvasH = pdfCanvas.height;
-      const rx = pageW / canvasW;
-      const ry = pageH / canvasH;
-
-      // ann.x/y are canvas pixels, convert to PDF points
-      const pdfX  = ann.x * rx;
-      const pdfY  = pageH - (ann.y + ann.h) * ry;   // flip Y
-      const pdfW  = ann.w * rx;
-      const pdfH  = ann.h * ry;
-
+      const rx = pageW / pdfCanvas.width;
+      const ry = pageH / pdfCanvas.height;
+      const pdfX = ann.x * rx;
+      const pdfY = pageH - (ann.y + ann.h) * ry;
+      const pdfW = ann.w * rx;
+      const pdfH = ann.h * ry;
       const [r, g, b] = hexToRgbFloat(ann.color);
       const fillColor = rgb(r, g, b);
 
       if (ann.type === 'highlight') {
-        page.drawRectangle({
-          x: pdfX, y: pdfY, width: pdfW, height: pdfH,
-          color: fillColor, opacity: 0.38,
-        });
-
+        page.drawRectangle({ x: pdfX, y: pdfY, width: pdfW, height: pdfH, color: fillColor, opacity: 0.38 });
       } else if (ann.type === 'underline') {
-        page.drawLine({
-          start: { x: pdfX,        y: pdfY },
-          end:   { x: pdfX + pdfW, y: pdfY },
-          thickness: 1.5, color: fillColor, opacity: 1,
-        });
-
+        page.drawLine({ start: { x: pdfX, y: pdfY }, end: { x: pdfX + pdfW, y: pdfY }, thickness: 1.5, color: fillColor, opacity: 1 });
       } else if (ann.type === 'strikethrough') {
         const midY = pdfY + pdfH / 2;
-        page.drawLine({
-          start: { x: pdfX,        y: midY },
-          end:   { x: pdfX + pdfW, y: midY },
-          thickness: 1.5, color: fillColor, opacity: 1,
-        });
-
+        page.drawLine({ start: { x: pdfX, y: midY }, end: { x: pdfX + pdfW, y: midY }, thickness: 1.5, color: fillColor, opacity: 1 });
       } else if (ann.type === 'comment') {
-        // Draw a subtle background
-        page.drawRectangle({
-          x: pdfX, y: pdfY, width: pdfW, height: pdfH,
-          color: fillColor, opacity: 0.15,
-          borderColor: fillColor, borderWidth: 1, borderOpacity: 0.7,
-        });
-
-        // Draw a small marker square at top-right corner
-        const markerSize = 10;
-        page.drawRectangle({
-          x: pdfX + pdfW - markerSize, y: pdfY + pdfH - markerSize,
-          width: markerSize, height: markerSize,
-          color: fillColor, opacity: 0.9,
-        });
-
-        // Embed comment text near the annotation (small font)
+        page.drawRectangle({ x: pdfX, y: pdfY, width: pdfW, height: pdfH, color: fillColor, opacity: 0.15, borderColor: fillColor, borderWidth: 1, borderOpacity: 0.7 });
+        const ms = 10;
+        page.drawRectangle({ x: pdfX + pdfW - ms, y: pdfY + pdfH - ms, width: ms, height: ms, color: fillColor, opacity: 0.9 });
         try {
-          const font    = await pdfDoc.embedFont(StandardFonts.Helvetica);
-          const maxW    = pdfW - 4;
+          const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
           const fontSize = Math.max(7, Math.min(10, pdfH * 0.35));
-          const lines   = wrapText(ann.text, font, fontSize, maxW);
+          const lines = wrapText(ann.text, font, fontSize, pdfW - 4);
           let textY = pdfY + pdfH - fontSize - 2;
           for (const line of lines) {
             if (textY < pdfY) break;
-            page.drawText(line, {
-              x: pdfX + 2, y: textY,
-              size: fontSize, font, color: rgb(0.1, 0.1, 0.1), opacity: 0.85,
-            });
+            page.drawText(line, { x: pdfX + 2, y: textY, size: fontSize, font, color: rgb(0.1, 0.1, 0.1), opacity: 0.85 });
             textY -= fontSize + 1;
           }
-        } catch (_) { /* font embed failed gracefully */ }
+        } catch (_) {}
       }
     }
 
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const baseName = pdfFile.name.replace(/\.pdf$/i, '');
-    downloadBlob(blob, `${baseName}_annotated.pdf`);
-
+    downloadBlob(blob, `${pdfFile.name.replace(/\.pdf$/i, '')}_annotated.pdf`);
   } catch (err) {
     showSaveError('Failed to save: ' + err.message);
   } finally {
@@ -1055,16 +947,13 @@ async function doSave() {
   }
 }
 
-// ── Text wrapping helper ──────────────────────────────
 function wrapText(text, font, size, maxWidth) {
-  const words = text.split(' ');
-  const lines = [];
+  const words = text.split(' '), lines = [];
   let line = '';
   for (const word of words) {
     const test = line ? line + ' ' + word : word;
     try {
-      const w = font.widthOfTextAtSize(test, size);
-      if (w > maxWidth && line) { lines.push(line); line = word; }
+      if (font.widthOfTextAtSize(test, size) > maxWidth && line) { lines.push(line); line = word; }
       else { line = test; }
     } catch { line = test; }
   }
@@ -1072,42 +961,31 @@ function wrapText(text, font, size, maxWidth) {
   return lines;
 }
 
-// ── Colour helpers ────────────────────────────────────
-function hexToRgba(hex, alpha) {
-  const [r, g, b] = hexToRgbInt(hex);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-function hexToRgbFloat(hex) {
-  const [r, g, b] = hexToRgbInt(hex);
-  return [r / 255, g / 255, b / 255];
-}
+function hexToRgba(hex, alpha) { const [r,g,b] = hexToRgbInt(hex); return `rgba(${r},${g},${b},${alpha})`; }
+function hexToRgbFloat(hex) { const [r,g,b] = hexToRgbInt(hex); return [r/255, g/255, b/255]; }
 function hexToRgbInt(hex) {
-  hex = hex.replace('#', '');
-  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
-  const n = parseInt(hex, 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  hex = hex.replace('#','');
+  if (hex.length === 3) hex = hex.split('').map(c=>c+c).join('');
+  const n = parseInt(hex,16);
+  return [(n>>16)&255,(n>>8)&255,n&255];
 }
 
-// ── Utilities ─────────────────────────────────────────
 function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
-  const a   = document.createElement('a');
+  const a = document.createElement('a');
   a.href = url; a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
 }
 function formatBytes(b) {
-  if (b < 1024) return b + ' B';
-  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
-  return (b/1024/1024).toFixed(2) + ' MB';
+  if (b < 1024) return b+' B';
+  if (b < 1024*1024) return (b/1024).toFixed(1)+' KB';
+  return (b/1024/1024).toFixed(2)+' MB';
 }
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function showSaveError(msg) { saveError.textContent = msg; saveError.classList.remove('hidden'); }
 function hideSaveError()    { saveError.classList.add('hidden'); }
 
-// ── Navbar ────────────────────────────────────────────
 function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
 function toggleMobileTools() {
   document.getElementById('mobile-tool-links').classList.toggle('open');
