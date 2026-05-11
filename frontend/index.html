@@ -201,38 +201,65 @@
       <!-- Desktop nav -->
       <div class="hidden md:flex items-center gap-1">
         <a href="/" class="nav-link"><i class="fas fa-home mr-1 text-xs"></i> Home</a>
+
+        <!-- Compress dropdown -->
         <div class="dropdown">
           <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
-            <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
+            <i class="fas fa-compress-alt text-xs"></i>&nbsp;Compress&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
           </button>
-          <div class="dropdown-menu" style="min-width:240px">
+          <div class="dropdown-menu" style="min-width:200px">
             <div class="dropdown-section">
-              <div class="dropdown-section-label">Organise</div>
-              <a href="/merge-pdf.html"         class="dropdown-item"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
-              <a href="/split-pdf.html"          class="dropdown-item"><i class="fas fa-cut text-red-500 w-4"></i> Split PDF</a>
-              <a href="/rotate-pdf.html"         class="dropdown-item"><i class="fas fa-sync-alt text-orange-500 w-4"></i> Rotate PDF</a>
-              <a href="/delete-pdf-pages.html"   class="dropdown-item"><i class="fas fa-trash-alt text-yellow-600 w-4"></i> Delete Pages</a>
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-section">
-              <div class="dropdown-section-label">Optimise</div>
-              <a href="/compress-pdf.html"       class="dropdown-item"><i class="fas fa-compress-alt text-blue-500 w-4"></i> Compress PDF</a>
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-section">
-              <div class="dropdown-section-label">Convert</div>
-              <a href="/image-to-pdf.html"       class="dropdown-item"><i class="fas fa-image text-purple-500 w-4"></i> Image to PDF</a>
-              <a href="/pdf-to-jpg.html"         class="dropdown-item"><i class="fas fa-file-image text-indigo-500 w-4"></i> PDF to JPG</a>
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-section">
-              <div class="dropdown-section-label">Annotate</div>
-              <a href="/annotate-pdf.html"       class="dropdown-item"><i class="fas fa-highlighter text-emerald-500 w-4"></i> Annotate PDF</a>
+              <div class="dropdown-section-label">Reduce File Size</div>
+              <a href="/compress-pdf.html" class="dropdown-item"><i class="fas fa-compress-alt text-blue-500 w-4"></i> Compress PDF</a>
             </div>
           </div>
         </div>
-        <a href="/about.html"          class="nav-link">About</a>
-        <a href="contactform" class="nav-link">contact</a>
+
+        <!-- Organize dropdown -->
+        <div class="dropdown">
+          <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
+            <i class="fas fa-layer-group text-xs"></i>&nbsp;Organize&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
+          </button>
+          <div class="dropdown-menu" style="min-width:200px">
+            <div class="dropdown-section">
+              <div class="dropdown-section-label">Manage Pages</div>
+              <a href="/merge-pdf.html"       class="dropdown-item"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
+              <a href="/split-pdf.html"       class="dropdown-item"><i class="fas fa-cut text-red-500 w-4"></i> Split PDF</a>
+              <a href="/rotate-pdf.html"      class="dropdown-item"><i class="fas fa-sync-alt text-orange-500 w-4"></i> Rotate PDF</a>
+              <a href="/delete-pdf-pages.html" class="dropdown-item"><i class="fas fa-trash-alt text-yellow-600 w-4"></i> Delete Pages</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Convert dropdown -->
+        <div class="dropdown">
+          <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
+            <i class="fas fa-exchange-alt text-xs"></i>&nbsp;Convert&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
+          </button>
+          <div class="dropdown-menu" style="min-width:200px">
+            <div class="dropdown-section">
+              <div class="dropdown-section-label">Change Format</div>
+              <a href="/image-to-pdf.html" class="dropdown-item"><i class="fas fa-image text-purple-500 w-4"></i> Image to PDF</a>
+              <a href="/pdf-to-jpg.html"   class="dropdown-item"><i class="fas fa-file-image text-indigo-500 w-4"></i> PDF to JPG</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Annotate dropdown -->
+        <div class="dropdown">
+          <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
+            <i class="fas fa-highlighter text-xs"></i>&nbsp;Annotate&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
+          </button>
+          <div class="dropdown-menu" style="min-width:200px">
+            <div class="dropdown-section">
+              <div class="dropdown-section-label">Mark Up PDFs</div>
+              <a href="/annotate-pdf.html" class="dropdown-item"><i class="fas fa-highlighter text-emerald-500 w-4"></i> Annotate PDF</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="/about.html"   class="nav-link">About</a>
+        <a href="contactform"   class="nav-link">Contact</a>
       </div>
 
       <!-- Hamburger -->
@@ -244,24 +271,47 @@
     <!-- Mobile menu -->
     <div id="mobile-menu" class="md:hidden px-4 pb-4" style="background:#312e81">
       <a href="/" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-home mr-2"></i>Home</a>
-      <button onclick="toggleMobileTools()" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
-        <span><i class="fas fa-tools mr-2"></i>Tools</span>
-        <i class="fas fa-chevron-down text-xs" id="tools-chevron"></i>
+
+      <!-- Mobile: Compress -->
+      <button onclick="toggleMobileSection('mobile-compress','chevron-compress')" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
+        <span><i class="fas fa-compress-alt mr-2"></i>Compress</span>
+        <i class="fas fa-chevron-down text-xs" id="chevron-compress"></i>
       </button>
-      <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
-        <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold">Organise</p>
-        <a href="/merge-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
-        <a href="/split-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
-        <a href="/rotate-pdf.html"      class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
-        <a href="/delete-pdf-pages.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-trash-alt mr-2"></i>Delete Pages</a>
-        <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold mt-1">Optimise</p>
-        <a href="/compress-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
-        <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold mt-1">Convert</p>
-        <a href="/image-to-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
-        <a href="/pdf-to-jpg.html"      class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
-        <p class="py-1 px-3 text-xs text-white opacity-40 uppercase tracking-wider font-semibold mt-1">Annotate</p>
-        <a href="/annotate-pdf.html"    class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-highlighter mr-2"></i>Annotate PDF</a>
+      <div id="mobile-compress" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+        <a href="/compress-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
       </div>
+
+      <!-- Mobile: Organize -->
+      <button onclick="toggleMobileSection('mobile-organize','chevron-organize')" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
+        <span><i class="fas fa-layer-group mr-2"></i>Organize</span>
+        <i class="fas fa-chevron-down text-xs" id="chevron-organize"></i>
+      </button>
+      <div id="mobile-organize" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+        <a href="/merge-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
+        <a href="/split-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
+        <a href="/rotate-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
+        <a href="/delete-pdf-pages.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-trash-alt mr-2"></i>Delete Pages</a>
+      </div>
+
+      <!-- Mobile: Convert -->
+      <button onclick="toggleMobileSection('mobile-convert','chevron-convert')" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
+        <span><i class="fas fa-exchange-alt mr-2"></i>Convert</span>
+        <i class="fas fa-chevron-down text-xs" id="chevron-convert"></i>
+      </button>
+      <div id="mobile-convert" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+        <a href="/image-to-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
+        <a href="/pdf-to-jpg.html"   class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
+      </div>
+
+      <!-- Mobile: Annotate -->
+      <button onclick="toggleMobileSection('mobile-annotate','chevron-annotate')" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
+        <span><i class="fas fa-highlighter mr-2"></i>Annotate</span>
+        <i class="fas fa-chevron-down text-xs" id="chevron-annotate"></i>
+      </button>
+      <div id="mobile-annotate" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
+        <a href="/annotate-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-highlighter mr-2"></i>Annotate PDF</a>
+      </div>
+
       <a href="#about"   class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-info-circle mr-2"></i>About</a>
       <a href="#contact" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-envelope mr-2"></i>Contact</a>
     </div>
@@ -465,10 +515,12 @@
 
   <script>
     function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
-    function toggleMobileTools() {
-      document.getElementById('mobile-tool-links').classList.toggle('open');
-      const c = document.getElementById('tools-chevron');
-      c.classList.toggle('fa-chevron-down'); c.classList.toggle('fa-chevron-up');
+    function toggleMobileSection(sectionId, chevronId) {
+      const section = document.getElementById(sectionId);
+      const chevron = document.getElementById(chevronId);
+      section.classList.toggle('open');
+      chevron.classList.toggle('fa-chevron-down');
+      chevron.classList.toggle('fa-chevron-up');
     }
     document.addEventListener('click', function(e) {
       const menu = document.getElementById('mobile-menu');
