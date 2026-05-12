@@ -27,28 +27,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+  <!-- Shared navbar & footer components -->
+  <script src="/components.js"></script>
+
   <style>
     body { font-family: 'Inter', sans-serif; }
-    .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
-    .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
-    .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
-    .dropdown { position:relative; }
-    .dropdown-menu { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#fff; border-radius:0.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.18); min-width:220px; z-index:100; overflow:hidden; }
-    .dropdown:hover .dropdown-menu { display:block; }
-    .dropdown-item { display:flex; align-items:center; gap:0.6rem; padding:0.75rem 1.1rem; color:#374151; font-size:0.9rem; font-weight:500; transition:background 0.15s; text-decoration:none; }
-    .dropdown-item:hover { background:#f3f4f6; }
-    .site-header { background: linear-gradient(135deg, #475569, #4338ca); }
-    .site-footer { background:linear-gradient(135deg,#1e293b,#312e81); color:rgba(255,255,255,0.75); }
-    .footer-link { color:rgba(255,255,255,0.65); transition:color 0.2s; font-size:0.875rem; text-decoration:none; }
-    .footer-link:hover { color:#fff; }
-    .footer-divider { border-color:rgba(255,255,255,0.12); }
-    .social-icon { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.8); transition:background 0.2s,color 0.2s; font-size:0.9rem; text-decoration:none; }
-    .social-icon:hover { background:rgba(255,255,255,0.22); color:#fff; }
-    #mobile-menu { display:none; }
-    #mobile-menu.open { display:block; }
-    .mobile-tool-links { display:none; }
-    .mobile-tool-links.open { display:block; }
 
+    /* ── Page header ── */
+    .site-header { background: linear-gradient(135deg, #475569, #4338ca); }
+
+    /* ── Prose ── */
     .prose h2 { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 2rem 0 0.75rem; }
     .prose h3 { font-size: 1rem; font-weight: 600; color: #334155; margin: 1.25rem 0 0.5rem; }
     .prose p  { color: #475569; line-height: 1.75; margin-bottom: 0.85rem; font-size: 0.95rem; }
@@ -56,66 +44,19 @@
     .prose ul li { color: #475569; font-size: 0.95rem; line-height: 1.7; padding-left: 1.4rem; position: relative; margin-bottom: 0.35rem; }
     .prose ul li::before { content: '✦'; position: absolute; left: 0; color: #4338ca; font-size: 0.6rem; top: 0.35rem; }
 
+    /* ── Value cards ── */
     .value-card { background: #fff; border: 1px solid #e8edf3; border-radius: 1rem; padding: 1.5rem; }
     .value-icon { width: 44px; height: 44px; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 0.85rem; }
 
+    /* ── Tool pills ── */
     .tool-pill { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem; border-radius: 999px; font-size: 0.8rem; font-weight: 500; text-decoration: none; border: 1px solid; transition: opacity 0.15s; }
     .tool-pill:hover { opacity: 0.8; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- NAVBAR -->
-  <nav class="navbar w-full shadow-lg sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2 text-white" style="text-decoration:none">
-        <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-          <i class="fas fa-file-pdf text-white text-sm"></i>
-        </div>
-        <span class="font-bold text-lg tracking-tight">Mini PDF Tools</span>
-      </a>
-      <div class="hidden md:flex items-center gap-1">
-        <a href="/" class="nav-link"><i class="fas fa-home mr-1 text-xs"></i> Home</a>
-        <div class="dropdown">
-          <button class="nav-link flex items-center gap-1" style="background:transparent;border:none;cursor:pointer;">
-            <i class="fas fa-tools text-xs"></i>&nbsp;Tools&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
-          </button>
-          <div class="dropdown-menu">
-            <a href="/compress-pdf.html"     class="dropdown-item"><i class="fas fa-compress-alt text-blue-500"></i> Compress PDF</a>
-            <a href="/merge-pdf.html"        class="dropdown-item"><i class="fas fa-object-group text-green-500"></i> Merge PDFs</a>
-            <a href="/split-pdf.html"        class="dropdown-item"><i class="fas fa-cut text-red-500"></i> Split PDF</a>
-            <a href="/image-to-pdf.html"     class="dropdown-item"><i class="fas fa-image text-purple-500"></i> Image to PDF</a>
-            <a href="/pdf-to-jpg.html"       class="dropdown-item"><i class="fas fa-file-image text-indigo-500"></i> PDF to JPG</a>
-            <a href="/rotate-pdf.html"       class="dropdown-item"><i class="fas fa-sync-alt text-orange-500"></i> Rotate PDF</a>
-            <a href="/delete-pdf-pages.html" class="dropdown-item"><i class="fas fa-trash-alt text-yellow-600"></i> Delete Pages</a>
-          </div>
-        </div>
-        <a href="/about.html"          class="nav-link">About</a>
-        <a href="/privacy-policy.html" class="nav-link">Privacy</a>
-      </div>
-      <button id="hamburger" class="md:hidden text-white p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition" onclick="toggleMobileMenu()">
-        <i class="fas fa-bars text-lg"></i>
-      </button>
-    </div>
-    <div id="mobile-menu" class="md:hidden px-4 pb-4" style="background:#312e81">
-      <a href="/" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-home mr-2"></i>Home</a>
-      <button onclick="toggleMobileTools()" class="w-full text-left py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10 flex items-center justify-between bg-transparent border-0 cursor-pointer">
-        <span><i class="fas fa-tools mr-2"></i>Tools</span>
-        <i class="fas fa-chevron-down text-xs" id="tools-chevron"></i>
-      </button>
-      <div id="mobile-tool-links" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
-        <a href="/compress-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
-        <a href="/merge-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
-        <a href="/split-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
-        <a href="/image-to-pdf.html"     class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
-        <a href="/pdf-to-jpg.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
-        <a href="/rotate-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
-        <a href="/delete-pdf-pages.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-trash-alt mr-2"></i>Delete Pages</a>
-      </div>
-      <a href="/about.html"          class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-info-circle mr-2"></i>About</a>
-      <a href="/privacy-policy.html" class="block py-2 px-3 text-white text-sm font-medium rounded hover:bg-white hover:bg-opacity-10"><i class="fas fa-shield-alt mr-2"></i>Privacy</a>
-    </div>
-  </nav>
+  <!-- ── NAVBAR (shared component) ── -->
+  <site-navbar></site-navbar>
 
   <!-- HERO -->
   <header class="site-header w-full py-8 px-8 text-white shadow-lg">
@@ -194,6 +135,7 @@
           <a href="/pdf-to-jpg.html"       class="tool-pill" style="background:#eef2ff;color:#4338ca;border-color:#c7d2fe;"><i class="fas fa-file-image"></i> PDF to JPG</a>
           <a href="/rotate-pdf.html"       class="tool-pill" style="background:#fff7ed;color:#ea580c;border-color:#fed7aa;"><i class="fas fa-sync-alt"></i> Rotate PDF</a>
           <a href="/delete-pdf-pages.html" class="tool-pill" style="background:#fefce8;color:#ca8a04;border-color:#fde047;"><i class="fas fa-trash-alt"></i> Delete Pages</a>
+          <a href="/annotate-pdf.html"     class="tool-pill" style="background:#ecfdf5;color:#059669;border-color:#6ee7b7;"><i class="fas fa-highlighter"></i> Annotate PDF</a>
         </div>
       </div>
 
@@ -212,66 +154,8 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="site-footer w-full mt-auto">
-    <div class="max-w-6xl mx-auto px-6 py-10">
-      <div class="flex flex-col md:flex-row justify-between gap-8 mb-8">
-        <div class="flex flex-col gap-3">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center"><i class="fas fa-file-pdf text-white text-sm"></i></div>
-            <span class="text-white font-bold text-lg">Mini PDF Tools</span>
-          </div>
-          <p class="text-sm max-w-xs" style="color:rgba(255,255,255,0.6)">Free, fast, and secure PDF tools. No signup required. Your files are never stored on our servers.</p>
-          <div class="flex gap-2 mt-1">
-            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-          </div>
-        </div>
-        <div>
-          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Tools</p>
-          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
-            <li><a href="/compress-pdf.html"     class="footer-link"><i class="fas fa-compress-alt mr-2 text-xs"></i>Compress PDF</a></li>
-            <li><a href="/merge-pdf.html"        class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
-            <li><a href="/split-pdf.html"        class="footer-link"><i class="fas fa-cut mr-2 text-xs"></i>Split PDF</a></li>
-            <li><a href="/image-to-pdf.html"     class="footer-link"><i class="fas fa-image mr-2 text-xs"></i>Image to PDF</a></li>
-            <li><a href="/pdf-to-jpg.html"       class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
-            <li><a href="/rotate-pdf.html"       class="footer-link"><i class="fas fa-sync-alt mr-2 text-xs"></i>Rotate PDF</a></li>
-            <li><a href="/delete-pdf-pages.html" class="footer-link"><i class="fas fa-trash-alt mr-2 text-xs"></i>Delete Pages</a></li>
-          </ul>
-        </div>
-        <div>
-          <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Company</p>
-          <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
-            <li><a href="/about.html"          class="footer-link"><i class="fas fa-info-circle mr-2 text-xs"></i>About</a></li>
-            <li><a href="/privacy-policy.html" class="footer-link"><i class="fas fa-shield-alt mr-2 text-xs"></i>Privacy Policy</a></li>
-            <li><a href="/terms.html"          class="footer-link"><i class="fas fa-file-contract mr-2 text-xs"></i>Terms of Use</a></li>
-            <li><a href="mailto:support@minipdftools.com" class="footer-link"><i class="fas fa-envelope mr-2 text-xs"></i>Contact Us</a></li>
-          </ul>
-        </div>
-      </div>
-      <hr class="footer-divider mb-6" />
-      <div class="flex flex-col md:flex-row justify-between items-center gap-2 text-xs" style="color:rgba(255,255,255,0.45)">
-        <p>Your document privacy is our top priority. Files are never stored on our servers.</p>
-        <p>&copy; 2025 Mini PDF Tools. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
+  <!-- ── FOOTER (shared component) ── -->
+  <site-footer></site-footer>
 
-  <script>
-    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
-    function toggleMobileTools() {
-      document.getElementById('mobile-tool-links').classList.toggle('open');
-      const c = document.getElementById('tools-chevron');
-      c.classList.toggle('fa-chevron-down'); c.classList.toggle('fa-chevron-up');
-    }
-    document.addEventListener('click', e => {
-      const menu = document.getElementById('mobile-menu');
-      const hamburger = document.getElementById('hamburger');
-      if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
-        menu.classList.remove('open');
-      }
-    });
-  </script>
 </body>
 </html>
