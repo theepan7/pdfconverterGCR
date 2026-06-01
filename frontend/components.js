@@ -18,9 +18,48 @@ const SHARED_STYLES = `
   .navbar { background: linear-gradient(135deg, #475569, #4338ca); }
   .nav-link { color:rgba(255,255,255,0.82); transition:color 0.2s,background 0.2s; border-radius:0.375rem; padding:0.4rem 0.75rem; font-weight:500; font-size:0.95rem; text-decoration:none; }
   .nav-link:hover { color:#fff; background:rgba(255,255,255,0.12); }
+
+  /* ── Dropdown fix: use padding + pseudo-element to bridge the gap ── */
   .dropdown { position:relative; }
-  .dropdown-menu { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#fff; border-radius:0.75rem; box-shadow:0 10px 30px rgba(0,0,0,0.18); min-width:220px; z-index:100; overflow:hidden; }
-  .dropdown:hover .dropdown-menu { display:block; }
+
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;                        /* sit flush against the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    min-width: 220px;
+    z-index: 100;
+    overflow: hidden;
+    padding-top: 8px;                 /* visible gap becomes part of the menu */
+  }
+
+  /* Invisible bridge fills the gap so mouse doesn't leave hover area */
+  .dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -8px;                        /* exactly covers the gap */
+    left: 0;
+    right: 0;
+    height: 8px;
+  }
+
+  /* Keep menu open while hovering the button OR the menu itself */
+  .dropdown:hover .dropdown-menu { display: block; }
+
+  /* Small delay on hide so fast mouse movements don't close it instantly */
+  .dropdown-menu { transition: opacity 0.1s; }
+  .dropdown:not(:hover) .dropdown-menu { display: none; }
+
+  .dropdown-inner {
+    background: #fff;
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
   .dropdown-section { padding:0.5rem 0; }
   .dropdown-section-label { font-size:0.68rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.08em; padding:0.4rem 1.1rem 0.2rem; }
   .dropdown-item { display:flex; align-items:center; gap:0.6rem; padding:0.6rem 1.1rem; color:#374151; font-size:0.875rem; font-weight:500; transition:background 0.15s; text-decoration:none; }
@@ -78,9 +117,11 @@ class SiteNavbar extends HTMLElement {
                 <i class="fas fa-compress-alt text-xs"></i>&nbsp;Compress&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
               </button>
               <div class="dropdown-menu" style="min-width:200px" role="menu">
-                <div class="dropdown-section">
-                  <div class="dropdown-section-label">Reduce File Size</div>
-                  <a href="/compress-pdf.html" class="dropdown-item" role="menuitem"><i class="fas fa-compress-alt text-blue-500 w-4"></i> Compress PDF</a>
+                <div class="dropdown-inner">
+                  <div class="dropdown-section">
+                    <div class="dropdown-section-label">Reduce File Size</div>
+                    <a href="/compress-pdf" class="dropdown-item" role="menuitem"><i class="fas fa-compress-alt text-blue-500 w-4"></i> Compress PDF</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -91,12 +132,14 @@ class SiteNavbar extends HTMLElement {
                 <i class="fas fa-layer-group text-xs"></i>&nbsp;Organize&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
               </button>
               <div class="dropdown-menu" style="min-width:200px" role="menu">
-                <div class="dropdown-section">
-                  <div class="dropdown-section-label">Manage Pages</div>
-                  <a href="/merge-pdf.html"        class="dropdown-item" role="menuitem"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
-                  <a href="/split-pdf.html"        class="dropdown-item" role="menuitem"><i class="fas fa-cut text-red-500 w-4"></i> Split PDF</a>
-                  <a href="/rotate-pdf.html"       class="dropdown-item" role="menuitem"><i class="fas fa-sync-alt text-orange-500 w-4"></i> Rotate PDF</a>
-                  <a href="/delete-pdf-pages.html" class="dropdown-item" role="menuitem"><i class="fas fa-trash-alt text-yellow-600 w-4"></i> Delete Pages</a>
+                <div class="dropdown-inner">
+                  <div class="dropdown-section">
+                    <div class="dropdown-section-label">Manage Pages</div>
+                    <a href="/merge-pdf"        class="dropdown-item" role="menuitem"><i class="fas fa-object-group text-green-500 w-4"></i> Merge PDFs</a>
+                    <a href="/split-pdf"        class="dropdown-item" role="menuitem"><i class="fas fa-cut text-red-500 w-4"></i> Split PDF</a>
+                    <a href="/rotate-pdf"       class="dropdown-item" role="menuitem"><i class="fas fa-sync-alt text-orange-500 w-4"></i> Rotate PDF</a>
+                    <a href="/delete-pdf-pages" class="dropdown-item" role="menuitem"><i class="fas fa-trash-alt text-yellow-600 w-4"></i> Delete Pages</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -107,10 +150,12 @@ class SiteNavbar extends HTMLElement {
                 <i class="fas fa-exchange-alt text-xs"></i>&nbsp;Convert&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
               </button>
               <div class="dropdown-menu" style="min-width:200px" role="menu">
-                <div class="dropdown-section">
-                  <div class="dropdown-section-label">Change Format</div>
-                  <a href="/image-to-pdf.html" class="dropdown-item" role="menuitem"><i class="fas fa-image text-purple-500 w-4"></i> Image to PDF</a>
-                  <a href="/pdf-to-jpg.html"   class="dropdown-item" role="menuitem"><i class="fas fa-file-image text-indigo-500 w-4"></i> PDF to JPG</a>
+                <div class="dropdown-inner">
+                  <div class="dropdown-section">
+                    <div class="dropdown-section-label">Change Format</div>
+                    <a href="/image-to-pdf" class="dropdown-item" role="menuitem"><i class="fas fa-image text-purple-500 w-4"></i> Image to PDF</a>
+                    <a href="/pdf-to-jpg"   class="dropdown-item" role="menuitem"><i class="fas fa-file-image text-indigo-500 w-4"></i> PDF to JPG</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -121,9 +166,11 @@ class SiteNavbar extends HTMLElement {
                 <i class="fas fa-highlighter text-xs"></i>&nbsp;Annotate&nbsp;<i class="fas fa-chevron-down text-xs opacity-70"></i>
               </button>
               <div class="dropdown-menu" style="min-width:200px" role="menu">
-                <div class="dropdown-section">
-                  <div class="dropdown-section-label">Mark Up PDFs</div>
-                  <a href="/annotate-pdf.html" class="dropdown-item" role="menuitem"><i class="fas fa-highlighter text-emerald-500 w-4"></i> Annotate PDF</a>
+                <div class="dropdown-inner">
+                  <div class="dropdown-section">
+                    <div class="dropdown-section-label">Mark Up PDFs</div>
+                    <a href="/annotate-pdf" class="dropdown-item" role="menuitem"><i class="fas fa-highlighter text-emerald-500 w-4"></i> Annotate PDF</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,7 +192,7 @@ class SiteNavbar extends HTMLElement {
             <i class="fas fa-chevron-down text-xs" id="chevron-compress"></i>
           </button>
           <div id="mobile-compress" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
-            <a href="/compress-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
+            <a href="/compress-pdf" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-compress-alt mr-2"></i>Compress PDF</a>
           </div>
 
           <!-- Mobile: Organize -->
@@ -154,10 +201,10 @@ class SiteNavbar extends HTMLElement {
             <i class="fas fa-chevron-down text-xs" id="chevron-organize"></i>
           </button>
           <div id="mobile-organize" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
-            <a href="/merge-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
-            <a href="/split-pdf.html"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
-            <a href="/rotate-pdf.html"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
-            <a href="/delete-pdf-pages.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-trash-alt mr-2"></i>Delete Pages</a>
+            <a href="/merge-pdf"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-object-group mr-2"></i>Merge PDFs</a>
+            <a href="/split-pdf"        class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-cut mr-2"></i>Split PDF</a>
+            <a href="/rotate-pdf"       class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-sync-alt mr-2"></i>Rotate PDF</a>
+            <a href="/delete-pdf-pages" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-trash-alt mr-2"></i>Delete Pages</a>
           </div>
 
           <!-- Mobile: Convert -->
@@ -166,8 +213,8 @@ class SiteNavbar extends HTMLElement {
             <i class="fas fa-chevron-down text-xs" id="chevron-convert"></i>
           </button>
           <div id="mobile-convert" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
-            <a href="/image-to-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
-            <a href="/pdf-to-jpg.html"   class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
+            <a href="/image-to-pdf" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-image mr-2"></i>Image to PDF</a>
+            <a href="/pdf-to-jpg"   class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-file-image mr-2"></i>PDF to JPG</a>
           </div>
 
           <!-- Mobile: Annotate -->
@@ -176,7 +223,7 @@ class SiteNavbar extends HTMLElement {
             <i class="fas fa-chevron-down text-xs" id="chevron-annotate"></i>
           </button>
           <div id="mobile-annotate" class="mobile-tool-links pl-4 border-l border-white border-opacity-20 ml-3">
-            <a href="/annotate-pdf.html" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-highlighter mr-2"></i>Annotate PDF</a>
+            <a href="/annotate-pdf" class="block py-2 px-3 text-white text-sm opacity-90 hover:opacity-100"><i class="fas fa-highlighter mr-2"></i>Annotate PDF</a>
           </div>
         </div>
       </nav>
@@ -224,10 +271,10 @@ class SiteFooter extends HTMLElement {
             <div>
               <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Organise</p>
               <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
-                <li><a href="/merge-pdf.html"        class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
-                <li><a href="/split-pdf.html"         class="footer-link"><i class="fas fa-cut mr-2 text-xs"></i>Split PDF</a></li>
-                <li><a href="/rotate-pdf.html"        class="footer-link"><i class="fas fa-sync-alt mr-2 text-xs"></i>Rotate PDF</a></li>
-                <li><a href="/delete-pdf-pages.html"  class="footer-link"><i class="fas fa-trash-alt mr-2 text-xs"></i>Delete Pages</a></li>
+                <li><a href="/merge-pdf"        class="footer-link"><i class="fas fa-object-group mr-2 text-xs"></i>Merge PDFs</a></li>
+                <li><a href="/split-pdf"         class="footer-link"><i class="fas fa-cut mr-2 text-xs"></i>Split PDF</a></li>
+                <li><a href="/rotate-pdf"        class="footer-link"><i class="fas fa-sync-alt mr-2 text-xs"></i>Rotate PDF</a></li>
+                <li><a href="/delete-pdf-pages"  class="footer-link"><i class="fas fa-trash-alt mr-2 text-xs"></i>Delete Pages</a></li>
               </ul>
             </div>
 
@@ -235,10 +282,10 @@ class SiteFooter extends HTMLElement {
             <div>
               <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Optimise &amp; Convert</p>
               <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
-                <li><a href="/compress-pdf.html"  class="footer-link"><i class="fas fa-compress-alt mr-2 text-xs"></i>Compress PDF</a></li>
-                <li><a href="/image-to-pdf.html"  class="footer-link"><i class="fas fa-image mr-2 text-xs"></i>Image to PDF</a></li>
-                <li><a href="/pdf-to-jpg.html"    class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
-                <li><a href="/annotate-pdf.html"  class="footer-link"><i class="fas fa-highlighter mr-2 text-xs"></i>Annotate PDF</a></li>
+                <li><a href="/compress-pdf"  class="footer-link"><i class="fas fa-compress-alt mr-2 text-xs"></i>Compress PDF</a></li>
+                <li><a href="/image-to-pdf"  class="footer-link"><i class="fas fa-image mr-2 text-xs"></i>Image to PDF</a></li>
+                <li><a href="/pdf-to-jpg"    class="footer-link"><i class="fas fa-file-image mr-2 text-xs"></i>PDF to JPG</a></li>
+                <li><a href="/annotate-pdf"  class="footer-link"><i class="fas fa-highlighter mr-2 text-xs"></i>Annotate PDF</a></li>
               </ul>
             </div>
 
@@ -246,10 +293,10 @@ class SiteFooter extends HTMLElement {
             <div>
               <p class="text-white font-semibold mb-3 text-sm uppercase tracking-wider">Company</p>
               <ul class="flex flex-col gap-2" style="list-style:none;padding:0;margin:0">
-                <li><a href="/about.html"                     class="footer-link"><i class="fas fa-info-circle mr-2 text-xs"></i>About</a></li>
+                <li><a href="/about"                          class="footer-link"><i class="fas fa-info-circle mr-2 text-xs"></i>About</a></li>
                 <li><a href="/contactform"                    class="footer-link"><i class="fas fa-envelope mr-2 text-xs"></i>Contact</a></li>
                 <li><a href="mailto:support@minipdftools.com" class="footer-link"><i class="fas fa-at mr-2 text-xs"></i>support@minipdftools.com</a></li>
-                <li><a href="/privacy.html"                   class="footer-link"><i class="fas fa-shield-alt mr-2 text-xs"></i>Privacy Policy</a></li>
+                <li><a href="/privacy"                        class="footer-link"><i class="fas fa-shield-alt mr-2 text-xs"></i>Privacy Policy</a></li>
               </ul>
             </div>
 
