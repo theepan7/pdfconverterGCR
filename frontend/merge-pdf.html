@@ -646,8 +646,6 @@ async function doMerge() {
     const mergedBytes = await mergedPdf.save();
 const blob = new Blob([mergedBytes], { type: 'application/pdf' });
 
-// Auto-download
-downloadBlob(blob, 'merged.pdf');
 
 // Show compression offer modal
 showCompressModal(blob, mergedBytes.length);
@@ -682,9 +680,7 @@ function esc(s) {
 function showError(msg) { mergeErr.textContent = msg; mergeErr.classList.remove('hidden'); }
 function hideError()    { mergeErr.classList.add('hidden'); }
 
-  // ── Post-merge compression offer ──────────────────────
 function showCompressModal(blob, byteSize) {
-  // Remove any existing modal
   const existing = document.getElementById('compress-modal');
   if (existing) existing.remove();
 
@@ -700,49 +696,48 @@ function showCompressModal(blob, byteSize) {
         Your merged PDF is <span class="modal-size">${formatBytes(byteSize)}</span>.<br>
         Would you like to compress it to reduce the file size?
       </p>
-      <button class="btn-compress" onclick="goCompress()">
+      <button class="btn-compress" id="btn-yes-compress">
         <i class="fas fa-compress-alt mr-2"></i>Yes, compress it
       </button>
-      <button class="btn-skip" onclick="closeModal()">
-        No thanks, keep as-is
+      <button class="btn-skip" id="btn-no-compress">
+        No thanks — just download
       </button>
     </div>
   `;
 
-  // Close on backdrop click
+  // "Yes" — go to compress page (blob already in sessionStorage)
+  overlay.querySelector('#btn-yes-compress').addEventListener('click', () => {
+    closeModal();
+    goCompress();
+  });
+
+  // "No" — just download normally
+  overlay.querySelector('#btn-no-compress').addEventListener('click', () => {
+    closeModal();
+    downloadBlob(blob, 'merged.pdf');
+  });
+
+  // Backdrop click = same as "No"
   overlay.addEventListener('click', e => {
-    if (e.target === overlay) closeModal();
+    if (e.target === overlay) {
+      closeModal();
+      downloadBlob(blob, 'merged.pdf');
+    }
   });
 
   document.body.appendChild(overlay);
 
-  // Store blob in sessionStorage for compress page to pick up
+  // Pre-store blob for compress page
   const reader = new FileReader();
   reader.onload = () => {
     try {
-      sessionStorage.setItem('compressFile_data', reader.result);        // base64 data URL
+      sessionStorage.setItem('compressFile_data', reader.result);
       sessionStorage.setItem('compressFile_name', 'merged.pdf');
       sessionStorage.setItem('compressFile_size', String(byteSize));
-    } catch(e) {
-      // sessionStorage full (very large file) — compress page will just show empty uploader
-    }
+    } catch(e) {}
   };
   reader.readAsDataURL(blob);
 }
-
-function closeModal() {
-  const m = document.getElementById('compress-modal');
-  if (m) {
-    m.style.animation = 'fadeIn 0.15s ease reverse';
-    setTimeout(() => m.remove(), 150);
-  }
-}
-
-function goCompress() {
-  closeModal();
-  window.location.href = '/compress-pdf.html?from=merge';
-}
-
 </script>
 </body>
 </html>
