@@ -248,7 +248,7 @@
         <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input-main').click()">
           <i class="fas fa-file-import text-green-400 text-5xl mb-4 block"></i>
           <p class="text-gray-700 font-semibold text-lg mb-1">Drop PDFs here or click to browse</p>
-          <p class="text-gray-400 text-sm">PDF files — max 32 MB total</p>
+          <p class="text-gray-400 text-sm">PDF files — max 500 MB total</p>
         </div>
 
         <!-- Hidden file inputs (separate so each opens its own picker) -->
@@ -342,7 +342,7 @@
    MERGE PDF — client-side merging with pdf-lib
    ═══════════════════════════════════════════════════════ */
 
-const MAX_BYTES = 32 * 1024 * 1024; // 32 MB
+const MAX_BYTES = 500 * 1024 * 1024; // 500 MB
 
 // ── State ─────────────────────────────────────────────
 let fileList = [];   // [{ id, file }]
@@ -430,7 +430,7 @@ function render() {
   fileSizeLbl.textContent  = formatBytes(totalBytes) + ' total';
 
   if (totalBytes > MAX_BYTES) {
-    showError('Total size exceeds 32 MB — please remove some files.');
+    showError('Total size exceeds 500 MB — please remove some files.');
     mergeBtn.disabled = true;
   } else {
     if (mergeErr.textContent.includes('32 MB')) hideError();
@@ -553,7 +553,7 @@ async function doMerge() {
 
   let total = 0;
   fileList.forEach(x => { total += x.file.size; });
-  if (total > MAX_BYTES) { showError('Total exceeds 32 MB — please remove some files.'); return; }
+  if (total > MAX_BYTES) { showError('Total exceeds 500 MB — please remove some files.'); return; }
 
   // Ensure pdf-lib is loaded
   if (typeof PDFLib === 'undefined') {
