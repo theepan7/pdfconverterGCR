@@ -217,6 +217,63 @@
 
     /* Size-over warning */
     .size-warning { color: #dc2626; }
+
+    /* Post-merge modal */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,0.55);
+  backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+
+.modal-box {
+  background: #fff;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+  text-align: center;
+  animation: popUp 0.22s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popUp {
+  from { opacity: 0; transform: scale(0.88) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-icon {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg,#16a34a,#22c55e);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.5rem; color: white;
+}
+.modal-title  { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem; }
+.modal-sub    { font-size: 0.875rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.5; }
+.modal-size   { font-weight: 600; color: #1e293b; }
+.btn-compress {
+  width: 100%;
+  background: linear-gradient(135deg,#4338ca,#6366f1);
+  color: white; font-weight: 700; font-size: 0.95rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 999px; border: none; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(67,56,202,0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+  margin-bottom: 0.75rem;
+}
+.btn-compress:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(67,56,202,0.4); }
+.btn-skip {
+  width: 100%;
+  background: none; border: 1.5px solid #e2e8f0;
+  color: #64748b; font-size: 0.9rem; font-weight: 500;
+  padding: 0.7rem 1.5rem;
+  border-radius: 999px; cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-skip:hover { border-color: #94a3b8; color: #1e293b; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -587,7 +644,13 @@ async function doMerge() {
     }
 
     const mergedBytes = await mergedPdf.save();
-    downloadBlob(new Blob([mergedBytes], { type: 'application/pdf' }), 'merged.pdf');
+const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+
+// Auto-download
+downloadBlob(blob, 'merged.pdf');
+
+// Show compression offer modal
+showCompressModal(blob, mergedBytes.length);
 
   } catch (err) {
     showError(err.message || 'An unexpected error occurred during merging.');
@@ -619,6 +682,66 @@ function esc(s) {
 function showError(msg) { mergeErr.textContent = msg; mergeErr.classList.remove('hidden'); }
 function hideError()    { mergeErr.classList.add('hidden'); }
 
+  // ── Post-merge compression offer ──────────────────────
+function showCompressModal(blob, byteSize) {
+  // Remove any existing modal
+  const existing = document.getElementById('compress-modal');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'compress-modal';
+
+  overlay.innerHTML = `
+    <div class="modal-box">
+      <div class="modal-icon"><i class="fas fa-check"></i></div>
+      <p class="modal-title">Merge complete! 🎉</p>
+      <p class="modal-sub">
+        Your merged PDF is <span class="modal-size">${formatBytes(byteSize)}</span>.<br>
+        Would you like to compress it to reduce the file size?
+      </p>
+      <button class="btn-compress" onclick="goCompress()">
+        <i class="fas fa-compress-alt mr-2"></i>Yes, compress it
+      </button>
+      <button class="btn-skip" onclick="closeModal()">
+        No thanks, keep as-is
+      </button>
+    </div>
+  `;
+
+  // Close on backdrop click
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.body.appendChild(overlay);
+
+  // Store blob in sessionStorage for compress page to pick up
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      sessionStorage.setItem('compressFile_data', reader.result);        // base64 data URL
+      sessionStorage.setItem('compressFile_name', 'merged.pdf');
+      sessionStorage.setItem('compressFile_size', String(byteSize));
+    } catch(e) {
+      // sessionStorage full (very large file) — compress page will just show empty uploader
+    }
+  };
+  reader.readAsDataURL(blob);
+}
+
+function closeModal() {
+  const m = document.getElementById('compress-modal');
+  if (m) {
+    m.style.animation = 'fadeIn 0.15s ease reverse';
+    setTimeout(() => m.remove(), 150);
+  }
+}
+
+function goCompress() {
+  closeModal();
+  window.location.href = '/compress-pdf.html?from=merge';
+}
 
 </script>
 </body>
