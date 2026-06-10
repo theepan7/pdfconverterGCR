@@ -382,6 +382,27 @@ const addMoreHint      = document.getElementById('add-more-hint');
 const inputMain        = document.getElementById('file-input-main');
 const inputAddMore     = document.getElementById('file-input-addmore');
 
+  // Auto-load a file passed from merge-pdf page
+window.addEventListener('DOMContentLoaded', () => {
+  const data = sessionStorage.getItem('compressFile_data');
+  const name = sessionStorage.getItem('compressFile_name');
+  if (!data || !name) return;
+
+  // Clean up immediately so it doesn't persist across sessions
+  sessionStorage.removeItem('compressFile_data');
+  sessionStorage.removeItem('compressFile_name');
+  sessionStorage.removeItem('compressFile_size');
+
+  // Convert base64 data URL back to a File object
+  fetch(data)
+    .then(r => r.blob())
+    .then(blob => {
+      const file = new File([blob], name, { type: 'application/pdf' });
+      addFiles([file]); // call whatever your compress page uses to accept files
+    });
+});
+
+  
 // ── File inputs ───────────────────────────────────────
 inputMain.addEventListener('change',    () => addFiles(inputMain.files));
 inputAddMore.addEventListener('change', () => addFiles(inputAddMore.files));
