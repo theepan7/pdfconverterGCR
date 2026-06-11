@@ -142,7 +142,7 @@
     }
     .file-remove:hover { color: #ef4444; background: #fef2f2; }
 
-    /* Move buttons (great for mobile) */
+    /* Move buttons */
     .move-btn {
       background: none;
       border: 1px solid #e2e8f0;
@@ -204,7 +204,7 @@
     .btn-merge:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(22,163,74,0.4); }
     .btn-merge:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
 
-    /* Slide-in animation for new items */
+    /* Slide-in animation */
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -218,62 +218,64 @@
     /* Size-over warning */
     .size-warning { color: #dc2626; }
 
-    /* Post-merge modal */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(15,23,42,0.55);
-  backdrop-filter: blur(3px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 9999;
-  animation: fadeIn 0.2s ease;
-}
-@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    /* ── Post-merge modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,0.55);
+      backdrop-filter: blur(3px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 
-.modal-box {
-  background: #fff;
-  border-radius: 1.25rem;
-  padding: 2rem;
-  max-width: 420px;
-  width: 90%;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.2);
-  text-align: center;
-  animation: popUp 0.22s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes popUp {
-  from { opacity: 0; transform: scale(0.88) translateY(12px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-.modal-icon {
-  width: 56px; height: 56px;
-  background: linear-gradient(135deg,#16a34a,#22c55e);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 1rem;
-  font-size: 1.5rem; color: white;
-}
-.modal-title  { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem; }
-.modal-sub    { font-size: 0.875rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.5; }
-.modal-size   { font-weight: 600; color: #1e293b; }
-.btn-compress {
-  width: 100%;
-  background: linear-gradient(135deg,#4338ca,#6366f1);
-  color: white; font-weight: 700; font-size: 0.95rem;
-  padding: 0.8rem 1.5rem;
-  border-radius: 999px; border: none; cursor: pointer;
-  box-shadow: 0 4px 14px rgba(67,56,202,0.35);
-  transition: transform 0.15s, box-shadow 0.15s;
-  margin-bottom: 0.75rem;
-}
-.btn-compress:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(67,56,202,0.4); }
-.btn-skip {
-  width: 100%;
-  background: none; border: 1.5px solid #e2e8f0;
-  color: #64748b; font-size: 0.9rem; font-weight: 500;
-  padding: 0.7rem 1.5rem;
-  border-radius: 999px; cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-}
-.btn-skip:hover { border-color: #94a3b8; color: #1e293b; }
+    .modal-box {
+      background: #fff;
+      border-radius: 1.25rem;
+      padding: 2rem;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+      text-align: center;
+      animation: popUp 0.22s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes popUp {
+      from { opacity: 0; transform: scale(0.88) translateY(12px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg,#16a34a,#22c55e);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem; color: white;
+    }
+    .modal-title  { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem; }
+    .modal-sub    { font-size: 0.875rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.5; }
+    .modal-size   { font-weight: 600; color: #1e293b; }
+    .btn-compress {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg,#4338ca,#6366f1);
+      color: white; font-weight: 700; font-size: 0.95rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 999px; border: none; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(67,56,202,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+      margin-bottom: 0.75rem;
+    }
+    .btn-compress:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(67,56,202,0.4); }
+    .btn-skip {
+      display: block;
+      width: 100%;
+      background: none; border: 1.5px solid #e2e8f0;
+      color: #64748b; font-size: 0.9rem; font-weight: 500;
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px; cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-skip:hover { border-color: #94a3b8; color: #1e293b; }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -301,21 +303,20 @@
 
       <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
 
-        <!-- Drop zone (visible when no files yet) -->
+        <!-- Drop zone -->
         <div id="drop-zone" class="drop-zone p-10 text-center" onclick="document.getElementById('file-input-main').click()">
           <i class="fas fa-file-import text-green-400 text-5xl mb-4 block"></i>
           <p class="text-gray-700 font-semibold text-lg mb-1">Drop PDFs here or click to browse</p>
           <p class="text-gray-400 text-sm">PDF files — max 500 MB total</p>
         </div>
 
-        <!-- Hidden file inputs (separate so each opens its own picker) -->
+        <!-- Hidden file inputs -->
         <input type="file" id="file-input-main"    accept=".pdf" multiple style="display:none" />
         <input type="file" id="file-input-addmore" accept=".pdf" multiple style="display:none" />
 
-        <!-- File manager (hidden until files are added) -->
+        <!-- File manager -->
         <div id="file-list-area" style="display:none">
 
-          <!-- List header -->
           <div class="flex items-center justify-between mb-3">
             <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider">
               Files to merge &nbsp;<span class="normal-case font-normal text-gray-400">(drag to reorder)</span>
@@ -325,16 +326,13 @@
             </button>
           </div>
 
-          <!-- Sortable file list -->
           <ul id="file-list"></ul>
 
-          <!-- Totals -->
           <div class="totals-bar">
             <span id="file-count-label">0 files</span>
             <span id="file-size-label">0 KB total</span>
           </div>
 
-          <!-- Add more + hint -->
           <div class="flex items-center gap-3 mt-5 flex-wrap">
             <button class="add-more-btn" onclick="document.getElementById('file-input-addmore').click()">
               <i class="fas fa-plus-circle"></i> Add more files
@@ -342,7 +340,6 @@
             <span class="text-xs text-gray-400">browse a different folder</span>
           </div>
 
-          <!-- Error / loading -->
           <div id="merge-error" class="hidden mt-3 text-red-500 font-semibold text-sm"></div>
           <div id="merge-loading" class="hidden mt-3 flex items-center gap-2 text-green-700 font-semibold text-sm">
             <svg class="spinner w-4 h-4 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -352,7 +349,6 @@
             Merging your PDFs… please wait
           </div>
 
-          <!-- Merge button -->
           <div class="flex justify-center mt-7">
             <button id="merge-btn" class="btn-merge" onclick="doMerge()">
               <i class="fas fa-object-group mr-2"></i>Merge PDFs
@@ -364,7 +360,7 @@
 
       <!-- Steps hint -->
       <div class="mt-5 flex flex-col sm:flex-row gap-3 text-sm text-gray-500 justify-center text-center">
-        <span><span class="font-bold text-indigo-400">1.</span> Add PDFs </span>
+        <span><span class="font-bold text-indigo-400">1.</span> Add PDFs</span>
         <span class="hidden sm:block text-gray-300">•</span>
         <span><span class="font-bold text-indigo-400">2.</span> Drag rows to set the order</span>
         <span class="hidden sm:block text-gray-300">•</span>
@@ -402,33 +398,28 @@
 const MAX_BYTES = 500 * 1024 * 1024; // 500 MB
 
 // ── State ─────────────────────────────────────────────
-let fileList = [];   // [{ id, file }]
+let fileList = [];
 let idCtr    = 0;
-
-// drag state
-let dragSrcId  = null;
+let dragSrcId = null;
 
 // ── DOM ───────────────────────────────────────────────
-const dropZone      = document.getElementById('drop-zone');
-const fileListArea  = document.getElementById('file-list-area');
-const fileListEl    = document.getElementById('file-list');
-const mergeErr      = document.getElementById('merge-error');
-const mergeLoad     = document.getElementById('merge-loading');
-const mergeBtn      = document.getElementById('merge-btn');
-const fileCountLbl  = document.getElementById('file-count-label');
-const fileSizeLbl   = document.getElementById('file-size-label');
-const inputMain     = document.getElementById('file-input-main');
-const inputAddMore  = document.getElementById('file-input-addmore');
+const dropZone     = document.getElementById('drop-zone');
+const fileListArea = document.getElementById('file-list-area');
+const fileListEl   = document.getElementById('file-list');
+const mergeErr     = document.getElementById('merge-error');
+const mergeLoad    = document.getElementById('merge-loading');
+const mergeBtn     = document.getElementById('merge-btn');
+const fileCountLbl = document.getElementById('file-count-label');
+const fileSizeLbl  = document.getElementById('file-size-label');
+const inputMain    = document.getElementById('file-input-main');
+const inputAddMore = document.getElementById('file-input-addmore');
 
 // ── File input handlers ───────────────────────────────
-inputMain.addEventListener('change',    () => addFiles(inputMain.files));
-inputAddMore.addEventListener('change', () => addFiles(inputAddMore.files));
+inputMain.addEventListener('change',    () => { addFiles(inputMain.files);    inputMain.value    = ''; });
+inputAddMore.addEventListener('change', () => { addFiles(inputAddMore.files); inputAddMore.value = ''; });
 
 // ── Drop zone ─────────────────────────────────────────
-dropZone.addEventListener('dragover', e => {
-  e.preventDefault();
-  dropZone.classList.add('dragover');
-});
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
 dropZone.addEventListener('drop', e => {
   e.preventDefault();
@@ -436,7 +427,6 @@ dropZone.addEventListener('drop', e => {
   addFiles(e.dataTransfer.files);
 });
 
-// Allow dropping anywhere on the page when list is visible
 document.addEventListener('dragover', e => e.preventDefault());
 document.addEventListener('drop', e => {
   if (e.target.closest('#drop-zone') || e.target.closest('#file-list')) return;
@@ -451,12 +441,9 @@ function addFiles(incoming) {
   );
   if (!pdfs.length) { showError('Only PDF files are supported.'); return; }
 
-  let added = 0;
   pdfs.forEach(f => {
-    // Skip exact duplicates (same name & size)
     if (!fileList.some(x => x.file.name === f.name && x.file.size === f.size)) {
       fileList.push({ id: ++idCtr, file: f });
-      added++;
     }
   });
 
@@ -490,7 +477,7 @@ function render() {
     showError('Total size exceeds 500 MB — please remove some files.');
     mergeBtn.disabled = true;
   } else {
-    if (mergeErr.textContent.includes('32 MB')) hideError();
+    if (mergeErr.textContent.includes('500 MB')) hideError();
     mergeBtn.disabled = false;
   }
 }
@@ -527,21 +514,16 @@ function buildRow(item, idx) {
     </button>
   `;
 
-  // ── Drag events ───────────────────────────────────
   li.addEventListener('dragstart', e => {
     dragSrcId = item.id;
     li.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', String(item.id));
   });
-
   li.addEventListener('dragend', () => {
     dragSrcId = null;
-    document.querySelectorAll('.file-item').forEach(el => {
-      el.classList.remove('dragging', 'drag-over');
-    });
+    document.querySelectorAll('.file-item').forEach(el => el.classList.remove('dragging', 'drag-over'));
   });
-
   li.addEventListener('dragover', e => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -550,11 +532,9 @@ function buildRow(item, idx) {
       li.classList.add('drag-over');
     }
   });
-
   li.addEventListener('dragleave', e => {
     if (!li.contains(e.relatedTarget)) li.classList.remove('drag-over');
   });
-
   li.addEventListener('drop', e => {
     e.preventDefault();
     li.classList.remove('drag-over');
@@ -604,7 +584,7 @@ function readFileAsArrayBuffer(file) {
   });
 }
 
-// ── Merge & download (client-side with pdf-lib) ───────
+// ── Merge (client-side with pdf-lib) ─────────────────
 async function doMerge() {
   if (fileList.length < 1) { showError('Please add at least one PDF.'); return; }
 
@@ -612,7 +592,6 @@ async function doMerge() {
   fileList.forEach(x => { total += x.file.size; });
   if (total > MAX_BYTES) { showError('Total exceeds 500 MB — please remove some files.'); return; }
 
-  // Ensure pdf-lib is loaded
   if (typeof PDFLib === 'undefined') {
     showError('PDF library not loaded yet — please wait a moment and try again.');
     return;
@@ -624,8 +603,6 @@ async function doMerge() {
 
   try {
     const { PDFDocument } = PDFLib;
-
-    // Create a new blank PDF to merge everything into
     const mergedPdf = await PDFDocument.create();
 
     for (const item of fileList) {
@@ -636,19 +613,16 @@ async function doMerge() {
       } catch (e) {
         throw new Error(`"${item.file.name}" could not be read — it may be password-protected or corrupted.`);
       }
-
-      const pageCount  = sourcePdf.getPageCount();
-      const pageIdxs   = Array.from({ length: pageCount }, (_, i) => i);
+      const pageIdxs    = Array.from({ length: sourcePdf.getPageCount() }, (_, i) => i);
       const copiedPages = await mergedPdf.copyPages(sourcePdf, pageIdxs);
       copiedPages.forEach(page => mergedPdf.addPage(page));
     }
 
     const mergedBytes = await mergedPdf.save();
-const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+    const blob = new Blob([mergedBytes], { type: 'application/pdf' });
 
-
-// Show compression offer modal
-showCompressModal(blob, mergedBytes.length);
+    // Show modal — no download yet
+    showCompressModal(blob, mergedBytes.length);
 
   } catch (err) {
     showError(err.message || 'An unexpected error occurred during merging.');
@@ -658,19 +632,106 @@ showCompressModal(blob, mergedBytes.length);
   }
 }
 
+// ── Post-merge modal ──────────────────────────────────
+function showCompressModal(blob, byteSize) {
+  // Remove any stale modal
+  const existing = document.getElementById('compress-modal');
+  if (existing) existing.remove();
+
+  // Build overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'compress-modal';
+
+  // Build box
+  const box = document.createElement('div');
+  box.className = 'modal-box';
+
+  // Icon
+  const icon = document.createElement('div');
+  icon.className = 'modal-icon';
+  icon.innerHTML = '<i class="fas fa-check"></i>';
+
+  // Title
+  const title = document.createElement('p');
+  title.className = 'modal-title';
+  title.textContent = 'Merge complete! 🎉';
+
+  // Subtitle
+  const sub = document.createElement('p');
+  sub.className = 'modal-sub';
+  sub.innerHTML = `Your merged PDF is <span class="modal-size">${formatBytes(byteSize)}</span>.<br>Would you like to compress it to reduce the file size?`;
+
+  // Yes button
+  const btnYes = document.createElement('button');
+  btnYes.className = 'btn-compress';
+  btnYes.innerHTML = '<i class="fas fa-compress-alt" style="margin-right:0.5rem"></i>Yes, compress it';
+
+  // No button
+  const btnNo = document.createElement('button');
+  btnNo.className = 'btn-skip';
+  btnNo.textContent = 'No thanks — just download';
+
+  // Assemble
+  box.appendChild(icon);
+  box.appendChild(title);
+  box.appendChild(sub);
+  box.appendChild(btnYes);
+  box.appendChild(btnNo);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  // Pre-store blob so compress page can pick it up
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      sessionStorage.setItem('compressFile_data', reader.result);
+      sessionStorage.setItem('compressFile_name', 'merged.pdf');
+      sessionStorage.setItem('compressFile_size', String(byteSize));
+    } catch(e) { /* sessionStorage full for very large files */ }
+  };
+  reader.readAsDataURL(blob);
+
+  // ── Button actions (all self-contained, no globals needed) ──
+
+  function dismiss() {
+    overlay.remove();
+  }
+
+  btnYes.addEventListener('click', e => {
+    e.stopPropagation();
+    dismiss();
+    window.location.href = '/compress-pdf.html?from=merge';
+  });
+
+  btnNo.addEventListener('click', e => {
+    e.stopPropagation();
+    dismiss();
+    downloadBlob(blob, 'merged.pdf');
+  });
+
+  // Clicking the dark backdrop = same as "No"
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      dismiss();
+      downloadBlob(blob, 'merged.pdf');
+    }
+  });
+}
+
 // ── Utilities ─────────────────────────────────────────
 function downloadBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
   const a   = document.createElement('a');
   a.href = url; a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function formatBytes(b) {
-  if (b < 1024)          return b + ' B';
-  if (b < 1024 * 1024)   return (b / 1024).toFixed(1) + ' KB';
-  return (b / (1024 * 1024)).toFixed(2) + ' MB';
+  if (b < 1024)        return b + ' B';
+  if (b < 1048576)     return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(2) + ' MB';
 }
 
 function esc(s) {
@@ -679,65 +740,6 @@ function esc(s) {
 
 function showError(msg) { mergeErr.textContent = msg; mergeErr.classList.remove('hidden'); }
 function hideError()    { mergeErr.classList.add('hidden'); }
-
-function showCompressModal(blob, byteSize) {
-  const existing = document.getElementById('compress-modal');
-  if (existing) existing.remove();
-
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.id = 'compress-modal';
-
-  overlay.innerHTML = `
-    <div class="modal-box">
-      <div class="modal-icon"><i class="fas fa-check"></i></div>
-      <p class="modal-title">Merge complete! 🎉</p>
-      <p class="modal-sub">
-        Your merged PDF is <span class="modal-size">${formatBytes(byteSize)}</span>.<br>
-        Would you like to compress it to reduce the file size?
-      </p>
-      <button class="btn-compress" id="btn-yes-compress">
-        <i class="fas fa-compress-alt mr-2"></i>Yes, compress it
-      </button>
-      <button class="btn-skip" id="btn-no-compress">
-        No thanks — just download
-      </button>
-    </div>
-  `;
-
-  // "Yes" — go to compress page (blob already in sessionStorage)
-  overlay.querySelector('#btn-yes-compress').addEventListener('click', () => {
-    closeModal();
-    goCompress();
-  });
-
-  // "No" — just download normally
-  overlay.querySelector('#btn-no-compress').addEventListener('click', () => {
-    closeModal();
-    downloadBlob(blob, 'merged.pdf');
-  });
-
-  // Backdrop click = same as "No"
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) {
-      closeModal();
-      downloadBlob(blob, 'merged.pdf');
-    }
-  });
-
-  document.body.appendChild(overlay);
-
-  // Pre-store blob for compress page
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      sessionStorage.setItem('compressFile_data', reader.result);
-      sessionStorage.setItem('compressFile_name', 'merged.pdf');
-      sessionStorage.setItem('compressFile_size', String(byteSize));
-    } catch(e) {}
-  };
-  reader.readAsDataURL(blob);
-}
 </script>
 </body>
 </html>
