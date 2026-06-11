@@ -682,15 +682,21 @@ function showCompressModal(blob, byteSize) {
   document.body.appendChild(overlay);
 
   // Pre-store blob so compress page can pick it up
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      sessionStorage.setItem('compressFile_data', reader.result);
-      sessionStorage.setItem('compressFile_name', 'merged.pdf');
-      sessionStorage.setItem('compressFile_size', String(byteSize));
-    } catch(e) { /* sessionStorage full for very large files */ }
+  storeFileForCompress(blob, 'merged.pdf');
+
+  function storeFileForCompress(blob, name) {
+  const req = indexedDB.open('pdfHandoff', 1);
+
+  req.onupgradeneeded = e => {
+    e.target.result.createObjectStore('files');
   };
-  reader.readAsDataURL(blob);
+
+  req.onsuccess = e => {
+    const db = e.target.result;
+    const tx = db.transaction('files', 'readwrite');
+    tx.objectStore('files').put({ blob, name }, 'pending');
+  };
+}
 
   // ── Button actions (all self-contained, no globals needed) ──
 
