@@ -384,9 +384,34 @@ const inputAddMore     = document.getElementById('file-input-addmore');
 
   // Auto-load a file passed from merge-pdf page
 window.addEventListener('DOMContentLoaded', () => {
-  const data = sessionStorage.getItem('compressFile_data');
-  const name = sessionStorage.getItem('compressFile_name');
-  if (!data || !name) return;
+  // Only attempt if coming from merge page
+  if (!document.referrer.includes('merge-pdf') && !location.search.includes('from=merge')) return;
+
+  const req = indexedDB.open('pdfHandoff', 1);
+
+  req.onupgradeneeded = e => {
+    e.target.result.createObjectStore('files');
+  };
+
+  req.onsuccess = e => {
+    const db = e.target.result;
+    const tx = db.transaction('files', 'readwrite');
+    const store = tx.objectStore('files');
+
+    const getReq = store.get('pending');
+
+    getReq.onsuccess = () => {
+      const record = getReq.result;
+      if (!record) return;
+
+      // Delete immediately so it doesn't linger
+      store.delete('pending');
+
+      const file = new File([record.blob], record.name, { type: 'application/pdf' });
+      addFiles([file]);
+    };
+  };
+});
 
   // Clean up immediately so it doesn't persist across sessions
   sessionStorage.removeItem('compressFile_data');
